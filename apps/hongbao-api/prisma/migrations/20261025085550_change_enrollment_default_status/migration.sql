@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Enrollment" ALTER COLUMN "status" SET DEFAULT 'PENDING',
+ALTER COLUMN "startedAt" DROP NOT NULL,
+ALTER COLUMN "startedAt" DROP DEFAULT;

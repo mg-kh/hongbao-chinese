@@ -1,0 +1,21 @@
+{
+  "Common": {
+    "mmk": "MMK"
+  },
+  "DashboardSidebar": {
+    "courses": "Courses",
+    "lessons": "Lessons"
+  },
+  "Course": {
+    "create_new_course": "သင်ရိုးအသစ်ဖန်တီးရန်"
+  },
+  "Lesson": {
+    "create_new_lesson": "Create New Lesson"
+  },
+  "PwaInstall": {
+    "title": "Hong Bao App ထည့်သွင်းရန်",
+    "description": "မြန်ဆန်စွာ အသုံးပြုနိုင်ရန် Hong Bao ကို သင့်ဖုန်း Home Screen ပေါ်တွင် ထည့်သွင်းလိုက်ပါ။",
+    "install": "ထည့်သွင်းမည်",
+    "not_now": "ယခုမလုပ်သေးပါ"
+  }
+}

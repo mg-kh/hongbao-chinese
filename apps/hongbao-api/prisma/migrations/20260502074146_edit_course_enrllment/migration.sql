@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "CourseEnrollment" ALTER COLUMN "progress" DROP NOT NULL,
+ALTER COLUMN "completed" DROP NOT NULL,
+ALTER COLUMN "approved" DROP NOT NULL,
+ALTER COLUMN "expiredAt" DROP NOT NULL;

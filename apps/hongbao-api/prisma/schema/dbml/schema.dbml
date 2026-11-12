@@ -1,0 +1,457 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Category {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  courses Course [not null]
+  flashcards Flashcard [not null]
+  levelTests LevelTest [not null]
+}
+
+Table Coupon {
+  id String [pk]
+  code String [unique, not null]
+  description String
+  discountType DiscountType [not null, default: 'PERCENTAGE']
+  discountValue Int [not null]
+  usageLimit Int
+  usedCount Int [not null, default: 0]
+  perUserLimit Int [default: 1]
+  isActive Boolean [not null, default: true]
+  startsAt DateTime
+  expiresAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  courses CouponCourse [not null]
+  redemptions CouponRedemption [not null]
+}
+
+Table CouponCourse {
+  couponId String [not null]
+  courseId String [not null]
+  coupon Coupon [not null]
+  course Course [not null]
+
+  indexes {
+    (couponId, courseId) [pk]
+  }
+}
+
+Table CouponRedemption {
+  id String [pk]
+  couponId String [not null]
+  userId String [not null]
+  courseId String
+  discount Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  coupon Coupon [not null]
+  user User [not null]
+}
+
+Table Course {
+  id String [pk]
+  title String [not null]
+  description String [not null]
+  includedAssets String[] [not null]
+  isFree Boolean [not null, default: false]
+  price Int [default: 0]
+  published Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  userId String [not null]
+  perTime Int [default: 0]
+  updatedAt DateTime [not null]
+  categoryId String
+  coupons CouponCourse [not null]
+  category Category
+  user User [not null]
+  enrollments Enrollment [not null]
+  purchaseItems PurchaseItem [not null]
+  quizzes CourseQuiz [not null]
+  lessons Lesson [not null]
+  videos Video [not null]
+}
+
+Table FcmToken {
+  id String [pk]
+  token String [unique, not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+}
+
+Table Feedback {
+  id String [pk]
+  name String [not null]
+  position String
+  content String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Flashcard {
+  id String [pk]
+  cnWord String [not null]
+  pinyin String [not null]
+  type String [not null]
+  meaningEn String [not null]
+  meaningMm String [not null]
+  categoryId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  exampleUsage Json [not null, default: '[]']
+  category Category [not null]
+}
+
+Table Lesson {
+  id String [pk]
+  courseId String [not null]
+  title String [not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  course Course [not null]
+  quizzes LessonQuiz [not null]
+  subLessons SubLesson [not null]
+}
+
+Table LevelTest {
+  id String [pk]
+  title String [not null]
+  description String
+  price Int [default: 0]
+  perTime Int [default: 0]
+  published Boolean [not null, default: false]
+  categoryId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  category Category [not null]
+  quiz LevelTestQuiz
+  enrollments Enrollment [not null]
+  purchaseItems PurchaseItem [not null]
+}
+
+Table LevelTestQuiz {
+  quizId String [unique, not null]
+  levelTestId String [unique, not null]
+  levelTest LevelTest [not null]
+  quiz Quiz [not null]
+
+  indexes {
+    (levelTestId, quizId) [pk]
+  }
+}
+
+Table UserProgress {
+  id String [pk]
+  userId String [not null]
+  entityType ProgressEntityType [not null]
+  entityId String [not null]
+  status ProgressStatus [not null, default: 'IN_PROGRESS']
+  startedAt DateTime [default: `now()`, not null]
+  completedAt DateTime
+  updatedAt DateTime [not null]
+  user User [not null]
+
+  indexes {
+    (userId, entityType, entityId) [unique]
+  }
+}
+
+Table Purchase {
+  id String [pk]
+  userId String [not null]
+  orderNo String [unique, not null]
+  status PurchaseStatus [not null, default: 'PENDING']
+  totalAmount Int [not null]
+  currency String [not null, default: 'MMK']
+  paymentType String
+  transactionNo String [unique]
+  createdAt DateTime [default: `now()`, not null]
+  paidAt DateTime
+  updatedAt DateTime [not null]
+  user User [not null]
+  items PurchaseItem [not null]
+}
+
+Table PurchaseItem {
+  id String [pk]
+  purchaseId String [not null]
+  courseId String
+  levelTestId String
+  productName String [not null]
+  price Int [not null]
+  durationDays Int
+  quantity Int [not null, default: 1]
+  createdAt DateTime [default: `now()`, not null]
+  purchase Purchase [not null]
+  course Course
+  levelTest LevelTest
+}
+
+Table Enrollment {
+  id String [pk]
+  userId String [not null]
+  courseId String
+  levelTestId String
+  orderNo String [not null]
+  status EnrollmentStatus [not null, default: 'PENDING']
+  startedAt DateTime
+  expiredAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+  course Course
+  levelTest LevelTest
+
+  indexes {
+    (userId, courseId) [unique]
+    (userId, levelTestId) [unique]
+  }
+}
+
+Table Question {
+  id String [pk]
+  quizId String
+  type QuestionType [not null]
+  data Json [not null]
+  createdAt DateTime [default: `now()`, not null]
+  title String [not null]
+  updatedAt DateTime [not null]
+  userId String [not null]
+  explanation String
+  order Int [not null, default: 0]
+  sectionId String
+  quiz Quiz
+  section QuizSection
+  user User [not null]
+}
+
+Table Quiz {
+  id String [pk]
+  userId String
+  title String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  description String
+  isLevelTest Boolean [not null, default: false]
+  courseQuiz CourseQuiz
+  lessonQuiz LessonQuiz
+  levelTestQuiz LevelTestQuiz
+  questions Question [not null]
+  user User
+  sections QuizSection [not null]
+  subLessonQuiz SubLessonQuiz
+}
+
+Table CourseQuiz {
+  quizId String [unique, not null]
+  courseId String [not null]
+  course Course [not null]
+  quiz Quiz [not null]
+
+  indexes {
+    (courseId, quizId) [pk]
+  }
+}
+
+Table LessonQuiz {
+  quizId String [unique, not null]
+  lessonId String [not null]
+  lesson Lesson [not null]
+  quiz Quiz [not null]
+
+  indexes {
+    (lessonId, quizId) [pk]
+  }
+}
+
+Table SubLessonQuiz {
+  quizId String [unique, not null]
+  subLessonId String [not null]
+  quiz Quiz [not null]
+  subLesson SubLesson [not null]
+
+  indexes {
+    (subLessonId, quizId) [pk]
+  }
+}
+
+Table QuizSection {
+  id String [pk]
+  quizId String [not null]
+  title String [not null]
+  description String
+  order Int [not null, default: 0]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  audioUrl String
+  timeLimit Int
+  questions Question [not null]
+  quiz Quiz [not null]
+}
+
+Table SubLesson {
+  id String [pk]
+  lessonId String [not null]
+  title String [not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  lesson Lesson [not null]
+  quizzes SubLessonQuiz [not null]
+  videos Video [not null]
+}
+
+Table User {
+  id String [pk]
+  name String [not null]
+  clerkId String [unique, not null]
+  email String [unique, not null]
+  role Role [not null, default: 'STUDENT']
+  createdAt DateTime [default: `now()`, not null]
+  imageUrl String
+  couponRedemptions CouponRedemption [not null]
+  courses Course [not null]
+  enrollments Enrollment [not null]
+  purchases Purchase [not null]
+  fcmTokens FcmToken [not null]
+  questions Question [not null]
+  quizzes Quiz [not null]
+  progresses UserProgress [not null]
+}
+
+Table Video {
+  id String [pk]
+  subLessonId String
+  url String [not null]
+  duration Int
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  description String
+  title String [not null]
+  courseId String
+  isIntroVideo Boolean [not null, default: false]
+  course Course
+  subLesson SubLesson
+}
+
+Enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+Enum ProgressEntityType {
+  COURSE
+  LESSON
+  SUB_LESSON
+  VIDEO
+  QUIZ
+  QUESTION
+  FLASHCARD
+}
+
+Enum ProgressStatus {
+  IN_PROGRESS
+  COMPLETED
+}
+
+Enum PurchaseStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+Enum EnrollmentStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+}
+
+Enum QuestionType {
+  MULTIPLE_CHOICES
+  TRUE_OR_FALSE
+  REARRANGE
+}
+
+Enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+  STAFF
+}
+
+Ref: CouponCourse.couponId > Coupon.id [delete: Cascade]
+
+Ref: CouponCourse.courseId > Course.id [delete: Cascade]
+
+Ref: CouponRedemption.couponId > Coupon.id [delete: Cascade]
+
+Ref: CouponRedemption.userId > User.id [delete: Cascade]
+
+Ref: Course.categoryId > Category.id
+
+Ref: Course.userId > User.id
+
+Ref: FcmToken.userId > User.id [delete: Cascade]
+
+Ref: Flashcard.categoryId > Category.id [delete: Cascade]
+
+Ref: Lesson.courseId > Course.id [delete: Cascade]
+
+Ref: LevelTest.categoryId > Category.id [delete: Cascade]
+
+Ref: LevelTestQuiz.levelTestId - LevelTest.id [delete: Cascade]
+
+Ref: LevelTestQuiz.quizId - Quiz.id [delete: Cascade]
+
+Ref: UserProgress.userId > User.id [delete: Cascade]
+
+Ref: Purchase.userId > User.id [delete: Restrict]
+
+Ref: PurchaseItem.purchaseId > Purchase.id [delete: Cascade]
+
+Ref: PurchaseItem.courseId > Course.id [delete: Set Null]
+
+Ref: PurchaseItem.levelTestId > LevelTest.id [delete: Set Null]
+
+Ref: Enrollment.userId > User.id [delete: Cascade]
+
+Ref: Enrollment.courseId > Course.id [delete: Cascade]
+
+Ref: Enrollment.levelTestId > LevelTest.id [delete: Cascade]
+
+Ref: Question.quizId > Quiz.id
+
+Ref: Question.sectionId > QuizSection.id
+
+Ref: Question.userId > User.id [delete: Cascade]
+
+Ref: Quiz.userId > User.id
+
+Ref: CourseQuiz.courseId > Course.id [delete: Cascade]
+
+Ref: CourseQuiz.quizId - Quiz.id [delete: Cascade]
+
+Ref: LessonQuiz.lessonId > Lesson.id [delete: Cascade]
+
+Ref: LessonQuiz.quizId - Quiz.id [delete: Cascade]
+
+Ref: SubLessonQuiz.quizId - Quiz.id [delete: Cascade]
+
+Ref: SubLessonQuiz.subLessonId > SubLesson.id [delete: Cascade]
+
+Ref: QuizSection.quizId > Quiz.id [delete: Cascade]
+
+Ref: SubLesson.lessonId > Lesson.id [delete: Cascade]
+
+Ref: Video.courseId > Course.id [delete: Cascade]
+
+Ref: Video.subLessonId > SubLesson.id [delete: Cascade]

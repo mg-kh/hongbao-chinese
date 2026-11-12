@@ -1,0 +1,177 @@
+"use client";
+
+import useAllFlashcardList from "@/hooks/global-data-fetching/useAllFlashcardList";
+import { useCompletedVideos } from "@/hooks/global-data-fetching/useCompletedVideos";
+import useMyCourses from "@/hooks/global-data-fetching/useMyCourses";
+import { Group, Stack, Text } from "@mantine/core";
+import {
+  BookOpenIcon,
+  BrainIcon,
+  CalendarXIcon,
+  CardsIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  PlayCircleIcon,
+} from "@phosphor-icons/react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import AccountLinks from "./components/AccountLinks/AccountLinks";
+import StatTile from "./components/StatTile/StatTile";
+import UserInfo from "./components/UserInfo/UserInfo";
+import { loadLearnedIds } from "./flashcards/learned";
+import { starterDeck as memoDeck } from "./memo-space/deck";
+import { loadProgress as loadMemoProgress } from "./memo-space/srs";
+
+/** Small heading that groups a row of related tiles. */
+const StatGroupLabel: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => (
+  <Text
+    size="11px"
+    fw={700}
+    c="gray.5"
+    className="uppercase! tracking-[0.12em]!"
+  >
+    {children}
+  </Text>
+);
+
+const Profile = () => {
+  const { userId } = useParams();
+  const uid = String(userId);
+  const { completedCount } = useCompletedVideos();
+  const { stats } = useMyCourses();
+  const { flashcards } = useAllFlashcardList();
+
+  // Flashcards/Memo Space progress is tracked client-side (no backend
+  // endpoint yet), so it's read from localStorage after mount - starts at 0
+  // to stay hydration-safe, then fills in once the browser can read it.
+  const [learnedCount, setLearnedCount] = useState(0);
+  const [dueCount, setDueCount] = useState(0);
+
+  useEffect(() => {
+    if (!userId) return;
+    setLearnedCount(loadLearnedIds(uid).length);
+
+    const progress = loadMemoProgress(uid);
+    const now = Date.now();
+    const due = memoDeck.filter(
+      (c) => !progress[c.id] || progress[c.id].dueAt <= now,
+    ).length;
+    setDueCount(due);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
+
+  const totalFlashcards = flashcards.length;
+  const learnedPct = totalFlashcards
+    ? Math.round((learnedCount / totalFlashcards) * 100)
+    : 0;
+
+  return (
+    <Stack gap={28} className="flex-1!">
+      {/* identity */}
+      <UserInfo />
+
+      {/* enrolment - the full course list lives on its own "My courses"
+          page; these are the headline numbers for it. */}
+      <Stack gap={10}>
+        <Group justify="space-between" align="center" gap={8}>
+          <StatGroupLabel>My courses</StatGroupLabel>
+          <Text
+            component={Link}
+            href={`/profile/${userId}/my-courses`}
+            size="xs"
+            fw={600}
+            c="hongbao-red.6"
+            className="no-underline! hover:underline!"
+          >
+            View all
+          </Text>
+        </Group>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <StatTile
+            icon={<BookOpenIcon size={18} weight="fill" />}
+            value={stats.total}
+            label="Enrolled"
+            caption={
+              stats.total > 0
+                ? "You're enrolled and learning"
+                : "Browse courses to get started"
+            }
+            tone={stats.total > 0 ? "brand" : "neutral"}
+          />
+          <StatTile
+            icon={<PlayCircleIcon size={18} weight="fill" />}
+            value={stats.active}
+            label="In progress"
+            caption={
+              stats.active > 0 ? "Keep up the momentum" : "Nothing in progress"
+            }
+            tone={stats.active > 0 ? "brand" : "neutral"}
+          />
+          <StatTile
+            icon={<ClockIcon size={18} weight="fill" />}
+            value={stats.pending}
+            label="Pending approval"
+            caption={
+              stats.pending > 0 ? "Awaiting staff review" : "Nothing pending"
+            }
+            tone={stats.pending > 0 ? "attention" : "neutral"}
+          />
+          <StatTile
+            icon={<CalendarXIcon size={18} weight="fill" />}
+            value={stats.expired}
+            label="Expired"
+            caption={
+              stats.expired > 0 ? "Renew to keep learning" : "None expired"
+            }
+            tone={stats.expired > 0 ? "attention" : "neutral"}
+          />
+        </div>
+      </Stack>
+
+      {/* activity */}
+      <Stack gap={10}>
+        <StatGroupLabel>Learning activity</StatGroupLabel>
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          <StatTile
+            icon={<CheckCircleIcon size={18} weight="fill" />}
+            value={completedCount}
+            label="Videos completed"
+            caption={
+              completedCount > 0
+                ? "Lessons finished across your courses"
+                : "Finish a lesson to start your streak"
+            }
+            tone={completedCount > 0 ? "success" : "neutral"}
+          />
+          <StatTile
+            icon={<CardsIcon size={18} weight="fill" />}
+            value={`${learnedCount}/${totalFlashcards}`}
+            label="Flashcards learned"
+            caption={`${learnedPct}% of the deck reviewed`}
+            progress={learnedPct}
+            tone={learnedCount > 0 ? "brand" : "neutral"}
+          />
+          <StatTile
+            icon={<BrainIcon size={18} weight="fill" />}
+            value={dueCount}
+            label="Due for review"
+            caption={dueCount > 0 ? "Ready to review now" : "All caught up!"}
+            tone={dueCount > 0 ? "attention" : "success"}
+            className="max-lg:col-span-2!"
+          />
+        </div>
+      </Stack>
+
+      {/* account */}
+      <Stack gap={10}>
+        <StatGroupLabel>Account</StatGroupLabel>
+        <AccountLinks />
+      </Stack>
+    </Stack>
+  );
+};
+
+export default Profile;

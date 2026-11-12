@@ -1,0 +1,30 @@
+model UserProgress {
+  id          String             @id @default(uuid())
+  userId      String
+  entityType  ProgressEntityType
+  entityId    String
+  status      ProgressStatus     @default(IN_PROGRESS)
+  startedAt   DateTime           @default(now())
+  completedAt DateTime?
+  updatedAt   DateTime           @updatedAt
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, entityType, entityId])
+  @@index([userId, status])
+  @@index([entityType, entityId])
+}
+
+enum ProgressEntityType {
+  COURSE
+  LESSON
+  SUB_LESSON
+  VIDEO
+  QUIZ
+  QUESTION
+  FLASHCARD
+}
+
+enum ProgressStatus {
+  IN_PROGRESS
+  COMPLETED
+}

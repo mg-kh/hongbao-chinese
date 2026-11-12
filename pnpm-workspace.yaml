@@ -1,0 +1,21 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+allowBuilds:
+  '@firebase/util': true
+  '@parcel/watcher': true
+  '@prisma/engines': true
+  '@scarf/scarf': false
+  '@swc/core': true
+  esbuild: true
+  prisma: true
+  protobufjs: true
+  sharp: true
+minimumReleaseAgeExclude:
+  - '@turbo/darwin-64@2.11.11'
+  - '@turbo/darwin-arm64@2.11.11'
+  - '@turbo/linux-64@2.11.11'
+  - '@turbo/linux-arm64@2.11.11'
+  - '@turbo/windows-64@2.11.11'
+  - '@turbo/windows-arm64@2.11.11'
+  - turbo@2.11.11

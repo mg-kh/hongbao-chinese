@@ -1,0 +1,15 @@
+model Flashcard {
+  id           String   @id @default(uuid())
+  cnWord       String
+  pinyin       String
+  type         String
+  meaningEn    String
+  meaningMm    String
+  categoryId   String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  exampleUsage Json     @default("[]")
+  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId])
+}

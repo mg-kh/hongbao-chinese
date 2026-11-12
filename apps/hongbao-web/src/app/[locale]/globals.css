@@ -1,0 +1,331 @@
+@import "tailwindcss";
+
+@import "@mantine/core/styles.css";
+@import "@mantine/notifications/styles.css";
+@import "@mantine/dropzone/styles.css";
+@import "@mantine/charts/styles.css";
+
+/* BeginYourJourneyBanner - slow drifting gradient background */
+@keyframes journey-gradient-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* CartButton - bounce when an item is added to the cart */
+@keyframes cart-bump {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.35) translateY(-3px);
+  }
+  55% {
+    transform: scale(0.92);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* StudentReview - card entrance on mount / page change */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@theme {
+  --color-hongbao-red-50: #ffe5e5;
+  --color-hongbao-red-100: #ffb8b8;
+  --color-hongbao-red-200: #ff8a8a;
+  --color-hongbao-red-300: #ff5c5c;
+  --color-hongbao-red-400: #ff3d3d;
+  --color-hongbao-red-500: #f5222d;
+  --color-hongbao-red-600: #d91e26;
+  --color-hongbao-red-700: #b71c1c;
+  --color-hongbao-red-800: #8c1515;
+  --color-hongbao-red-900: #660f0f;
+  --color-hongbao-maroon-50: #f5e6e6;
+  --color-hongbao-maroon-100: #e0b3b3;
+  --color-hongbao-maroon-200: #cc8080;
+  --color-hongbao-maroon-300: #b84d4d;
+  --color-hongbao-maroon-400: #a31f1f;
+  --color-hongbao-maroon-500: #7a1f1f;
+  --color-hongbao-maroon-600: #661a1a;
+  --color-hongbao-maroon-700: #521414;
+  --color-hongbao-maroon-800: #3d0f0f;
+  --color-hongbao-maroon-900: #2a0a0a;
+  --color-hongbao-gold-50: #fff4d6;
+  --color-hongbao-gold-100: #ffe8a3;
+  --color-hongbao-gold-200: #ffdc70;
+  --color-hongbao-gold-300: #ffd04d;
+  --color-hongbao-gold-400: #f5c542;
+  --color-hongbao-gold-500: #e6b93c;
+  --color-hongbao-gold-600: #cc9f33;
+  --color-hongbao-gold-700: #b3862b;
+  --color-hongbao-gold-800: #996d22;
+  --color-hongbao-gold-900: #80541a;
+  --color-hongbao-orange-50: #fff0e6;
+  --color-hongbao-orange-100: #ffd1b3;
+  --color-hongbao-orange-200: #ffb380;
+  --color-hongbao-orange-300: #ff944d;
+  --color-hongbao-orange-400: #ff7a26;
+  --color-hongbao-orange-500: #f26a1b;
+  --color-hongbao-orange-600: #d95f18;
+  --color-hongbao-orange-700: #b84f14;
+  --color-hongbao-orange-800: #993f10;
+  --color-hongbao-orange-900: #7a300c;
+  --color-hongbao-brown-50: #f2e6e0;
+  --color-hongbao-brown-100: #d9bfb3;
+  --color-hongbao-brown-200: #bf9985;
+  --color-hongbao-brown-300: #a67357;
+  --color-hongbao-brown-400: #8c4d2a;
+  --color-hongbao-brown-500: #733d22;
+  --color-hongbao-brown-600: #5c311b;
+  --color-hongbao-brown-700: #452514;
+  --color-hongbao-brown-800: #2e180d;
+  --color-hongbao-brown-900: #1a0d07;
+  --color-hongbao-cream-50: #fff8f2;
+  --color-hongbao-cream-100: #fff0e5;
+  --color-hongbao-cream-200: #ffe6d4;
+  --color-hongbao-cream-300: #ffdcc2;
+  --color-hongbao-cream-400: #ffd1b0;
+  --color-hongbao-cream-500: #ffc69e;
+  --color-hongbao-cream-600: #f2b488;
+  --color-hongbao-cream-700: #d99d73;
+  --color-hongbao-cream-800: #bf855e;
+  --color-hongbao-cream-900: #a66d49;
+}
+
+/* CustomRichTextEditor - draggable resize handles for inline images */
+[data-resize-wrapper] {
+  outline-offset: 2px;
+  transition: outline-color 120ms ease;
+}
+
+.ProseMirror:not([contenteditable="false"]) [data-resize-wrapper]:hover,
+.ProseMirror-selectednode [data-resize-wrapper] {
+  outline: 2px solid var(--color-hongbao-red-500);
+}
+
+[data-resize-handle] {
+  z-index: 20;
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background-color: var(--color-hongbao-red-500);
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+[data-resize-wrapper]:hover [data-resize-handle],
+.ProseMirror-selectednode [data-resize-handle] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Preview mode (editor.setEditable(false)) - resize handles must not be
+   interactable once the content is read-only. */
+.ProseMirror[contenteditable="false"] [data-resize-handle] {
+  display: none;
+}
+
+[data-resize-handle="top-left"] {
+  transform: translate(-50%, -50%);
+  cursor: nwse-resize;
+}
+
+[data-resize-handle="top-right"] {
+  transform: translate(50%, -50%);
+  cursor: nesw-resize;
+}
+
+[data-resize-handle="bottom-left"] {
+  transform: translate(-50%, 50%);
+  cursor: nesw-resize;
+}
+
+[data-resize-handle="bottom-right"] {
+  transform: translate(50%, 50%);
+  cursor: nwse-resize;
+}
+
+[data-resize-delete] {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 21;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.55);
+  color: white;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+[data-resize-delete]::before {
+  content: "\2715";
+  font-size: 11px;
+  line-height: 1;
+}
+
+[data-resize-wrapper]:hover [data-resize-delete],
+.ProseMirror-selectednode [data-resize-delete] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ProseMirror[contenteditable="false"] [data-resize-delete] {
+  display: none;
+}
+
+/* CustomRichTextEditor - pinyin ruby annotations.
+   The pinyin is drawn from the data-rt attribute via ::after rather than a
+   real <rt> child so the mark's DOM stays a plain [tag, hole] wrapper - the
+   same shape as bold/italic - which keeps typing/cursor movement inside
+   annotated text smooth. Unscoped (not `.ProseMirror ...`) so it also shows
+   up wherever the saved HTML is rendered outside the editor (RichTextContent,
+   CustomRadioGroup, ...). */
+ruby[data-rt] {
+  position: relative;
+  margin: 0 1px;
+}
+
+ruby[data-rt]::after {
+  content: attr(data-rt);
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -100%);
+  font-size: 0.6em;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-hongbao-red-600);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* CustomRichTextEditor - bullet/ordered lists and blockquote.
+   Tailwind's preflight resets `ul, ol { list-style: none }` globally, and
+   Mantine's own tiptap stylesheet additionally sets `list-style-type: none`
+   plus `display: flex` on every <li> (for its task-list checkboxes) - both
+   combine to strip markers from plain bullet/ordered lists entirely, so
+   toggling them looked like nothing happened. Restored explicitly here. */
+.ProseMirror ul:not([data-type="taskList"]) {
+  list-style-type: disc;
+  padding-inline-start: 1.5em;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  padding-inline-start: 1.5em;
+}
+
+.ProseMirror ul:not([data-type="taskList"]) > li,
+.ProseMirror ol > li {
+  display: list-item;
+}
+
+.ProseMirror blockquote {
+  border-inline-start: 3px solid var(--color-hongbao-red-300);
+  padding-inline-start: 1em;
+  margin-inline-start: 0;
+  color: var(--color-hongbao-brown-700);
+  font-style: italic;
+}
+
+/* CustomRichTextEditor - bubble menu framing.
+   The sticky toolbar's card look (border + rounded corners) comes from the
+   RichTextEditor root it's docked inside; the bubble menu is a standalone
+   floating portal with none of that, so it's replicated here using the same
+   Mantine tokens/selectors the root card itself uses, to keep it visually
+   identical (including light/dark mode) rather than an approximation.
+   No `overflow: hidden` here - controls like Ruby/Link render their popover
+   inline (withinPortal={false}, needed so opening them doesn't blur/hide the
+   bubble menu itself) rather than portaled, so clipping overflow would also
+   clip - and hide - those popovers' inputs. The toolbar inside gets its own
+   bottom-radius instead, to still land on evenly rounded corners. */
+.rte-bubble-menu {
+  border-radius: var(--mantine-radius-default);
+  border: calc(0.0625rem * var(--mantine-scale)) solid;
+  box-shadow: var(--mantine-shadow-md);
+}
+
+:where([data-mantine-color-scheme="light"]) .rte-bubble-menu {
+  border-color: var(--mantine-color-gray-4);
+}
+
+:where([data-mantine-color-scheme="dark"]) .rte-bubble-menu {
+  border-color: var(--mantine-color-dark-4);
+}
+
+/* CustomRichTextEditor - inserted audio playback.
+   Rendered as a plain <audio> tag (see extensions/Audio.ts) so it plays
+   identically wherever the saved HTML ends up (editor, RichTextContent, ...)
+   with no extra JS required. */
+.ProseMirror audio[data-type="audio"] {
+  display: block;
+  width: 100%;
+  margin-block: 0.5em;
+}
+
+/* CustomRichTextEditor - inserted PDF attachment chip.
+   Rendered as a plain <a> tag (see extensions/PdfAttachment.ts) so the chip
+   looks and works the same everywhere the saved HTML is displayed, not just
+   inside the editor. */
+a[data-type="pdf-attachment"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-block: 0.5em;
+  padding: 0.5em 0.85em;
+  border: 1px solid var(--mantine-color-gray-4);
+  border-radius: var(--mantine-radius-default);
+  background-color: var(--mantine-color-gray-0);
+  color: var(--color-hongbao-brown-700);
+  text-decoration: none;
+  font-size: 0.9em;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+a[data-type="pdf-attachment"]:hover {
+  border-color: var(--color-hongbao-red-500);
+  background-color: var(--mantine-color-gray-1);
+}
+
+.rte-pdf-chip-icon {
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.rte-pdf-chip-name {
+  font-weight: 500;
+}

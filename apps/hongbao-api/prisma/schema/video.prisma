@@ -1,0 +1,16 @@
+model Video {
+  id           String     @id @default(uuid())
+  subLessonId  String?
+  url          String
+  duration     Int?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  description  String?
+  title        String
+  courseId     String?
+  isIntroVideo Boolean    @default(false)
+  course       Course?    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  subLesson    SubLesson? @relation(fields: [subLessonId], references: [id], onDelete: Cascade)
+
+  @@index([subLessonId])
+}

@@ -1,0 +1,83 @@
+model Purchase {
+  id            String         @id @default(cuid())
+  userId        String
+  orderNo       String         @unique
+  status        PurchaseStatus @default(PENDING)
+  totalAmount   Int
+  currency      String         @default("MMK")
+  paymentType   String?
+  transactionNo String?        @unique
+  createdAt     DateTime       @default(now())
+  paidAt        DateTime?
+  updatedAt     DateTime       @updatedAt
+  // Restrict: payment history must survive user deletion attempts
+  user          User           @relation(fields: [userId], references: [id], onDelete: Restrict)
+  items         PurchaseItem[]
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+}
+
+// productName / price / durationDays are snapshots taken at checkout.
+// Product FKs are SET NULL on product delete so history survives, which is why
+// the DB check (see migration) is "at most one" product; the app sets exactly one.
+model PurchaseItem {
+  id           String     @id @default(cuid())
+  purchaseId   String
+  courseId     String?
+  levelTestId  String?
+  productName  String
+  price        Int
+  durationDays Int?
+  quantity     Int        @default(1)
+  createdAt    DateTime   @default(now())
+  purchase     Purchase   @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  course       Course?    @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  levelTest    LevelTest? @relation(fields: [levelTestId], references: [id], onDelete: SetNull)
+
+  @@index([purchaseId])
+  @@index([courseId])
+  @@index([levelTestId])
+}
+
+// Exactly one product FK is enforced by a CHECK constraint (see migration).
+// Per-product composite uniques are safe with nullable columns: rows whose
+// product column is NULL never collide, and rows for that product do.
+model Enrollment {
+  id          String           @id @default(cuid())
+  userId      String
+  courseId    String?
+  levelTestId String?
+  // Order that last granted/renewed this enrollment; not unique since one
+  // order can cover several products and renewals overwrite it.
+  orderNo     String
+  status      EnrollmentStatus @default(PENDING)
+  startedAt   DateTime?        
+  expiredAt   DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course      Course?          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  levelTest   LevelTest?       @relation(fields: [levelTestId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@unique([userId, levelTestId])
+  @@index([courseId])
+  @@index([levelTestId])
+  @@index([orderNo])
+  @@index([status, expiredAt])
+}
+
+enum PurchaseStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum EnrollmentStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+}

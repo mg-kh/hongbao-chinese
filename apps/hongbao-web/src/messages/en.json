@@ -1,0 +1,21 @@
+{
+  "Common": {
+    "mmk": "MMK"
+  },
+  "DashboardSidebar": {
+    "courses": "Courses",
+    "lessons": "Lessons"
+  },
+  "Course": {
+    "create_new_course": "Create New Course"
+  },
+  "Lesson": {
+    "create_new_lesson": "Create New Lesson"
+  },
+  "PwaInstall": {
+    "title": "Install Hong Bao",
+    "description": "Add Hong Bao to your home screen for quick access and a faster, app-like experience.",
+    "install": "Install",
+    "not_now": "Not now"
+  }
+}

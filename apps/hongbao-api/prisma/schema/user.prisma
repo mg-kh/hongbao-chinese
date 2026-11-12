@@ -1,0 +1,24 @@
+model User {
+  id                String             @id @default(uuid())
+  name              String
+  clerkId           String             @unique
+  email             String             @unique
+  role              Role               @default(STUDENT)
+  createdAt         DateTime           @default(now())
+  imageUrl          String?
+  couponRedemptions CouponRedemption[]
+  courses           Course[]
+  enrollments       Enrollment[]
+  purchases         Purchase[]
+  fcmTokens         FcmToken[]
+  questions         Question[]
+  quizzes           Quiz[]
+  progresses        UserProgress[]
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+  STAFF
+}

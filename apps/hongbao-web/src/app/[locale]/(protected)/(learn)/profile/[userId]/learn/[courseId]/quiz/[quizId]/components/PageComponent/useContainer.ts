@@ -1,0 +1,237 @@
+import useApiQuery from "@/hooks/fetching/useApiQuery";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams } from "next/navigation";
+import {
+  BaseSyntheticEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { QuizAnswersFormField, QuizAnswersSchema } from "./quiz-answers-schema";
+import {
+  QuestionType,
+  TAnswer,
+  TGradedQuestion,
+  TQuiz,
+  TQuizQuestion,
+  TQuizSubmission,
+} from "./types/quiz.type";
+
+/** `options`/`question` are rich text (e.g. "<p>Mouse</p>") while `answer` is
+ * always plain text, so tags need stripping before comparing the two. */
+const stripHtml = (value: string) => value.replace(/<[^>]+>/g, "").trim();
+
+/** An answer flattened to one comparable string - option codes for
+ * single-choice, space-joined words for re-arrange. For grading, not display. */
+const toValue = (value: TAnswer) =>
+  stripHtml(Array.isArray(value) ? value.join(" ") : (value ?? ""));
+
+/** Resolves an answer to display text: a single-choice option's label
+ * (options carry nanoid values, not words) or the space-joined word list for
+ * re-arrange. May contain rich text (e.g. ruby) - render it as HTML. */
+const answerLabelOf = (q: TQuizQuestion, value: TAnswer) => {
+  if (Array.isArray(value)) return stripHtml(value.join(" "));
+  const option = (q.data.options || []).find((o) => o.value === value);
+  return option?.label ?? value ?? "";
+};
+
+/** The expected answer's raw value(s), for the correctness check. */
+const correctValueOf = (q: TQuizQuestion) =>
+  q.type === QuestionType.REARRANGE
+    ? stripHtml((q.data.answers || []).join(" "))
+    : stripHtml(q.data.answer ?? "");
+
+/** The expected answer as display text for the review screen. */
+const correctLabelOf = (q: TQuizQuestion) =>
+  q.type === QuestionType.REARRANGE
+    ? stripHtml((q.data.answers || []).join(" "))
+    : answerLabelOf(q, q.data.answer);
+
+/** Performance bands drive the headline message on the results screen. */
+const bandFor = (percent: number) => {
+  if (percent === 100)
+    return {
+      title: "Perfect score!",
+      body: "Every answer correct - you're ready for the next lesson.",
+      tone: "success" as const,
+    };
+  if (percent >= 80)
+    return {
+      title: "Nicely done!",
+      body: "You've got a solid grip on this. Review the few you missed below.",
+      tone: "success" as const,
+    };
+  if (percent >= 50)
+    return {
+      title: "Good effort",
+      body: "You're getting there. The review below shows exactly what to work on.",
+      tone: "attention" as const,
+    };
+  return {
+    title: "Worth another pass",
+    body: "Go back over the lesson, then retake this quiz - the review below is a good place to start.",
+    tone: "danger" as const,
+  };
+};
+
+/** Stable fallback so `answers` keeps referential identity across renders
+ * before the form has any values yet. */
+const EMPTY_ANSWERS: QuizAnswersFormField["answers"] = {};
+
+/** A short, actionable tip per question on the review screen. */
+const suggestionFor = (g: TGradedQuestion) => {
+  if (g.isCorrect) return "Correct - keep it up.";
+  if (!g.isAnswered)
+    return "You skipped this one. Give it a try on your retake.";
+
+  switch (g.question.type) {
+    case QuestionType.REARRANGE:
+      return "Word order tripped you up. Read the correct sentence aloud a few times to lock in the pattern.";
+    case QuestionType.TRUE_OR_FALSE:
+      return "Re-read the statement carefully - one word usually decides true from false.";
+    default:
+      return "Compare your choice with the correct answer and note what makes it fit.";
+  }
+};
+
+const useContainer = () => {
+  const { quizId, courseId, userId } = useParams<{
+    quizId: string;
+    courseId: string;
+    userId: string;
+  }>();
+
+  const { data: apiQuestions, isLoading } = useApiQuery<
+    { data: TQuiz },
+    TQuizQuestion[]
+  >({
+    url: `quiz/${quizId}`,
+    enabled: !!quizId,
+    retry: false,
+    select: (data) => data?.data?.questions,
+  });
+
+  const questions = useMemo(() => apiQuestions ?? [], [apiQuestions]);
+
+  const form = useForm<QuizAnswersFormField>({
+    mode: "onChange",
+    resolver: zodResolver(QuizAnswersSchema),
+    defaultValues: { answers: {} },
+  });
+  const { control, reset, handleSubmit } = form;
+
+  const answers = useWatch({ control, name: "answers" }) ?? EMPTY_ANSWERS;
+
+  const [index, setIndex] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
+  const [submission, setSubmission] = useState<TQuizSubmission | null>(null);
+  // Wall-clock reads aren't allowed during render, so the timer starts on
+  // mount instead.
+  const startedAt = useRef<number | null>(null);
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    startedAt.current = Date.now();
+  }, []);
+
+  const total = questions.length;
+  const current = questions[index];
+  const currentAnswer = current ? answers[current.id] : undefined;
+
+  const answeredCount = questions.filter((q) => {
+    const a = answers[q.id];
+    return Array.isArray(a) ? a.length > 0 : !!a;
+  }).length;
+
+  const isAnswered = Array.isArray(currentAnswer)
+    ? currentAnswer.length > 0
+    : !!currentAnswer;
+
+  const goPrev = () => setIndex((i) => Math.max(0, i - 1));
+  const goNext = () => setIndex((i) => Math.min(total - 1, i + 1));
+  const goTo = (i: number) => setIndex(Math.min(Math.max(0, i), total - 1));
+
+  /** Shapes the form's answers map into a submit-ready payload. */
+  const buildSubmission = (values: QuizAnswersFormField): TQuizSubmission => ({
+    quizId,
+    answers: questions.map((q) => {
+      const answer = values.answers[q.id];
+      return {
+        questionId: q.id,
+        answer,
+        answerLabel: answerLabelOf(q, answer),
+      };
+    }),
+  });
+
+  const onValid = (values: QuizAnswersFormField) => {
+    console.log(buildSubmission(values));
+    setSubmission(buildSubmission(values));
+    setSubmitted(true);
+  };
+
+  const submit = (e?: BaseSyntheticEvent) => {
+    const started = startedAt.current ?? Date.now();
+    setElapsed(Math.round((Date.now() - started) / 1000));
+    return handleSubmit(onValid)(e);
+  };
+
+  const retake = () => {
+    reset({ answers: {} });
+    setIndex(0);
+    setSubmitted(false);
+    setSubmission(null);
+    startedAt.current = Date.now();
+    setElapsed(0);
+  };
+
+  const graded = useMemo<TGradedQuestion[]>(
+    () =>
+      questions.map((q) => {
+        const given = answers[q.id];
+        const givenValue = toValue(given);
+        return {
+          question: q,
+          given,
+          correct: correctLabelOf(q),
+          givenLabel: answerLabelOf(q, given),
+          isAnswered: Array.isArray(given) ? given.length > 0 : !!given,
+          isCorrect: !!givenValue && givenValue === correctValueOf(q),
+        };
+      }),
+    [questions, answers],
+  );
+
+  const score = graded.filter((g) => g.isCorrect).length;
+  const percent = total ? Math.round((score / total) * 100) : 0;
+
+  return {
+    form,
+    isLoading,
+    questions,
+    total,
+    index,
+    current,
+    isAnswered,
+    answeredCount,
+    answers,
+    goPrev,
+    goNext,
+    goTo,
+    submit,
+    retake,
+    submitted,
+    submission,
+    graded,
+    score,
+    percent,
+    elapsed,
+    band: bandFor(percent),
+    suggestionFor,
+    courseHref: `/profile/${userId}/learn/${courseId}`,
+  };
+};
+
+export default useContainer;

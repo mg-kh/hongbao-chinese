@@ -1,0 +1,26 @@
+model LevelTest {
+  id            String         @id @default(uuid())
+  title         String
+  description   String?
+  price         Int?           @default(0)
+  perTime       Int?           @default(0)
+  published     Boolean        @default(false)
+  categoryId    String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  category      Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  quiz          LevelTestQuiz?
+  enrollments   Enrollment[]
+  purchaseItems PurchaseItem[]
+
+  @@index([categoryId])
+}
+
+model LevelTestQuiz {
+  quizId      String    @unique
+  levelTestId String    @unique
+  levelTest   LevelTest @relation(fields: [levelTestId], references: [id], onDelete: Cascade)
+  quiz        Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@id([levelTestId, quizId])
+}

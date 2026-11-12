@@ -1,0 +1,22 @@
+model Question {
+  id          String       @id @default(uuid())
+  quizId      String?
+  type        QuestionType
+  data        Json
+  createdAt   DateTime     @default(now())
+  title       String
+  updatedAt   DateTime     @updatedAt
+  userId      String
+  explanation String?
+  order       Int          @default(0)
+  sectionId   String?
+  quiz        Quiz?        @relation(fields: [quizId], references: [id])
+  section     QuizSection? @relation(fields: [sectionId], references: [id])
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICES
+  TRUE_OR_FALSE
+  REARRANGE
+}

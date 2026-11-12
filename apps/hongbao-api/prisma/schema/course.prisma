@@ -1,0 +1,25 @@
+model Course {
+  id             String         @id @default(uuid())
+  title          String
+  description    String
+  includedAssets String[]
+  isFree         Boolean        @default(false)
+  price          Int?           @default(0)
+  published      Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  userId         String
+  perTime        Int?           @default(0)
+  updatedAt      DateTime       @updatedAt
+  categoryId     String?
+  coupons        CouponCourse[]
+  category       Category?      @relation(fields: [categoryId], references: [id])
+  user           User           @relation(fields: [userId], references: [id])
+  enrollments    Enrollment[]
+  purchaseItems  PurchaseItem[]
+  quizzes        CourseQuiz[]
+  lessons        Lesson[]
+  videos         Video[]
+
+  @@index([userId])
+  @@index([categoryId])
+}
