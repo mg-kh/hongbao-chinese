@@ -35,12 +35,14 @@ import { MockTestsModule } from './mock-tests/mock-tests.module';
 import { ClientMockTestModule } from './client/client-mock-test/client-mock-test.module';
 import { ShopModule } from './client/shop/shop.module';
 import { ClientPurchaseModule } from './client/client-purchase/client-purchase.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    LoggerModule,
     // Multiple named tiers are checked on every request; a request must pass
     // ALL of them to proceed. This gives burst protection (short) as well as
     // sustained-abuse protection (medium/long) at the same time.
