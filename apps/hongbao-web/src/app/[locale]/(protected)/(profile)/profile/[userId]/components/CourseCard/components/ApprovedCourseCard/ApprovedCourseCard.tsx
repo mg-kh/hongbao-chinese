@@ -17,7 +17,7 @@ const ApprovedCourseCard: React.FC<Props> = ({ data }) => {
       href={
         data?.type === "course"
           ? `/profile/${userId}/learn/${data?.productId}`
-          : "/level-test"
+          : "/mock-test"
       }
       className="block! no-underline!"
     >

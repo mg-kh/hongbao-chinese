@@ -99,7 +99,7 @@ const DrawerRow: React.FC<{
 const navItems = [
   { label: "Home", href: "/", match: "/" },
   { label: "Shop", href: "/shop", match: "shop" },
-  { label: "Level Test", href: "/level-test", match: "level-test" },
+  { label: "Mock Test", href: "/mock-test", match: "mock-test" },
   { label: "Reading Blogs", href: "/blogs", match: "blogs" },
   { label: "Privacy Policy", href: "/privacy-policy", match: "privacy-policy" },
 ];
@@ -540,8 +540,8 @@ const ClientNavbar = () => {
             <CartButton variant="row" onNavigate={closeMenu} />
             <DrawerRow
               icon={<IconWriting size={18} />}
-              label="Level Test"
-              href="/level-test"
+              label="Mock Test"
+              href="/mock-test"
               onClick={closeMenu}
             />
             <DrawerRow

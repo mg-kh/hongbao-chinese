@@ -6,7 +6,7 @@ import { withErrorHandling } from '../utils/withErrorHandling';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { QuizToCourseDto } from './dto/quiz-to-course.dto';
 import { QuizToLessonDto } from './dto/quiz-to-lesson.dto';
-import { QuizToLevelTestDto } from './dto/quiz-to-level-test.dto';
+import { QuizToMockTestDto } from './dto/quiz-to-mock-test.dto';
 import { QuizToSubLessonDto } from './dto/quiz-to-sub-lesson.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
 
@@ -28,7 +28,7 @@ export class QuizService {
   async findAll() {
     return withErrorHandling(async () => {
       const res = await this.prisma.quiz.findMany({
-        where: { isLevelTest: false },
+        where: { isMockTest: false },
         include: {
           sections: {
             orderBy: { order: 'asc' },
@@ -61,7 +61,7 @@ export class QuizService {
     return withErrorHandling(async () => {
       const res = await this.prisma.quiz.findMany({
         where: {
-          isLevelTest: false,
+          isMockTest: false,
           AND: [
             { courseQuiz: { is: null } },
             { lessonQuiz: { is: null } },
@@ -191,13 +191,13 @@ export class QuizService {
     });
   }
 
-  async addQuizToLevelTest(data: QuizToLevelTestDto) {
+  async addQuizToMockTest(data: QuizToMockTestDto) {
     return withErrorHandling(async () => {
       const res = await this.prisma.$transaction(async (tx) => {
-        const link = await tx.levelTestQuiz.create({ data });
+        const link = await tx.mockTestQuiz.create({ data });
         await tx.quiz.update({
           where: { id: data.quizId },
-          data: { isLevelTest: true },
+          data: { isMockTest: true },
         });
         return link;
       });
@@ -207,17 +207,17 @@ export class QuizService {
     });
   }
 
-  async removeQuizFromLevelTest(data: QuizToLevelTestDto) {
+  async removeQuizFromMockTest(data: QuizToMockTestDto) {
     return withErrorHandling(async () => {
       const res = await this.prisma.$transaction(async (tx) => {
-        const link = await tx.levelTestQuiz.delete({
+        const link = await tx.mockTestQuiz.delete({
           where: {
-            levelTestId_quizId: data,
+            mockTestId_quizId: data,
           },
         });
         await tx.quiz.update({
           where: { id: data.quizId },
-          data: { isLevelTest: false },
+          data: { isMockTest: false },
         });
         return link;
       });

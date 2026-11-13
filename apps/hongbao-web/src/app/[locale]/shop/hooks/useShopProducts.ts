@@ -15,7 +15,7 @@ type Filters = {
 };
 
 /**
- * The storefront catalogue: courses and level tests from the `shop/all-products`
+ * The storefront catalogue: courses and mock tests from the `shop/all-products`
  * API, normalised to `TShopProduct` so the listing, cart, and checkout only deal
  * with one shape. Type and category are filtered server-side.
  */

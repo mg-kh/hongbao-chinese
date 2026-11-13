@@ -7,7 +7,7 @@ export * from "./schemas/course.js";
 export * from "./schemas/feedback.js";
 export * from "./schemas/flashcard.js";
 export * from "./schemas/lesson.js";
-export * from "./schemas/level-test.js";
+export * from "./schemas/mock-test.js";
 export * from "./schemas/notification.js";
 export * from "./schemas/purchase.js";
 export * from "./schemas/question.js";

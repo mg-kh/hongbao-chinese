@@ -5,10 +5,10 @@ model Quiz {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   description   String?
-  isLevelTest   Boolean        @default(false)
+  isMockTest   Boolean        @default(false)
   courseQuiz    CourseQuiz?
   lessonQuiz    LessonQuiz?
-  levelTestQuiz LevelTestQuiz?
+  mockTestQuiz MockTestQuiz?
   questions     Question[]
   user          User?          @relation(fields: [userId], references: [id])
   sections      QuizSection[]

@@ -23,7 +23,7 @@ import useContainer from "./useContainer";
 
 const gradientByType: Record<ShopProductType, string> = {
   course: "from-hongbao-red-500! to-hongbao-maroon-600!",
-  "level-test": "from-hongbao-gold-500! to-hongbao-orange-600!",
+  "mock-test": "from-hongbao-gold-500! to-hongbao-orange-600!",
 };
 
 const money = (value: number) =>

@@ -77,7 +77,7 @@ const HeroSection = () => {
                   component, and a component passed as a prop can't cross the
                   server/client boundary. */}
               <Link
-                href="/level-test"
+                href="/mock-test"
                 className="no-underline! w-full! sm:w-auto!"
               >
                 <Button
@@ -96,7 +96,7 @@ const HeroSection = () => {
                     <IconArrowRight className="hidden! sm:inline-block!" />
                   }
                 >
-                  Level test စစ်ရန်
+                  Mock test စစ်ရန်
                 </Button>
               </Link>
             </div>

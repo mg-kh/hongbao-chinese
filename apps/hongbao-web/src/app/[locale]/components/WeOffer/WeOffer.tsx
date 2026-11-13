@@ -1,5 +1,5 @@
 import CourseIcon from "@/components/icons/CourseIcon";
-import HSK_LevelTest_Icon from "@/components/icons/HSK_LevelTest_Icon";
+import HSK_MockTest_Icon from "@/components/icons/HSK_MockTest_Icon";
 import LessonIcon from "@/components/icons/LessonIcon";
 import QuizIcon from "@/components/icons/QuizIcon";
 import SpaceRepeatIcon from "@/components/icons/SpaceRepeatIcon";
@@ -42,8 +42,8 @@ const WeOffer = () => {
               color="maroon"
             />
             <StatusCard
-              title="Level Test"
-              icon={HSK_LevelTest_Icon}
+              title="Mock Test"
+              icon={HSK_MockTest_Icon}
               color="brown"
             />
             <StatusCard

@@ -1,0 +1,26 @@
+model MockTest {
+  id            String         @id @default(uuid())
+  title         String
+  description   String?
+  price         Int?           @default(0)
+  perTime       Int?           @default(0)
+  published     Boolean        @default(false)
+  categoryId    String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  category      Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  quiz          MockTestQuiz?
+  enrollments   Enrollment[]
+  purchaseItems PurchaseItem[]
+
+  @@index([categoryId])
+}
+
+model MockTestQuiz {
+  quizId      String    @unique
+  mockTestId String    @unique
+  mockTest   MockTest @relation(fields: [mockTestId], references: [id], onDelete: Cascade)
+  quiz        Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@id([mockTestId, quizId])
+}

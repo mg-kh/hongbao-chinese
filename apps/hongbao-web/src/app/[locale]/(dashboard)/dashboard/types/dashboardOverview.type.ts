@@ -25,6 +25,6 @@ export type TDashboardOverviewRes = {
   stats: TDashboardStats;
   courseCategoryBreakdown: TCategoryBreakdown[];
   flashcardCategoryBreakdown: TCategoryBreakdown[];
-  levelTestCategoryBreakdown: TCategoryBreakdown[];
+  mockTestCategoryBreakdown: TCategoryBreakdown[];
   topCourses: TTopCourse[];
 };

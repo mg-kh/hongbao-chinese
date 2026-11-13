@@ -24,7 +24,7 @@ const useContainer = () => {
     if (link.segment) {
       // match the segment only at the same depth it occupies in the
       // link's own href, so an unrelated nested route that happens to
-      // reuse the same segment name (e.g. level-tests/[id]/quizzes vs
+      // reuse the same segment name (e.g. mock-tests/[id]/quizzes vs
       // assets/quizzes) doesn't also light up this link
       const hrefSegments = compact(split(link.href, "/"));
       const segmentIndex = hrefSegments.indexOf(link.segment);

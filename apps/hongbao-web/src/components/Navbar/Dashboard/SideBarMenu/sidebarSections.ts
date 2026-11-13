@@ -8,7 +8,7 @@ import {
   FLASHCARD_LIST,
   GENERATE_COUPONS,
   LESSON_LIST,
-  LEVEL_TEST_LIST,
+  MOCK_TEST_LIST,
   PURCHASES_APPROVED,
   QUIZZES_LIST,
   REVENUE,
@@ -79,12 +79,12 @@ export const getSidebarSections = (
         links: [{ label: "Flashcard", href: FLASHCARD_LIST }],
       },
       {
-        group: "Level Tests",
+        group: "Mock Tests",
         links: [
           {
-            label: "Level Tests",
-            href: LEVEL_TEST_LIST,
-            segment: "level-tests",
+            label: "Mock Tests",
+            href: MOCK_TEST_LIST,
+            segment: "mock-tests",
           },
         ],
       },
@@ -103,7 +103,7 @@ export const getSidebarSections = (
       { label: "Generate Coupons", href: GENERATE_COUPONS },
       // { label: "Pricing - Course", href: PRICING_COURSE },
       // { label: "Pricing - Flash Cards", href: PRICING_FLASHCARD },
-      // { label: "Level Tests", href: PRICING_LEVEL_TEST },
+      // { label: "Mock Tests", href: PRICING_MOCK_TEST },
     ],
   },
   {

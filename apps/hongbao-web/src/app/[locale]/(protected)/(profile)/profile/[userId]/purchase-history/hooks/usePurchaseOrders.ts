@@ -15,9 +15,9 @@ const PAGE_LIMIT = 10;
 const toOrder = (p: TMyPurchase): TPurchaseOrder => {
   const items = p.items.map((i) => ({
     id: i.id,
-    productId: i.courseId ?? i.levelTestId,
-    type: i.courseId ? ("course" as const) : ("level-test" as const),
-    title: i.course?.title ?? i.levelTest?.title ?? i.productName,
+    productId: i.courseId ?? i.mockTestId,
+    type: i.courseId ? ("course" as const) : ("mock-test" as const),
+    title: i.course?.title ?? i.mockTest?.title ?? i.productName,
     durationDays: i.durationDays,
     quantity: i.quantity,
     lineTotal: i.price * i.quantity,

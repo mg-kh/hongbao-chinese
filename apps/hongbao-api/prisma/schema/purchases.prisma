@@ -25,7 +25,7 @@ model PurchaseItem {
   id           String     @id @default(cuid())
   purchaseId   String
   courseId     String?
-  levelTestId  String?
+  mockTestId  String?
   productName  String
   price        Int
   durationDays Int?
@@ -33,11 +33,11 @@ model PurchaseItem {
   createdAt    DateTime   @default(now())
   purchase     Purchase   @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
   course       Course?    @relation(fields: [courseId], references: [id], onDelete: SetNull)
-  levelTest    LevelTest? @relation(fields: [levelTestId], references: [id], onDelete: SetNull)
+  mockTest    MockTest? @relation(fields: [mockTestId], references: [id], onDelete: SetNull)
 
   @@index([purchaseId])
   @@index([courseId])
-  @@index([levelTestId])
+  @@index([mockTestId])
 }
 
 // Exactly one product FK is enforced by a CHECK constraint (see migration).
@@ -47,7 +47,7 @@ model Enrollment {
   id          String           @id @default(cuid())
   userId      String
   courseId    String?
-  levelTestId String?
+  mockTestId String?
   // Order that last granted/renewed this enrollment; not unique since one
   // order can cover several products and renewals overwrite it.
   orderNo     String
@@ -58,12 +58,12 @@ model Enrollment {
   updatedAt   DateTime         @updatedAt
   user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   course      Course?          @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  levelTest   LevelTest?       @relation(fields: [levelTestId], references: [id], onDelete: Cascade)
+  mockTest   MockTest?       @relation(fields: [mockTestId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
-  @@unique([userId, levelTestId])
+  @@unique([userId, mockTestId])
   @@index([courseId])
-  @@index([levelTestId])
+  @@index([mockTestId])
   @@index([orderNo])
   @@index([status, expiredAt])
 }

@@ -25,11 +25,11 @@ export const QuizToSubLessonSchema = z.object({
 });
 export type QuizToSubLessonRequest = z.input<typeof QuizToSubLessonSchema>;
 
-export const QuizToLevelTestSchema = z.object({
+export const QuizToMockTestSchema = z.object({
   quizId: z.string().min(1),
-  levelTestId: z.string().min(1),
+  mockTestId: z.string().min(1),
 });
-export type QuizToLevelTestRequest = z.input<typeof QuizToLevelTestSchema>;
+export type QuizToMockTestRequest = z.input<typeof QuizToMockTestSchema>;
 
 export const CreateQuizSectionSchema = z.object({
   quizId: z.string().min(1),

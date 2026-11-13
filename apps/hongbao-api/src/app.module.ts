@@ -31,8 +31,8 @@ import { CategoryModule } from './category/category.module';
 import { FlashcardModule } from './flashcard/flashcard.module';
 import { ClientFlashcardModule } from './client/client-flashcard/client-flashcard.module';
 import { ClientCategoryModule } from './client/client-category/client-category.module';
-import { LevelTestsModule } from './level-tests/level-tests.module';
-import { ClientLevelTestModule } from './client/client-level-test/client-level-test.module';
+import { MockTestsModule } from './mock-tests/mock-tests.module';
+import { ClientMockTestModule } from './client/client-mock-test/client-mock-test.module';
 import { ShopModule } from './client/shop/shop.module';
 import { ClientPurchaseModule } from './client/client-purchase/client-purchase.module';
 
@@ -85,8 +85,8 @@ import { ClientPurchaseModule } from './client/client-purchase/client-purchase.m
     FlashcardModule,
     ClientFlashcardModule,
     ClientCategoryModule,
-    LevelTestsModule,
-    ClientLevelTestModule,
+    MockTestsModule,
+    ClientMockTestModule,
     ShopModule,
     ClientPurchaseModule,
   ],

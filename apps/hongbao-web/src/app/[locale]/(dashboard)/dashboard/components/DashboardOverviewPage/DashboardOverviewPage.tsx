@@ -33,9 +33,9 @@ const DashboardOverviewPage = () => {
           isLoading={isLoading}
         />
         <CategoryBreakdownChart
-          title="Level Tests by Category"
-          unitLabel="level tests"
-          data={overview.levelTestCategoryBreakdown}
+          title="Mock Tests by Category"
+          unitLabel="mock tests"
+          data={overview.mockTestCategoryBreakdown}
           isLoading={isLoading}
         />
       </SimpleGrid>

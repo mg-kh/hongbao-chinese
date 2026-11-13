@@ -10,7 +10,7 @@ Table Category {
   updatedAt DateTime [not null]
   courses Course [not null]
   flashcards Flashcard [not null]
-  levelTests LevelTest [not null]
+  mockTests MockTest [not null]
 }
 
 Table Coupon {
@@ -120,7 +120,7 @@ Table Lesson {
   subLessons SubLesson [not null]
 }
 
-Table LevelTest {
+Table MockTest {
   id String [pk]
   title String [not null]
   description String
@@ -131,19 +131,19 @@ Table LevelTest {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   category Category [not null]
-  quiz LevelTestQuiz
+  quiz MockTestQuiz
   enrollments Enrollment [not null]
   purchaseItems PurchaseItem [not null]
 }
 
-Table LevelTestQuiz {
+Table MockTestQuiz {
   quizId String [unique, not null]
-  levelTestId String [unique, not null]
-  levelTest LevelTest [not null]
+  mockTestId String [unique, not null]
+  mockTest MockTest [not null]
   quiz Quiz [not null]
 
   indexes {
-    (levelTestId, quizId) [pk]
+    (mockTestId, quizId) [pk]
   }
 }
 
@@ -183,7 +183,7 @@ Table PurchaseItem {
   id String [pk]
   purchaseId String [not null]
   courseId String
-  levelTestId String
+  mockTestId String
   productName String [not null]
   price Int [not null]
   durationDays Int
@@ -191,14 +191,14 @@ Table PurchaseItem {
   createdAt DateTime [default: `now()`, not null]
   purchase Purchase [not null]
   course Course
-  levelTest LevelTest
+  mockTest MockTest
 }
 
 Table Enrollment {
   id String [pk]
   userId String [not null]
   courseId String
-  levelTestId String
+  mockTestId String
   orderNo String [not null]
   status EnrollmentStatus [not null, default: 'PENDING']
   startedAt DateTime
@@ -207,11 +207,11 @@ Table Enrollment {
   updatedAt DateTime [not null]
   user User [not null]
   course Course
-  levelTest LevelTest
+  mockTest MockTest
 
   indexes {
     (userId, courseId) [unique]
-    (userId, levelTestId) [unique]
+    (userId, mockTestId) [unique]
   }
 }
 
@@ -239,10 +239,10 @@ Table Quiz {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   description String
-  isLevelTest Boolean [not null, default: false]
+  isMockTest Boolean [not null, default: false]
   courseQuiz CourseQuiz
   lessonQuiz LessonQuiz
-  levelTestQuiz LevelTestQuiz
+  mockTestQuiz MockTestQuiz
   questions Question [not null]
   user User
   sections QuizSection [not null]
@@ -406,11 +406,11 @@ Ref: Flashcard.categoryId > Category.id [delete: Cascade]
 
 Ref: Lesson.courseId > Course.id [delete: Cascade]
 
-Ref: LevelTest.categoryId > Category.id [delete: Cascade]
+Ref: MockTest.categoryId > Category.id [delete: Cascade]
 
-Ref: LevelTestQuiz.levelTestId - LevelTest.id [delete: Cascade]
+Ref: MockTestQuiz.mockTestId - MockTest.id [delete: Cascade]
 
-Ref: LevelTestQuiz.quizId - Quiz.id [delete: Cascade]
+Ref: MockTestQuiz.quizId - Quiz.id [delete: Cascade]
 
 Ref: UserProgress.userId > User.id [delete: Cascade]
 
@@ -420,13 +420,13 @@ Ref: PurchaseItem.purchaseId > Purchase.id [delete: Cascade]
 
 Ref: PurchaseItem.courseId > Course.id [delete: Set Null]
 
-Ref: PurchaseItem.levelTestId > LevelTest.id [delete: Set Null]
+Ref: PurchaseItem.mockTestId > MockTest.id [delete: Set Null]
 
 Ref: Enrollment.userId > User.id [delete: Cascade]
 
 Ref: Enrollment.courseId > Course.id [delete: Cascade]
 
-Ref: Enrollment.levelTestId > LevelTest.id [delete: Cascade]
+Ref: Enrollment.mockTestId > MockTest.id [delete: Cascade]
 
 Ref: Question.quizId > Quiz.id
 
