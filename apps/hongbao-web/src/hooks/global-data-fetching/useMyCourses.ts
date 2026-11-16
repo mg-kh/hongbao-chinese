@@ -10,11 +10,11 @@ import {
 const PAGE_LIMIT = 10;
 
 const toCourse = (e: TMyEnrollment): TMyCourse => {
-  const product = e.course ?? e.levelTest;
+  const product = e.course ?? e.mockTest;
   return {
     id: e.id,
-    productId: e.courseId ?? e.levelTestId ?? product?.id ?? "",
-    type: e.courseId ? "course" : "level-test",
+    productId: e.courseId ?? e.mockTestId ?? product?.id ?? "",
+    type: e.courseId ? "course" : "mock-test",
     title: product?.title ?? "",
     perTime: product?.perTime ?? 1,
     status: e.status,
@@ -26,7 +26,7 @@ const toCourse = (e: TMyEnrollment): TMyCourse => {
 };
 
 /**
- * The user's enrolments (courses + level tests) from
+ * The user's enrolments (courses + mock tests) from
  * `purchase/my-enrollments`, one page at a time, plus the counts derived from
  * them. Shared by the profile overview (stat tiles) and the My courses page
  * (filter tabs). `stats.total` is the server-side total; the per-status

@@ -65,6 +65,6 @@ export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType];
 export const ProductType = {
   ALL: "all",
   COURSE: "course",
-  LEVEL_TEST: "level-test",
+  MOCK_TEST: "mock-test",
 } as const;
 export type ProductType = (typeof ProductType)[keyof typeof ProductType];

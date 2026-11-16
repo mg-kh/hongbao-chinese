@@ -28,9 +28,9 @@ export const publicBottomNavItems: TBottomNavItem[] = [
     icon: <StorefrontIcon size={20} weight="fill" />,
   },
   {
-    label: "Level Test",
-    href: "/level-test",
-    match: "level-test",
+    label: "Mock Test",
+    href: "/mock-test",
+    match: "mock-test",
     icon: <ExamIcon size={20} weight="fill" />,
   },
   {

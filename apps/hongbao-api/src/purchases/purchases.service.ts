@@ -142,8 +142,8 @@ export class PurchasesService {
     let product: EnrollmentProduct;
     if (item.courseId) {
       product = { courseId: item.courseId };
-    } else if (item.levelTestId) {
-      product = { levelTestId: item.levelTestId };
+    } else if (item.mockTestId) {
+      product = { mockTestId: item.mockTestId };
     } else {
       // Product was deleted after checkout; nothing to grant.
       return;
@@ -216,7 +216,7 @@ export class PurchasesService {
           {
             items: {
               some: {
-                OR: [{ courseId: search }, { levelTestId: search }],
+                OR: [{ courseId: search }, { mockTestId: search }],
               },
             },
           },
@@ -255,7 +255,7 @@ export class PurchasesService {
               course: {
                 select: selectFromResponse(['title']),
               },
-              levelTest: {
+              mockTest: {
                 select: selectFromResponse(['title']),
               },
             },

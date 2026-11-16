@@ -34,7 +34,7 @@ const typeAccent: Record<
     gradient: "from-hongbao-red-500! to-hongbao-maroon-600!",
     icon: <BookOpenIcon size={12} weight="fill" />,
   },
-  "level-test": {
+  "mock-test": {
     gradient: "from-hongbao-gold-500! to-hongbao-orange-600!",
     icon: <ClipboardTextIcon size={12} weight="fill" />,
   },

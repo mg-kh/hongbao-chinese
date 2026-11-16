@@ -13,7 +13,7 @@ export type TMyPurchaseItem = {
   id: string;
   purchaseId: string;
   courseId: string | null;
-  levelTestId: string | null;
+  mockTestId: string | null;
   productName: string;
   /** Line price in the order's currency. */
   price: number;
@@ -21,7 +21,7 @@ export type TMyPurchaseItem = {
   quantity: number;
   createdAt: string;
   course: { id: string; title: string } | null;
-  levelTest: { id: string; title: string } | null;
+  mockTest: { id: string; title: string } | null;
 };
 
 export type TMyPurchase = {
@@ -49,12 +49,12 @@ export type TMyPurchaseRes = {
 
 /* ---------------- UI shape ---------------- */
 
-export type TOrderItemType = "course" | "level-test";
+export type TOrderItemType = "course" | "mock-test";
 
 export type TOrderItem = {
   /** Order line id - unique within the order. */
   id: string;
-  /** The course / level test the line grants access to. */
+  /** The course / mock test the line grants access to. */
   productId: string | null;
   type: TOrderItemType;
   title: string;

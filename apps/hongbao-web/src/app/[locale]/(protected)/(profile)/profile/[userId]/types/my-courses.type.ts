@@ -8,14 +8,14 @@ export type TMyEnrollment = {
   id: string;
   userId: string;
   courseId: string | null;
-  levelTestId: string | null;
+  mockTestId: string | null;
   status: TEnrollmentStatus;
   startedAt: string | null;
   expiredAt: string | null;
   createdAt: string;
   updatedAt: string;
   course: TEnrollmentProduct | null;
-  levelTest: TEnrollmentProduct | null;
+  mockTest: TEnrollmentProduct | null;
   hasAccess: boolean;
 };
 
@@ -32,9 +32,9 @@ export type TMyEnrollmentRes = {
 export type TMyCourse = {
   /** Enrollment id - unique per row. */
   id: string;
-  /** The course / level test this enrollment grants access to. */
+  /** The course / mock test this enrollment grants access to. */
   productId: string;
-  type: "course" | "level-test";
+  type: "course" | "mock-test";
   title: string;
   /** Access length in months. */
   perTime: number;

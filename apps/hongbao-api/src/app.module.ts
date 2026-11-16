@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { minutes, seconds, ThrottlerModule } from '@nestjs/throttler';
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
 import { AppController } from './app.controller';
@@ -31,16 +31,21 @@ import { CategoryModule } from './category/category.module';
 import { FlashcardModule } from './flashcard/flashcard.module';
 import { ClientFlashcardModule } from './client/client-flashcard/client-flashcard.module';
 import { ClientCategoryModule } from './client/client-category/client-category.module';
-import { LevelTestsModule } from './level-tests/level-tests.module';
-import { ClientLevelTestModule } from './client/client-level-test/client-level-test.module';
+import { MockTestsModule } from './mock-tests/mock-tests.module';
+import { ClientMockTestModule } from './client/client-mock-test/client-mock-test.module';
 import { ShopModule } from './client/shop/shop.module';
 import { ClientPurchaseModule } from './client/client-purchase/client-purchase.module';
+import { LoggerModule } from './logger/logger.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { TelegramModule } from './telegram/telegram.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    LoggerModule,
+    TelegramModule,
     // Multiple named tiers are checked on every request; a request must pass
     // ALL of them to proceed. This gives burst protection (short) as well as
     // sustained-abuse protection (medium/long) at the same time.
@@ -85,14 +90,18 @@ import { ClientPurchaseModule } from './client/client-purchase/client-purchase.m
     FlashcardModule,
     ClientFlashcardModule,
     ClientCategoryModule,
-    LevelTestsModule,
-    ClientLevelTestModule,
+    MockTestsModule,
+    ClientMockTestModule,
     ShopModule,
     ClientPurchaseModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
     {
       provide: APP_PIPE,
       useClass: ZodValidationPipe,

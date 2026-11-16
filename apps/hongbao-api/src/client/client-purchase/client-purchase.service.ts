@@ -14,14 +14,14 @@ const purchaseInclude = {
   items: {
     include: {
       course: { select: { id: true, title: true } },
-      levelTest: { select: { id: true, title: true } },
+      mockTest: { select: { id: true, title: true } },
     },
   },
 } satisfies Prisma.PurchaseInclude;
 
 const enrollmentInclude = {
   course: { select: { id: true, title: true, perTime: true } },
-  levelTest: { select: { id: true, title: true, perTime: true } },
+  mockTest: { select: { id: true, title: true, perTime: true } },
 } satisfies Prisma.EnrollmentInclude;
 
 @Injectable()
@@ -40,13 +40,13 @@ export class ClientPurchaseService {
         const product = await this.findPublishedProduct(productType, productId);
         if (!product) {
           throw new NotFoundException(
-            `${isCourse ? 'Course' : 'Level test'} ${productId} not found`,
+            `${isCourse ? 'Course' : 'Mock test'} ${productId} not found`,
           );
         }
 
         const productWhere = isCourse
           ? { courseId: productId }
-          : { levelTestId: productId };
+          : { mockTestId: productId };
 
         // Name/price/duration are snapshotted.
         const price = product.price ?? 0;
@@ -107,11 +107,11 @@ export class ClientPurchaseService {
     items: Prisma.PurchaseItemCreateManyPurchaseInput[],
   ) {
     return tx.enrollment.createMany({
-      data: items.map(({ courseId, levelTestId }) => ({
+      data: items.map(({ courseId, mockTestId }) => ({
         userId,
         orderNo,
         courseId,
-        levelTestId,
+        mockTestId,
       })),
       skipDuplicates: true,
     });
@@ -125,8 +125,8 @@ export class ClientPurchaseService {
     switch (productType) {
       case ProductType.COURSE:
         return this.prisma.course.findFirst({ where });
-      case ProductType.LEVEL_TEST:
-        return this.prisma.levelTest.findFirst({ where });
+      case ProductType.MOCK_TEST:
+        return this.prisma.mockTest.findFirst({ where });
       default:
         return null;
     }
@@ -170,7 +170,7 @@ export class ClientPurchaseService {
         userId,
         ...(status && { status }),
         ...(type === ProductType.COURSE && { courseId: { not: null } }),
-        ...(type === ProductType.LEVEL_TEST && { levelTestId: { not: null } }),
+        ...(type === ProductType.MOCK_TEST && { mockTestId: { not: null } }),
       };
 
       const [items, total] = await this.prisma.$transaction([

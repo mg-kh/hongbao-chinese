@@ -27,7 +27,7 @@ export const MOCK_DASHBOARD_OVERVIEW: TDashboardOverviewRes = {
     { category: "Kids Chinese", count: 96, color: "hongbao-orange.5" },
     { category: "Culture & Reading", count: 58, color: "hongbao-brown.4" },
   ],
-  levelTestCategoryBreakdown: [
+  mockTestCategoryBreakdown: [
     { category: "HSK Prep", count: 14, color: "hongbao-red.5" },
     { category: "Conversation", count: 8, color: "hongbao-gold.5" },
     { category: "Business Chinese", count: 5, color: "hongbao-maroon.5" },

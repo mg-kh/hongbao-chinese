@@ -7,7 +7,7 @@ import type { ShopTypeFilter } from "../../useContainer";
 const TYPE_OPTIONS: { value: ShopTypeFilter; label: string }[] = [
   { value: "all", label: "All products" },
   { value: "course", label: "Courses" },
-  { value: "level-test", label: "Level Tests" },
+  { value: "mock-test", label: "Mock Tests" },
 ];
 
 interface Props {

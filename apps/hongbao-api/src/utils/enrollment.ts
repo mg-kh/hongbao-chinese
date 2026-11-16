@@ -1,6 +1,6 @@
 import { Enrollment, Prisma } from '@prisma/client';
 
-export type EnrollmentProduct = { courseId: string } | { levelTestId: string };
+export type EnrollmentProduct = { courseId: string } | { mockTestId: string };
 
 // Access requires both an ACTIVE status and an unexpired (or lifetime) expiry;
 // EXPIRED is not written by a job, so status alone is not enough.
@@ -23,7 +23,7 @@ export const enrollmentUniqueWhere = (
 ): Prisma.EnrollmentWhereUniqueInput =>
   'courseId' in product
     ? { userId_courseId: { userId, courseId: product.courseId } }
-    : { userId_levelTestId: { userId, levelTestId: product.levelTestId } };
+    : { userId_mockTestId: { userId, mockTestId: product.mockTestId } };
 
 export const hasProductAccess = async (
   db: Pick<Prisma.TransactionClient, 'enrollment'>,

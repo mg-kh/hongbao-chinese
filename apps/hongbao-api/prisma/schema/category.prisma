@@ -6,7 +6,7 @@ model Category {
   updatedAt   DateTime    @updatedAt
   courses     Course[]
   flashcards  Flashcard[]
-  levelTests  LevelTest[]
+  mockTests  MockTest[]
 
   @@index([name])
 }

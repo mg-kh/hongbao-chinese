@@ -11,7 +11,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { QuizToCourseDto } from './dto/quiz-to-course.dto';
 import { QuizToLessonDto } from './dto/quiz-to-lesson.dto';
-import { QuizToLevelTestDto } from './dto/quiz-to-level-test.dto';
+import { QuizToMockTestDto } from './dto/quiz-to-mock-test.dto';
 import { QuizToSubLessonDto } from './dto/quiz-to-sub-lesson.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
 import { QuizService } from './quiz.service';
@@ -78,14 +78,14 @@ export class QuizController {
     return this.quizService.removeQuizFromSubLesson(data);
   }
 
-  @Post('quiz-to-level-test')
-  addQuizToLevelTest(@Body() data: QuizToLevelTestDto) {
-    return this.quizService.addQuizToLevelTest(data);
+  @Post('quiz-to-mock-test')
+  addQuizToMockTest(@Body() data: QuizToMockTestDto) {
+    return this.quizService.addQuizToMockTest(data);
   }
 
-  @Delete('quiz-to-level-test')
-  removeQuizFromLevelTest(@Body() data: QuizToLevelTestDto) {
-    return this.quizService.removeQuizFromLevelTest(data);
+  @Delete('quiz-to-mock-test')
+  removeQuizFromMockTest(@Body() data: QuizToMockTestDto) {
+    return this.quizService.removeQuizFromMockTest(data);
   }
 
   @Delete(':id')

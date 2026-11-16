@@ -16,7 +16,7 @@ const useShopOverview = () => {
     () => ({
       all: overview?.productCount ?? 0,
       course: overview?.courseCount ?? 0,
-      "level-test": overview?.levelTestCount ?? 0,
+      "mock-test": overview?.mockTestCount ?? 0,
     }),
     [overview],
   );

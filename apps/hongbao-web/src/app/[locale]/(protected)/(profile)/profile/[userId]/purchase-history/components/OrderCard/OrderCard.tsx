@@ -37,8 +37,8 @@ const typeMeta: Record<
     tile: "bg-hongbao-red-50! text-hongbao-red-600!",
     icon: <BookOpenIcon size={16} weight="fill" />,
   },
-  "level-test": {
-    label: "Level Test",
+  "mock-test": {
+    label: "Mock Test",
     tile: "bg-hongbao-orange-50! text-hongbao-orange-600!",
     icon: <ExamIcon size={16} weight="fill" />,
   },

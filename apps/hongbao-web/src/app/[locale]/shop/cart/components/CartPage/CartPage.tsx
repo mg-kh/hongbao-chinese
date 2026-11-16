@@ -89,7 +89,7 @@ const CartPage = () => {
                 Your cart is empty
               </Text>
               <Text size="sm" c="gray.6" className="mt-1!">
-                Browse courses, flashcards, and level tests to get started.
+                Browse courses, flashcards, and mock tests to get started.
               </Text>
               <Button
                 component={Link}

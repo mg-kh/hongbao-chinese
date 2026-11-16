@@ -19,7 +19,7 @@ const courseSelect = {
   category: categorySelect,
 } satisfies Prisma.CourseSelect;
 
-const levelTestSelect = {
+const mockTestSelect = {
   id: true,
   title: true,
   description: true,
@@ -32,11 +32,11 @@ const levelTestSelect = {
       quiz: { select: { _count: { select: { questions: true } } } },
     },
   },
-} satisfies Prisma.LevelTestSelect;
+} satisfies Prisma.MockTestSelect;
 
 type ShopCourse = Prisma.CourseGetPayload<{ select: typeof courseSelect }>;
-type ShopLevelTest = Prisma.LevelTestGetPayload<{
-  select: typeof levelTestSelect;
+type ShopMockTest = Prisma.MockTestGetPayload<{
+  select: typeof mockTestSelect;
 }>;
 
 @Injectable()
@@ -49,16 +49,16 @@ export class ShopService {
         published: true,
         ...(categoryId ? { categoryId } : {}),
       };
-      const includeCourses = type !== ProductType.LEVEL_TEST;
-      const includeLevelTests = type !== ProductType.COURSE;
+      const includeCourses = type !== ProductType.MOCK_TEST;
+      const includeMockTests = type !== ProductType.COURSE;
 
-      const [courses, levelTests] = await Promise.all([
+      const [courses, mockTests] = await Promise.all([
         includeCourses
           ? this.prisma.course.findMany({ where, select: courseSelect })
           : Promise.resolve<ShopCourse[]>([]),
-        includeLevelTests
-          ? this.prisma.levelTest.findMany({ where, select: levelTestSelect })
-          : Promise.resolve<ShopLevelTest[]>([]),
+        includeMockTests
+          ? this.prisma.mockTest.findMany({ where, select: mockTestSelect })
+          : Promise.resolve<ShopMockTest[]>([]),
       ]);
 
       const data = [
@@ -66,9 +66,9 @@ export class ShopService {
           ...course,
           type: ProductType.COURSE,
         })),
-        ...levelTests.map(({ quiz, ...levelTest }) => ({
-          ...levelTest,
-          type: ProductType.LEVEL_TEST,
+        ...mockTests.map(({ quiz, ...mockTest }) => ({
+          ...mockTest,
+          type: ProductType.MOCK_TEST,
           testCount: quiz?.quiz._count.questions ?? 0,
         })),
       ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
@@ -81,16 +81,16 @@ export class ShopService {
     return withErrorHandling(async () => {
       const where = { published: true };
 
-      const [courseCount, levelTestCount] = await Promise.all([
+      const [courseCount, mockTestCount] = await Promise.all([
         this.prisma.course.count({ where }),
-        this.prisma.levelTest.count({ where }),
+        this.prisma.mockTest.count({ where }),
       ]);
 
       return successResponse({
         data: {
-          productCount: courseCount + levelTestCount,
+          productCount: courseCount + mockTestCount,
           courseCount,
-          levelTestCount,
+          mockTestCount,
         },
       });
     });

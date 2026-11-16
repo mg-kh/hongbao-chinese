@@ -14,7 +14,7 @@ export const SUB_LESSON_LIST = "/dashboard/assets/sub-lessons";
 export const VIDEO_LIST = "/dashboard/assets/videos";
 export const QUIZZES_LIST = "/dashboard/assets/quizzes";
 export const ATTACH_QUIZ = "/dashboard/assets/attach-quizzes";
-export const LEVEL_TEST_LIST = "/dashboard/assets/level-tests";
+export const MOCK_TEST_LIST = "/dashboard/assets/mock-tests";
 
 // Users
 export const USERS = "/dashboard/users";
@@ -26,4 +26,4 @@ export const FEED_BACKS = "/dashboard/users/feedbacks";
 export const GENERATE_COUPONS = "/dashboard/promotion/generate-coupons";
 export const PRICING_COURSE = "/dashboard/pricing/course";
 export const PRICING_FLASHCARD = "/dashboard/pricing/flash_card";
-export const PRICING_LEVEL_TEST = "/dashboard/pricing/level_test";
+export const PRICING_MOCK_TEST = "/dashboard/pricing/mock_test";

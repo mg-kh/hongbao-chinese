@@ -1,11 +1,11 @@
+import selectFromResponse from '@/utils/selectFromResponse';
 import { Injectable } from '@nestjs/common';
+import { map, omit } from 'lodash';
 import { PrismaService } from '../prisma/prisma.service';
 import { successResponse } from '../utils/response';
 import { withErrorHandling } from '../utils/withErrorHandling';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
-import selectFromResponse from '@/utils/selectFromResponse';
-import { map, omit } from 'lodash';
 
 @Injectable()
 export class CourseService {

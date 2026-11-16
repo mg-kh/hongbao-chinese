@@ -25,14 +25,14 @@ export type TShopProductRes =
       includedAssets: string[];
     })
   | (TShopProductResBase & {
-      type: "level-test";
+      type: "mock-test";
       testCount: number;
     });
 
 export type TShopOverviewRes = {
   productCount: number;
   courseCount: number;
-  levelTestCount: number;
+  mockTestCount: number;
 };
 
 export type TShopProduct = {
@@ -48,7 +48,7 @@ export type TShopProduct = {
   discount: number;
   isFree?: boolean;
   includedAssets?: string[];
-  /** Number of tests bundled in a level-test product. */
+  /** Number of tests bundled in a mock-test product. */
   testCount?: number;
   /** Detail page link - courses point at `/course-detail/:id`. */
   detailHref?: string;
@@ -83,5 +83,5 @@ export const SHOP_TYPE_META: Record<
   { label: string; plural: string }
 > = {
   course: { label: "Course", plural: "Courses" },
-  "level-test": { label: "Level Test", plural: "Level Tests" },
+  "mock-test": { label: "Mock Test", plural: "Mock Tests" },
 };
