@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PurchaseApproveDto } from './dto/purchase-approve.dto';
 import { PurchasePaginationDto } from './dto/purchase-pagination.dto';
+import { PurchaseRejectDto } from './dto/purchase-reject.dto';
 import { PurchasesService } from './purchases.service';
 
 @ApiTags('Dashboard - Purchases')
@@ -25,8 +26,18 @@ export class PurchasesController {
     return this.purchasesService.purchaseApprove(data);
   }
 
+  @Post('purchase-reject')
+  purchaseReject(@Body() data: PurchaseRejectDto) {
+    return this.purchasesService.purchaseReject(data);
+  }
+
   @Get('approved')
   getAllApprovedCourse(@Query() query: PurchasePaginationDto) {
     return this.purchasesService.getAllApprovedCourse(query);
+  }
+
+  @Get('rejected')
+  getAllRejectedPurchases(@Query() query: PurchasePaginationDto) {
+    return this.purchasesService.getAllRejectedPurchases(query);
   }
 }

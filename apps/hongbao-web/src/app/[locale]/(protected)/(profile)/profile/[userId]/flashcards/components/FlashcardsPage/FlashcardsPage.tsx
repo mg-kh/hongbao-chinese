@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import { Center, Loader, Paper, Select, Stack, Text } from "@mantine/core";
 import { ArrowLeftIcon } from "@phosphor-icons/react";
 import Link from "next/link";
@@ -50,7 +51,7 @@ const FlashcardsPage = () => {
 
       <div className="flex! flex-col! sm:flex-row! sm:items-center! sm:justify-between! gap-3!">
         <Text size="xs" c="gray.5">
-          {cards.length} card{cards.length === 1 ? "" : "s"}
+          {pluralize(cards.length, "card")}
         </Text>
 
         <Select

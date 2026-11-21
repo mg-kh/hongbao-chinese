@@ -1,21 +1,20 @@
 "use client";
 
 import LoaderComponent from "@/components/LoaderComponent/LoaderComponent";
-import { TPurchaseCourse } from "@/app/[locale]/(dashboard)/dashboard/users/purchases/types/purchases.type";
+import { TPurchase } from "@/app/[locale]/(dashboard)/dashboard/users/purchases/types/purchases.type";
 import { Paper, Stack, Text } from "@mantine/core";
 import { ReceiptIcon } from "@phosphor-icons/react";
-import PurchaseOrderCard from "./components/PurchaseOrderCard/PurchaseOrderCard";
-import useContainer from "./useContainer";
+import AdminPurchaseCard from "@/app/[locale]/(dashboard)/dashboard/users/purchases/components/PurchaseOrderList/components/AdminPurchaseCard/AdminPurchaseCard";
 
 interface Props {
-  rows: TPurchaseCourse[];
+  rows: TPurchase[];
   isLoading?: boolean;
   /** Filters / search bar shown above the list. */
   header?: React.ReactNode;
   /** Pagination shown below the list. */
   footer?: React.ReactNode;
-  /** Right-hand side of each order line (e.g. an Approve button). */
-  renderItemAction?: (item: TPurchaseCourse) => React.ReactNode;
+  /** Order-level action (e.g. an Approve button). */
+  renderAction?: (purchase: TPurchase) => React.ReactNode;
   emptyLabel?: string;
 }
 
@@ -24,11 +23,9 @@ const PurchaseOrderList: React.FC<Props> = ({
   isLoading,
   header,
   footer,
-  renderItemAction,
+  renderAction,
   emptyLabel = "No orders found",
 }) => {
-  const { orders } = useContainer(rows);
-
   return (
     <Stack gap={12}>
       {header && (
@@ -39,7 +36,7 @@ const PurchaseOrderList: React.FC<Props> = ({
 
       {isLoading ? (
         <LoaderComponent />
-      ) : orders.length === 0 ? (
+      ) : rows.length === 0 ? (
         <Paper
           withBorder
           bdrs={16}
@@ -54,11 +51,11 @@ const PurchaseOrderList: React.FC<Props> = ({
         </Paper>
       ) : (
         <Stack gap={12}>
-          {orders.map((order) => (
-            <PurchaseOrderCard
-              key={order.orderNo}
-              order={order}
-              renderItemAction={renderItemAction}
+          {rows.map((purchase) => (
+            <AdminPurchaseCard
+              key={purchase.id}
+              purchase={purchase}
+              renderAction={renderAction}
             />
           ))}
         </Stack>

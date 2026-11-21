@@ -3,6 +3,7 @@ import useApiQuery from "@/hooks/fetching/useApiQuery";
 type TPurchaseListRes = {
   approvedCount: number;
   pendingCount: number;
+  rejectedCount: number;
 };
 
 const usePurchaseList = () => {
@@ -14,6 +15,7 @@ const usePurchaseList = () => {
   return {
     approvedCount: data?.approvedCount,
     pendingCount: data?.pendingCount,
+    rejectedCount: data?.rejectedCount,
   };
 };
 

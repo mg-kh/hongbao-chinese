@@ -1,20 +1,41 @@
-export type TPurchaseCourse = {
+export type TPurchaseStatus = "PENDING" | "APPROVED" | "CANCELLED";
+
+export type TPurchaseItem = {
+  id: string;
+  purchaseId: string;
+  courseId: string | null;
+  mockTestId: string | null;
+  /** Snapshot of the product name at checkout. */
+  productName: string;
+  price: number;
+  /** `null` means lifetime access. */
+  durationDays: number | null;
+  quantity: number;
+  createdAt: string;
+  course: { title: string } | null;
+  mockTest: { title: string } | null;
+};
+
+export type TPurchase = {
   id: string;
   userId: string;
   orderNo: string;
-  courseId: string;
-  paymentType: string;
-  transactionNo: string;
-  status: "PENDING" | "REJECTED" | "APPROVED" | "EXPIRED";
+  status: TPurchaseStatus;
+  totalAmount: number;
+  currency: string;
+  paymentType: string | null;
+  transactionNo: string | null;
   createdAt: string;
+  paidAt: string | null;
+  /** Set when an admin rejected the order (status CANCELLED). */
+  rejectReason: string | null;
   updatedAt: string;
-  expiredAt: string | null;
   user: { name: string };
-  course: { title: string };
+  items: TPurchaseItem[];
 };
 
-export type TPurchaseCourseRes = {
-  items: TPurchaseCourse[];
+export type TPurchaseRes = {
+  items: TPurchase[];
   limit: number;
   page: number;
   total: number;

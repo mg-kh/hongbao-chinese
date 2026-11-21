@@ -1,19 +1,18 @@
 import useApiQuery from "@/hooks/fetching/useApiQuery";
 import useMutationQuery from "@/hooks/fetching/useMutationQuery";
-import { usePathname } from "@/i18n/navigation";
 import { TErrorOptions } from "@/types/general.type";
 import { showErrorNoti, showSuccessNoti } from "@/utils/notifications-helper";
 import { useState } from "react";
-import usePurchaseList from "../../../hooks/usePurchaseList";
 import {
-  TPurchaseCourse,
-  TPurchaseCourseRes,
-} from "../../../types/purchases.type";
+  TPurchase,
+  TPurchaseRes,
+} from "@/app/[locale]/(dashboard)/dashboard/users/purchases/types/purchases.type";
 import { modals } from "@mantine/modals";
+import { PurchaseApproveRequest, PurchaseRejectRequest } from "@repo/shared";
+import { createElement } from "react";
+import RejectModal from "../RejectModal/RejectModal";
 
 const useContainer = () => {
-  const pathname = usePathname();
-  const { pendingCount } = usePurchaseList();
   const [params, setParams] = useState({
     limit: "10",
     page: 1,
@@ -21,53 +20,95 @@ const useContainer = () => {
     start_date: "",
     end_date: "",
   });
-  const { data, isLoading } = useApiQuery<
-    { data: TPurchaseCourseRes },
-    TPurchaseCourseRes
-  >({
-    url: `dashboard/purchases/pending-approved`,
-    select: (data) => data?.data,
-    key: "purchase-pending-approved-list",
-    params: {
-      ...params,
+  const { data, isLoading } = useApiQuery<{ data: TPurchaseRes }, TPurchaseRes>(
+    {
+      url: `dashboard/purchases/pending-approved`,
+      select: (data) => data?.data,
+      key: "purchase-pending-approved-list",
+      params: {
+        ...params,
+      },
     },
-  });
-  const { mutate: approve } = useMutationQuery({
+  );
+  const {
+    mutate: approve,
+    isPending: isApproving,
+    variables: approveVars,
+  } = useMutationQuery<unknown, PurchaseApproveRequest>({
     url: `dashboard/purchases/purchase-approve`,
-    invalidateKeys: ["purchase-pending-approved-list", "purchase-list-count"],
+    invalidateKeys: [
+      "purchase-pending-approved-list",
+      "purchase-approved-list",
+      "purchase-list-count",
+    ],
   });
-  const handleApprove = ({
-    enrollmentId,
-    courseId,
-  }: {
-    enrollmentId: string;
-    courseId: string;
-  }) => {
-    approve(
-      {
-        enrollmentId,
-        courseId,
+  const {
+    mutate: reject,
+    isPending: isRejecting,
+    variables: rejectVars,
+  } = useMutationQuery<unknown, PurchaseRejectRequest>({
+    url: `dashboard/purchases/purchase-reject`,
+    invalidateKeys: [
+      "purchase-pending-approved-list",
+      "purchase-rejected-list",
+      "purchase-list-count",
+    ],
+  });
+  /** Id of the order with a request in flight, so only its buttons spin. */
+  const busyId =
+    (isApproving && approveVars?.purchaseId) ||
+    (isRejecting && rejectVars?.purchaseId) ||
+    null;
+  const handleApprove = (payload: PurchaseApproveRequest) => {
+    approve(payload, {
+      onSuccess: () => {
+        showSuccessNoti();
       },
-      {
-        onSuccess: () => {
-          showSuccessNoti();
-        },
-        onError: (e: TErrorOptions) => {
-          showErrorNoti(e.message);
-        },
+      onError: (e: TErrorOptions) => {
+        showErrorNoti(e.message);
       },
-    );
+    });
   };
-  const confirmApprove = (item: TPurchaseCourse) => {
+  const handleReject = (payload: PurchaseRejectRequest) => {
+    reject(payload, {
+      onSuccess: () => {
+        showSuccessNoti();
+      },
+      onError: (e: TErrorOptions) => {
+        showErrorNoti(e.message);
+      },
+    });
+  };
+  const confirmReject = (purchase: TPurchase) => {
+    const modalId = modals.open({
+      title: "Reject order",
+      centered: true,
+      children: createElement(RejectModal, {
+        purchase,
+        onCancel: () => modals.close(modalId),
+        onSubmit: (reason: string) => {
+          handleReject({ purchaseId: purchase.id, reason });
+          modals.close(modalId);
+        },
+      }),
+    });
+  };
+  const confirmApprove = (purchase: TPurchase) => {
+    const products = purchase.items
+      .map(
+        (item) =>
+          item.course?.title || item.mockTest?.title || item.productName,
+      )
+      .join(", ");
     const openModal = modals.openConfirmModal({
       title: "Are you sure?",
       closeOnConfirm: false,
       centered: true,
-      children: `Approve "${item?.course?.title ?? "this course"}" for ${item?.user?.name ?? "this user"}?`,
+      children: `Approve order ${purchase.orderNo} (${products || "no items"}) for ${purchase.user?.name ?? "this user"}?`,
       labels: { confirm: "Confirm", cancel: "Cancel" },
       confirmProps: { color: "green" },
       onConfirm: () => {
-        handleApprove({ enrollmentId: item?.id, courseId: item?.courseId });
+        handleApprove({ purchaseId: purchase.id });
         modals.close(openModal);
       },
     });
@@ -87,13 +128,12 @@ const useContainer = () => {
   };
 
   return {
-    open,
-    pathname,
-    pendingCount,
     pendingList: data?.items || [],
     isLoading,
     handleApprove,
     confirmApprove,
+    confirmReject,
+    busyId,
     params,
     setParams,
     totalPages: data?.totalPage || 1,

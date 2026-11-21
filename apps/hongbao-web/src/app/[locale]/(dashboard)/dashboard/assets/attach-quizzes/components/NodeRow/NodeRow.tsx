@@ -1,3 +1,4 @@
+import { pluralize } from "@/utils/pluralize";
 import { cn } from "@/utils/cn";
 import { Badge, Button, Loader, Text } from "@mantine/core";
 import { IconChevronRight, IconPlus } from "@tabler/icons-react";
@@ -69,7 +70,7 @@ const NodeRow: React.FC<Props> = ({
           variant={quizzesCount > 0 ? "filled" : "light"}
           color={quizzesCount > 0 ? "blue" : "gray"}
         >
-          {quizzesCount} {quizzesCount === 1 ? "quiz" : "quizzes"}
+          {pluralize(quizzesCount, "quiz", "quizzes")}
         </Badge>
       )}
 

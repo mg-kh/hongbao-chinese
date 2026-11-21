@@ -99,7 +99,7 @@ export class ClientPurchaseService {
   }
 
   // PENDING until confirmPurchase activates it. skipDuplicates leaves existing
-  // enrollments (e.g. an ACTIVE one being renewed) untouched.
+  // enrollments (e.g. an APPROVED one being renewed) untouched.
   private addPendingEnrollments(
     tx: Prisma.TransactionClient,
     userId: string,

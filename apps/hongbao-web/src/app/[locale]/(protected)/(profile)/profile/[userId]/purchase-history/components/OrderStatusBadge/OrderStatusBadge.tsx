@@ -39,7 +39,8 @@ interface Props extends Omit<BadgeProps, "color" | "leftSection"> {
 
 /** Single source of truth for how each order status looks and reads. */
 const OrderStatusBadge: React.FC<Props> = ({ status, ...props }) => {
-  const meta = statusMeta[status];
+  // Fall back rather than crash if the API ever sends an unmapped status.
+  const meta = statusMeta[status] ?? statusMeta.PENDING;
   return (
     <Badge
       color={meta.color}

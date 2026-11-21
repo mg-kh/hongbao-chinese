@@ -1,3 +1,4 @@
+import { pluralize } from "@/utils/pluralize";
 import { PURCHASES_PENDING } from "@/constants/DashboardRoutes";
 import { Link } from "@/i18n/navigation";
 import { Button, Group, Paper, Text, ThemeIcon } from "@mantine/core";
@@ -27,7 +28,7 @@ const PendingApprovalBanner: React.FC<Props> = ({ pendingCount }) => {
           </ThemeIcon>
           <div>
             <Text fw={700} size="sm">
-              {pendingCount} purchase{pendingCount === 1 ? "" : "s"} awaiting approval
+              {pluralize(pendingCount, "purchase")} awaiting approval
             </Text>
             <Text size="xs" c="dimmed">
               Review pending course purchases before students lose access.

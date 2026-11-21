@@ -5,6 +5,13 @@
  * `purchase-history/hooks/usePurchaseOrders.ts`).
  */
 
+import type {
+  TPurchaseCardItem,
+  TPurchaseCardOrder,
+} from "@/types/purchase-order.type";
+import type { PurchaseStatus } from "@repo/shared";
+
+/** UI-facing order status; mapped from the raw `PurchaseStatus` in `toOrder`. */
 export type TOrderStatus = "PENDING" | "APPROVED" | "REJECTED" | "EXPIRED";
 
 /* ---------------- API response ---------------- */
@@ -28,13 +35,16 @@ export type TMyPurchase = {
   id: string;
   userId: string;
   orderNo: string;
-  status: TOrderStatus;
+  /** Raw DB status (PENDING / APPROVED / CANCELLED). */
+  status: PurchaseStatus;
   totalAmount: number;
   currency: string;
   paymentType: string;
   transactionNo: string;
   createdAt: string;
   paidAt: string | null;
+  /** Admin's reason, set when the order was rejected (CANCELLED). */
+  rejectReason: string | null;
   updatedAt: string;
   items: TMyPurchaseItem[];
 };
@@ -49,41 +59,16 @@ export type TMyPurchaseRes = {
 
 /* ---------------- UI shape ---------------- */
 
-export type TOrderItemType = "course" | "mock-test";
+/** One order line - the shared purchase card's item shape. */
+export type TOrderItem = TPurchaseCardItem;
 
-export type TOrderItem = {
-  /** Order line id - unique within the order. */
-  id: string;
-  /** The course / mock test the line grants access to. */
-  productId: string | null;
-  type: TOrderItemType;
-  title: string;
-  /** Access length granted by this line. */
-  durationDays: number;
-  quantity: number;
-  /** Line total (price × quantity). */
-  lineTotal: number;
-};
-
-export type TPurchaseOrder = {
-  id: string;
-  /** Customer-facing order number, e.g. "HB-20261025-E8B33554". */
-  reference: string;
+/** The shared card's order plus the customer-facing lifecycle fields. */
+export type TPurchaseOrder = TPurchaseCardOrder & {
   status: TOrderStatus;
-  /** ISO timestamp the order was submitted. */
-  createdAt: string;
   /** ISO timestamp the payment was confirmed; null until then. */
   paidAt: string | null;
   /** ISO timestamp of the last status change. */
   updatedAt: string;
-  currency: string;
-  paymentType: string;
-  transactionNo: string;
-  /** Sum of line totals. */
-  subtotal: number;
-  /** What the customer was charged. */
-  total: number;
-  items: TOrderItem[];
 };
 
 /** Status buckets the list can be narrowed to. */

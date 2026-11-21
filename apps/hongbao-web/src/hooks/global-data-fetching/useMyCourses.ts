@@ -9,19 +9,39 @@ import {
 
 const PAGE_LIMIT = 10;
 
-const toCourse = (e: TMyEnrollment): TMyCourse => {
+/**
+ * The API never writes EXPIRED - an enrollment stays APPROVED and only its
+ * `expiredAt` passes - so derive it here. Null `expiredAt` means lifetime.
+ */
+const resolveStatus = (
+  e: TMyEnrollment,
+  now: number,
+): TMyEnrollment["status"] => {
+  if (
+    e.status === "APPROVED" &&
+    e.expiredAt &&
+    new Date(e.expiredAt).getTime() <= now
+  ) {
+    return "EXPIRED";
+  }
+  return e.status;
+};
+
+const toCourse = (e: TMyEnrollment, now = Date.now()): TMyCourse => {
   const product = e.course ?? e.mockTest;
+  const status = resolveStatus(e, now);
   return {
     id: e.id,
     productId: e.courseId ?? e.mockTestId ?? product?.id ?? "",
     type: e.courseId ? "course" : "mock-test",
     title: product?.title ?? "",
+    thumbnail: product?.thumbnail ?? null,
     perTime: product?.perTime ?? 1,
-    status: e.status,
+    status,
     startedAt: e.startedAt,
     expiredAt: e.expiredAt,
     createdAt: e.createdAt,
-    hasAccess: e.hasAccess,
+    hasAccess: e.hasAccess && status !== "EXPIRED",
   };
 };
 
@@ -47,7 +67,10 @@ const useMyCourses = () => {
   });
 
   const coursesRes = useMemo<TMyCourse[]>(
-    () => (data?.items ?? []).map(toCourse),
+    () => {
+      const now = Date.now();
+      return (data?.items ?? []).map((e) => toCourse(e, now));
+    },
     [data],
   );
 

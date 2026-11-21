@@ -1,6 +1,7 @@
 "use client";
 
 import useApiQuery from "@/hooks/fetching/useApiQuery";
+import { toPurchaseCardOrder } from "@/utils/purchaseOrder";
 import { keepPreviousData } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import {
@@ -12,32 +13,28 @@ import {
 
 const PAGE_LIMIT = 10;
 
-const toOrder = (p: TMyPurchase): TPurchaseOrder => {
-  const items = p.items.map((i) => ({
-    id: i.id,
-    productId: i.courseId ?? i.mockTestId,
-    type: i.courseId ? ("course" as const) : ("mock-test" as const),
-    title: i.course?.title ?? i.mockTest?.title ?? i.productName,
-    durationDays: i.durationDays,
-    quantity: i.quantity,
-    lineTotal: i.price * i.quantity,
-  }));
-
-  return {
-    id: p.id,
-    reference: p.orderNo,
-    status: p.status,
-    createdAt: p.createdAt,
-    paidAt: p.paidAt,
-    updatedAt: p.updatedAt,
-    currency: p.currency,
-    paymentType: p.paymentType,
-    transactionNo: p.transactionNo,
-    subtotal: items.reduce((sum, i) => sum + i.lineTotal, 0),
-    total: p.totalAmount,
-    items,
-  };
+/**
+ * Raw purchase status -> what the customer sees. CANCELLED is an admin
+ * rejection.
+ */
+const toOrderStatus = (status: TMyPurchase["status"]): TOrderStatus => {
+  switch (status) {
+    case "APPROVED":
+      return "APPROVED";
+    case "CANCELLED":
+      return "REJECTED";
+    case "PENDING":
+    default:
+      return "PENDING";
+  }
 };
+
+const toOrder = (p: TMyPurchase): TPurchaseOrder => ({
+  ...toPurchaseCardOrder(p),
+  status: toOrderStatus(p.status),
+  paidAt: p.paidAt,
+  updatedAt: p.updatedAt,
+});
 
 /**
  * The signed-in user's orders from `purchase/my-purchases`, one page at a

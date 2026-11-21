@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import RichTextContent from "@/components/RichTextContent/RichTextContent";
 import {
   Badge,
@@ -66,10 +67,8 @@ const Page = () => {
     accessWeeks > 0 && plan.length > 0 ? plan.length / accessWeeks : 0;
   const paceLabel =
     lessonsPerWeek >= 1
-      ? `${Math.ceil(lessonsPerWeek)} lesson${
-          Math.ceil(lessonsPerWeek) > 1 ? "s" : ""
-        } a week`
-      : `1 lesson every ${Math.max(1, Math.round(1 / lessonsPerWeek))} weeks`;
+      ? `${pluralize(Math.ceil(lessonsPerWeek), "lesson")} a week`
+      : `1 lesson every ${pluralize(Math.max(1, Math.round(1 / lessonsPerWeek)), "week")}`;
 
   /** First lesson that still has unfinished content. */
   const upNext =
@@ -168,8 +167,8 @@ const Page = () => {
                       </>
                     ) : (
                       <>
-                        {remaining} lesson{remaining === 1 ? "" : "s"} left to
-                        complete this course.
+                        {pluralize(remaining, "lesson")} left to complete this
+                        course.
                       </>
                     )}
                   </Text>

@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import MobileBottomNav from "@/components/Navbar/MobileBottomNav/MobileBottomNav";
 import { publicBottomNavItems } from "@/components/Navbar/MobileBottomNav/publicNavItems";
 import { Link } from "@/i18n/navigation";
@@ -64,7 +65,7 @@ const CartPage = () => {
               </Text>
               {isReady && count > 0 && (
                 <span className="rounded-full! bg-hongbao-red-50! px-2.5! py-0.5! text-xs! font-bold! text-hongbao-red-700!">
-                  {count} {count === 1 ? "item" : "items"}
+                  {pluralize(count, "item")}
                 </span>
               )}
             </Group>

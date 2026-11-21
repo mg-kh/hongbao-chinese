@@ -7,6 +7,12 @@ export const PurchaseApproveSchema = z.object({
 });
 export type PurchaseApproveRequest = z.input<typeof PurchaseApproveSchema>;
 
+export const PurchaseRejectSchema = z.object({
+  purchaseId: z.string().min(1),
+  reason: z.string().trim().min(1).max(500),
+});
+export type PurchaseRejectRequest = z.input<typeof PurchaseRejectSchema>;
+
 export const PurchasePaginationSchema = PaginationQuerySchema.extend({
   search: z.string().nullish(),
   start_date: z.string().nullish(),

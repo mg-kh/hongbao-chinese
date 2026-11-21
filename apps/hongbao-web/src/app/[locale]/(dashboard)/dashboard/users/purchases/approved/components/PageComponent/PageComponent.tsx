@@ -2,29 +2,14 @@ import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 import PurchaseOrderList from "@/app/[locale]/(dashboard)/dashboard/users/purchases/components/PurchaseOrderList/PurchaseOrderList";
 import CustomSearchInput from "@/components/Inputs/CustomSearchInput/CustomSearchInput";
 import DateRangeInput from "@/components/Inputs/DateRangeInput/DateRangeInput";
-import {
-  DASHBOARD,
-  PURCHASES_APPROVED,
-  PURCHASES_PENDING,
-} from "@/constants/DashboardRoutes";
-import { Link } from "@/i18n/navigation";
-import {
-  Badge,
-  Flex,
-  Group,
-  Pagination,
-  Select,
-  Stack,
-  Tabs,
-  Text,
-} from "@mantine/core";
-import { first, last, split } from "lodash";
+import PurchaseTabs from "@/app/[locale]/(dashboard)/dashboard/users/purchases/components/PurchaseTabs/PurchaseTabs";
+import { DASHBOARD } from "@/constants/DashboardRoutes";
+import { Flex, Group, Pagination, Select, Stack } from "@mantine/core";
+import { first, last } from "lodash";
 import useContainer from "./useContainer";
 
 const PageComponent = () => {
   const {
-    pathname,
-    pendingCount,
     approvedList,
     isLoading,
     params,
@@ -46,27 +31,7 @@ const PageComponent = () => {
           />
         </Group>
 
-        <Tabs value={last(split(pathname, "/"))}>
-          <Tabs.List>
-            <Link href={PURCHASES_APPROVED}>
-              <Tabs.Tab value="approved">
-                <Group>
-                  <Text size="sm">Approved</Text>{" "}
-                </Group>
-              </Tabs.Tab>
-            </Link>
-            <Link href={PURCHASES_PENDING}>
-              <Tabs.Tab value="pending-approved">
-                <Group>
-                  <Text size="sm">Pending List</Text>{" "}
-                  <Badge color="green" size="xs">
-                    {pendingCount}
-                  </Badge>
-                </Group>
-              </Tabs.Tab>
-            </Link>
-          </Tabs.List>
-        </Tabs>
+        <PurchaseTabs />
 
         <PurchaseOrderList
           isLoading={isLoading}

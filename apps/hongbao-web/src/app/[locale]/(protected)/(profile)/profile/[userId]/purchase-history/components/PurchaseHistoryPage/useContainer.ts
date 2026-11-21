@@ -10,7 +10,8 @@ const useContainer = () => {
   const [filter, setFilter] = useState<OrderFilter>("ALL");
 
   const filteredOrders = useMemo(
-    () => (filter === "ALL" ? orders : orders.filter((o) => o.status === filter)),
+    () =>
+      filter === "ALL" ? orders : orders.filter((o) => o.status === filter),
     [orders, filter],
   );
 

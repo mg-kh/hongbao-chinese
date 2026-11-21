@@ -9,6 +9,8 @@ model Purchase {
   transactionNo String?        @unique
   createdAt     DateTime       @default(now())
   paidAt        DateTime?
+  // Set when an admin rejects a PENDING order (status -> CANCELLED).
+  rejectReason  String?
   updatedAt     DateTime       @updatedAt
   // Restrict: payment history must survive user deletion attempts
   user          User           @relation(fields: [userId], references: [id], onDelete: Restrict)
@@ -70,14 +72,12 @@ model Enrollment {
 
 enum PurchaseStatus {
   PENDING
-  PAID
-  FAILED
+  APPROVED
   CANCELLED
-  REFUNDED
 }
 
 enum EnrollmentStatus {
   PENDING
-  ACTIVE
+  APPROVED
   EXPIRED
 }

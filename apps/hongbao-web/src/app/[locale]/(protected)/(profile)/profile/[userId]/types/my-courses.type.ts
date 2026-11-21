@@ -2,7 +2,13 @@ export type TEnrollmentStatus = "PENDING" | "APPROVED" | "REJECTED" | "EXPIRED";
 
 /* ---------------- API response (`purchase/my-enrollments`) ---------------- */
 
-type TEnrollmentProduct = { id: string; title: string; perTime: number };
+type TEnrollmentProduct = {
+  id: string;
+  title: string;
+  perTime: number;
+  /** Not returned by the API yet - reserved for course / mock test cover images. */
+  thumbnail?: string | null;
+};
 
 export type TMyEnrollment = {
   id: string;
@@ -36,6 +42,8 @@ export type TMyCourse = {
   productId: string;
   type: "course" | "mock-test";
   title: string;
+  /** Cover image; the card falls back to a type icon when missing. */
+  thumbnail: string | null;
   /** Access length in months. */
   perTime: number;
   status: TEnrollmentStatus;

@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import { Button, Text } from "@mantine/core";
 import { SlidersHorizontalIcon } from "@phosphor-icons/react";
 import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
@@ -91,7 +92,7 @@ const SortTabs: React.FC<Props> = ({
       </div>
 
       <Text size="xs" fw={600} c="gray.6" className="hidden! shrink-0! px-1! md:block!">
-        {total} {total === 1 ? "result" : "results"}
+        {pluralize(total, "result")}
       </Text>
 
       <Button
