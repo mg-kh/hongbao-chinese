@@ -12,8 +12,8 @@ export type TPurchaseItem = {
   durationDays: number | null;
   quantity: number;
   createdAt: string;
-  course: { title: string } | null;
-  mockTest: { title: string } | null;
+  course: { id?: string; title: string } | null;
+  mockTest: { id?: string; title: string } | null;
 };
 
 export type TPurchase = {
@@ -32,6 +32,11 @@ export type TPurchase = {
   updatedAt: string;
   user: { name: string };
   items: TPurchaseItem[];
+};
+
+/** `GET dashboard/purchases/:id` - a purchase with the full customer record. */
+export type TPurchaseDetail = Omit<TPurchase, "user"> & {
+  user: { id: string; name: string; email: string; imageUrl: string | null };
 };
 
 export type TPurchaseRes = {

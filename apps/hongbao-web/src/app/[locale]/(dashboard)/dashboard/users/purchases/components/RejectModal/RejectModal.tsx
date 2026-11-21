@@ -1,11 +1,11 @@
 "use client";
 
-import { TPurchase } from "@/app/[locale]/(dashboard)/dashboard/users/purchases/types/purchases.type";
+import { TPurchaseActionTarget } from "@/app/[locale]/(dashboard)/dashboard/users/purchases/hooks/usePurchaseActions";
 import { Button, Group, Stack, Text, Textarea } from "@mantine/core";
 import useContainer from "./useContainer";
 
 interface Props {
-  purchase: TPurchase;
+  purchase: Pick<TPurchaseActionTarget, "orderNo" | "user">;
   onSubmit: (reason: string) => void;
   onCancel: () => void;
 }

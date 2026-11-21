@@ -36,28 +36,32 @@ const PageComponent = () => {
         <PurchaseOrderList
           isLoading={isLoading}
           rows={approvedList || []}
+          noOffset={(Number(params.page) - 1) * Number(params.limit)}
           header={
-            <Flex justify="end" gap={10} wrap="wrap">
-              <DateRangeInput
-                onChange={(v) => {
-                  setParams((prev) => ({
-                    ...prev,
-                    start_date: (first(v) as string) || "",
-                    end_date: (last(v) as string) || "",
-                  }));
-                }}
-              />
-              <CustomSearchInput
-                placeholder="Search by Username or User Id or Course Id"
-                w={{ base: "100%", sm: 400 }}
-                searchFn={(value) => {
-                  handleSearch(value);
-                }}
-                clearFn={() => {
-                  handleSearchClear();
-                }}
-              />
-            </Flex>
+            <div className="flex items-center justify-between gap-2.5">
+              <div className="min-w-0 flex-1 sm:max-w-100">
+                <CustomSearchInput
+                  placeholder="Search by Username or User Id or Course Id"
+                  searchFn={(value) => {
+                    handleSearch(value);
+                  }}
+                  clearFn={() => {
+                    handleSearchClear();
+                  }}
+                />
+              </div>
+              <div className="w-40 shrink-0 sm:w-62.5">
+                <DateRangeInput
+                  onChange={(v) => {
+                    setParams((prev) => ({
+                      ...prev,
+                      start_date: (first(v) as string) || "",
+                      end_date: (last(v) as string) || "",
+                    }));
+                  }}
+                />
+              </div>
+            </div>
           }
           footer={
             <>

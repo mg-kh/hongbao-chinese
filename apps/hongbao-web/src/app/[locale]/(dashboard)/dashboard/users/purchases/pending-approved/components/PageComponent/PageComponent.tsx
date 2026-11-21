@@ -6,7 +6,7 @@ import CustomSearchInput from "@/components/Inputs/CustomSearchInput/CustomSearc
 import DateRangeInput from "@/components/Inputs/DateRangeInput/DateRangeInput";
 import PurchaseTabs from "@/app/[locale]/(dashboard)/dashboard/users/purchases/components/PurchaseTabs/PurchaseTabs";
 import { DASHBOARD } from "@/constants/DashboardRoutes";
-import { Button, Flex, Group, Pagination, Select, Stack } from "@mantine/core";
+import { Flex, Group, Pagination, Select, Stack } from "@mantine/core";
 import { first, last } from "lodash";
 import useContainer from "./useContainer";
 
@@ -14,9 +14,6 @@ const PageComponent = () => {
   const {
     pendingList,
     isLoading,
-    confirmApprove,
-    confirmReject,
-    busyId,
     params,
     setParams,
     totalPages,
@@ -41,49 +38,33 @@ const PageComponent = () => {
         <PurchaseOrderList
           isLoading={isLoading}
           rows={pendingList || []}
+          noOffset={(Number(params.page) - 1) * Number(params.limit)}
           header={
-            <Flex justify="end" gap={10} wrap="wrap">
-              <DateRangeInput
-                onChange={(v) => {
-                  setParams((prev) => ({
-                    ...prev,
-                    start_date: (first(v) as string) || "",
-                    end_date: (last(v) as string) || "",
-                  }));
-                }}
-              />
-              <CustomSearchInput
-                placeholder="Search by username, user ID, order no, txn no or product ID"
-                w={{ base: "100%", sm: 400 }}
-                searchFn={(value) => {
-                  handleSearch(value);
-                }}
-                clearFn={() => {
-                  handleSearchClear();
-                }}
-              />
-            </Flex>
+            <div className="flex items-center justify-between gap-2.5">
+              <div className="min-w-0 flex-1 sm:max-w-100">
+                <CustomSearchInput
+                  placeholder="Search by username, user ID, order no, txn no or product ID"
+                  searchFn={(value) => {
+                    handleSearch(value);
+                  }}
+                  clearFn={() => {
+                    handleSearchClear();
+                  }}
+                />
+              </div>
+              <div className="w-40 shrink-0 sm:w-62.5">
+                <DateRangeInput
+                  onChange={(v) => {
+                    setParams((prev) => ({
+                      ...prev,
+                      start_date: (first(v) as string) || "",
+                      end_date: (last(v) as string) || "",
+                    }));
+                  }}
+                />
+              </div>
+            </div>
           }
-          renderAction={(purchase) => (
-            <Group gap={8}>
-              <Button
-                size="xs"
-                color="red"
-                variant="outline"
-                disabled={busyId === purchase.id}
-                onClick={() => confirmReject(purchase)}
-              >
-                Reject
-              </Button>
-              <Button
-                size="xs"
-                loading={busyId === purchase.id}
-                onClick={() => confirmApprove(purchase)}
-              >
-                Approve
-              </Button>
-            </Group>
-          )}
           footer={
             <>
               <Flex justify="end" align={"center"} gap={10}>

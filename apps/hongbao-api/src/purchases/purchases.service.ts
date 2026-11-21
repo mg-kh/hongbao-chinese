@@ -63,6 +63,34 @@ export class PurchasesService {
     return this.getPurchasesByStatus('CANCELLED', query);
   }
 
+  /** One purchase with everything the dashboard detail page shows. */
+  async getPurchaseDetail(id: string) {
+    return withErrorHandling(async () => {
+      const purchase = await this.prisma.purchase.findUnique({
+        where: { id },
+        include: {
+          user: {
+            select: selectFromResponse(['id', 'name', 'email', 'imageUrl']),
+          },
+          items: {
+            include: {
+              course: { select: selectFromResponse(['id', 'title']) },
+              mockTest: { select: selectFromResponse(['id', 'title']) },
+            },
+            orderBy: { createdAt: 'asc' },
+          },
+        },
+      });
+      if (!purchase) {
+        throw new NotFoundException('Purchase not found');
+      }
+
+      return successResponse({
+        data: purchase,
+      });
+    });
+  }
+
   async purchaseApprove(data: PurchaseApproveDto) {
     return withErrorHandling(async () => {
       const { purchase, granted } = await this.confirmPurchase(data.purchaseId);

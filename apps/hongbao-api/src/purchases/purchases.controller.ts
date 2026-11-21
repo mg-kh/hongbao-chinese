@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PurchaseApproveDto } from './dto/purchase-approve.dto';
 import { PurchasePaginationDto } from './dto/purchase-pagination.dto';
@@ -39,5 +39,11 @@ export class PurchasesController {
   @Get('rejected')
   getAllRejectedPurchases(@Query() query: PurchasePaginationDto) {
     return this.purchasesService.getAllRejectedPurchases(query);
+  }
+
+  // Keep last: the dynamic segment would otherwise shadow the static routes above.
+  @Get(':id')
+  getPurchaseDetail(@Param('id') id: string) {
+    return this.purchasesService.getPurchaseDetail(id);
   }
 }

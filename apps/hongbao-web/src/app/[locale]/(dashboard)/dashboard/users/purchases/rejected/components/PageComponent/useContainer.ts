@@ -42,7 +42,6 @@ const useContainer = () => {
     rejectedList: data?.items || [],
     isLoading,
     params,
-    total: data?.total || 0,
     totalPages: data?.totalPage || 1,
     handleSearch,
     handleSearchClear,
