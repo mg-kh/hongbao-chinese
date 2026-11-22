@@ -49,13 +49,21 @@ const buildSteps = (order: TPurchaseOrder): Step[] => {
     ];
   }
 
-  if (order.status === "REJECTED") {
+  if (order.status === "CANCELLED") {
     return [
       placed,
-      { title: "Payment reviewed", detail: fmt(order.updatedAt), state: "done" },
+      {
+        title: "Payment reviewed",
+        detail: fmt(order.updatedAt),
+        state: "done",
+      },
       {
         title: "Order declined",
-        detail: "The transfer couldn't be verified",
+        // The admin's reason is shown on the card; the generic copy only
+        // covers older orders rejected before reasons were recorded.
+        detail: order.rejectReason
+          ? "See the reason above"
+          : "The transfer couldn't be verified",
         state: "failed",
       },
     ];

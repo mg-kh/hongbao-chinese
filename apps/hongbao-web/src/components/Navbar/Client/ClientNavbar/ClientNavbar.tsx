@@ -283,6 +283,8 @@ const ClientNavbar = () => {
                     </Text>
                   </Menu.Item>
                   <Menu.Item
+                    href={`/profile/${user?.id}/my-courses`}
+                    component={Link}
                     leftSection={
                       <Box className="flex! items-center! justify-center! w-8! h-8! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600!">
                         <IconBook size={15} />
@@ -455,6 +457,7 @@ const ClientNavbar = () => {
               <DrawerRow
                 icon={<IconBook size={18} />}
                 label="My courses"
+                href={`/profile/${user?.id}/my-courses`}
                 onClick={closeMenu}
               />
               {user?.role !== "STUDENT" && (

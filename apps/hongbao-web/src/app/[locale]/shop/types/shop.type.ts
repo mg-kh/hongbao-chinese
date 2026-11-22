@@ -1,3 +1,4 @@
+import { pluralize } from "@/utils/pluralize";
 import type { ProductType } from "@repo/shared";
 
 export type ShopProductType = Exclude<ProductType, "all">;
@@ -75,7 +76,7 @@ export const clampMonths = (n: number): number => {
 
 export const MONTH_OPTIONS = Array.from({ length: SHOP_MAX_MONTHS }, (_, i) => {
   const m = i + 1;
-  return { value: String(m), label: `${m} ${m === 1 ? "month" : "months"}` };
+  return { value: String(m), label: pluralize(m, "month") };
 });
 
 export const SHOP_TYPE_META: Record<

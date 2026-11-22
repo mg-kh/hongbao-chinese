@@ -1,5 +1,6 @@
 "use client";
 
+import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 import LoaderComponent from "@/components/LoaderComponent/LoaderComponent";
 import {
   Box,
@@ -13,6 +14,7 @@ import {
 import { ArrowRightIcon, ShoppingCartIcon } from "@phosphor-icons/react";
 import { isEmpty } from "lodash";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import CourseCard from "../../../components/CourseCard/CourseCard";
 import useContainer from "./useContainer";
 
@@ -36,20 +38,21 @@ const PageComponent = () => {
     setFilter,
     filters,
     filteredCourses,
+    activeCount,
   } = useContainer();
+  const { userId } = useParams();
 
   return (
     <Stack gap={24} className="flex-1!">
       {/* page header */}
-      <Group justify="space-between" align="flex-start" wrap="wrap" gap={12}>
-        <Stack gap={4} className="min-w-0!">
-          <Text size="xl" fw={"bold"} c={"hongbao-red"}>
-            ကျွန်ုပ်၏ သင်ခန်းစာများ
-          </Text>
-          <Text size="sm" c="gray.6">
-            Everything you&apos;re enrolled in, and where each one stands.
-          </Text>
-        </Stack>
+      <Group justify="space-between" align="center" wrap="wrap" gap={12}>
+        <CustomBreadCrumb
+          title="ကျွန်ုပ်၏ သင်ခန်းစာများ"
+          links={[
+            { label: "Profile", href: `/profile/${userId}`, isActive: true },
+            { label: "My courses", href: "", isActive: false },
+          ]}
+        />
         <Button
           component={Link}
           href="/shop?type=course"
@@ -83,20 +86,29 @@ const PageComponent = () => {
                   }`}
                 >
                   {f.label}
-                  <span
-                    className={`rounded-full! px-1.5! py-0.5! text-[10px]! leading-none! ${
-                      active
-                        ? "bg-white/25! text-white!"
-                        : "bg-gray-100! text-gray-500!"
-                    }`}
-                  >
-                    {f.count}
-                  </span>
                 </button>
               );
             })}
           </Group>
         </Box>
+      )}
+
+      {/* item count for the active filter */}
+      {stats.total > 0 && !isLoading && (
+        <Group
+          gap={8}
+          align="center"
+          wrap="wrap"
+          className="border-b! border-gray-100! pb-3!"
+        >
+          <Text size="sm" c="gray.6">
+            Showing{" "}
+            <Text span fw={700} c="gray.9">
+              {activeCount}
+            </Text>{" "}
+            {activeCount === 1 ? "course" : "courses"}
+          </Text>
+        </Group>
       )}
 
       {/* list */}

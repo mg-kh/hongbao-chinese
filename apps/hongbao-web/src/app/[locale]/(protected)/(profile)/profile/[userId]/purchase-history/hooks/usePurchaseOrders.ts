@@ -1,52 +1,51 @@
 "use client";
 
 import useApiQuery from "@/hooks/fetching/useApiQuery";
+import { toPurchaseCardOrder } from "@/utils/purchaseOrder";
+import { DatesRangeValue } from "@mantine/dates";
 import { keepPreviousData } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import {
+  OrderFilter,
   TMyPurchase,
   TMyPurchaseRes,
-  TOrderStatus,
   TPurchaseOrder,
 } from "../../types/purchase-history.type";
 
 const PAGE_LIMIT = 10;
 
-const toOrder = (p: TMyPurchase): TPurchaseOrder => {
-  const items = p.items.map((i) => ({
-    id: i.id,
-    productId: i.courseId ?? i.mockTestId,
-    type: i.courseId ? ("course" as const) : ("mock-test" as const),
-    title: i.course?.title ?? i.mockTest?.title ?? i.productName,
-    durationDays: i.durationDays,
-    quantity: i.quantity,
-    lineTotal: i.price * i.quantity,
-  }));
-
-  return {
-    id: p.id,
-    reference: p.orderNo,
-    status: p.status,
-    createdAt: p.createdAt,
-    paidAt: p.paidAt,
-    updatedAt: p.updatedAt,
-    currency: p.currency,
-    paymentType: p.paymentType,
-    transactionNo: p.transactionNo,
-    subtotal: items.reduce((sum, i) => sum + i.lineTotal, 0),
-    total: p.totalAmount,
-    items,
-  };
-};
+const toOrder = (p: TMyPurchase): TPurchaseOrder => ({
+  ...toPurchaseCardOrder(p),
+  status: p.orderStatus,
+  paidAt: p.paidAt,
+  updatedAt: p.updatedAt,
+});
 
 /**
  * The signed-in user's orders from `purchase/my-purchases`, one page at a
- * time, plus counts derived from the loaded page. `stats.total` is the
- * server-side total; the per-status counts and `spent` only cover the
- * current page.
+ * time. Status and date range are filtered server-side; `stats` are
+ * server-side totals for the date range (they ignore the status tab).
  */
 const usePurchaseOrders = () => {
   const [page, setPage] = useState(1);
+  const [filter, setFilterState] = useState<OrderFilter>("ALL");
+
+  /** Switching tabs starts over from the first page. */
+  const setFilter = (value: OrderFilter) => {
+    setFilterState(value);
+    setPage(1);
+  };
+  const [dateRange, setDateRangeState] = useState<DatesRangeValue>([
+    null,
+    null,
+  ]);
+  const [startDate, endDate] = dateRange;
+
+  /** Changing the range starts over from the first page. */
+  const setDateRange = (value: DatesRangeValue) => {
+    setDateRangeState(value);
+    setPage(1);
+  };
 
   const { data, isLoading, isFetching } = useApiQuery<
     { data: TMyPurchaseRes },
@@ -54,7 +53,13 @@ const usePurchaseOrders = () => {
   >({
     url: "purchase/my-purchases",
     key: "my-purchases",
-    params: { page, limit: PAGE_LIMIT },
+    params: {
+      page,
+      limit: PAGE_LIMIT,
+      ...(filter !== "ALL" && { status: filter }),
+      start_date: (startDate as string) || "",
+      end_date: (endDate as string) || "",
+    },
     select: (res) => res?.data,
     placeholderData: keepPreviousData,
   });
@@ -64,21 +69,13 @@ const usePurchaseOrders = () => {
     [data],
   );
 
-  const stats = useMemo(() => {
-    const by = (status: TOrderStatus) =>
-      orders.filter((o) => o.status === status).length;
-    return {
-      total: data?.total ?? 0,
-      pending: by("PENDING"),
-      approved: by("APPROVED"),
-      rejected: by("REJECTED"),
-      expired: by("EXPIRED"),
-      /** Total across approved + expired orders (money actually spent). */
-      spent: orders
-        .filter((o) => o.status === "APPROVED" || o.status === "EXPIRED")
-        .reduce((sum, o) => sum + o.total, 0),
-    };
-  }, [orders, data?.total]);
+  const stats = {
+    total: data?.counts?.ALL ?? 0,
+    pending: data?.counts?.PENDING ?? 0,
+    approved: data?.counts?.APPROVED ?? 0,
+    cancelled: data?.counts?.CANCELLED ?? 0,
+    expired: data?.counts?.EXPIRED ?? 0,
+  };
 
   return {
     orders,
@@ -88,6 +85,11 @@ const usePurchaseOrders = () => {
     page,
     setPage,
     totalPages: data?.totalPage || 1,
+    filter,
+    setFilter,
+    dateRange,
+    setDateRange,
+    isDateFiltered: Boolean(startDate || endDate),
   };
 };
 

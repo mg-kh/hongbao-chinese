@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import {
   SHOP_MAX_MONTHS,
@@ -30,7 +31,7 @@ const MonthStepper: React.FC<Props> = ({ value, onChange }) => {
         <IconMinus size={14} stroke={2.5} />
       </button>
       <span className="min-w-[64px]! border-x! border-gray-200! px-2! py-1! text-center! text-xs! font-bold! text-gray-800! tabular-nums!">
-        {current} {current === 1 ? "mo" : "mos"}
+        {pluralize(current, "mo")}
       </span>
       <button
         type="button"

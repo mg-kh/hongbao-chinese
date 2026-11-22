@@ -4,33 +4,16 @@ import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 import PurchaseOrderList from "@/app/[locale]/(dashboard)/dashboard/users/purchases/components/PurchaseOrderList/PurchaseOrderList";
 import CustomSearchInput from "@/components/Inputs/CustomSearchInput/CustomSearchInput";
 import DateRangeInput from "@/components/Inputs/DateRangeInput/DateRangeInput";
-import {
-  DASHBOARD,
-  PURCHASES_APPROVED,
-  PURCHASES_PENDING,
-} from "@/constants/DashboardRoutes";
-import { Link } from "@/i18n/navigation";
-import {
-  Badge,
-  Button,
-  Flex,
-  Group,
-  Pagination,
-  Select,
-  Stack,
-  Tabs,
-  Text,
-} from "@mantine/core";
-import { first, last, split } from "lodash";
+import PurchaseTabs from "@/app/[locale]/(dashboard)/dashboard/users/purchases/components/PurchaseTabs/PurchaseTabs";
+import { DASHBOARD } from "@/constants/DashboardRoutes";
+import { Flex, Group, Pagination, Select, Stack } from "@mantine/core";
+import { first, last } from "lodash";
 import useContainer from "./useContainer";
 
 const PageComponent = () => {
   const {
-    pathname,
-    pendingCount,
     pendingList,
     isLoading,
-    confirmApprove,
     params,
     setParams,
     totalPages,
@@ -50,59 +33,38 @@ const PageComponent = () => {
           />
         </Group>
 
-        <Tabs value={last(split(pathname, "/"))}>
-          <Tabs.List>
-            <Link href={PURCHASES_APPROVED}>
-              <Tabs.Tab value="approved">
-                <Group>
-                  <Text size="sm">Approved</Text>{" "}
-                </Group>
-              </Tabs.Tab>
-            </Link>
-            <Link href={PURCHASES_PENDING}>
-              <Tabs.Tab value="pending-approved">
-                <Group>
-                  <Text size="sm">Pending List</Text>{" "}
-                  <Badge color="green" size="xs">
-                    {pendingCount}
-                  </Badge>
-                </Group>
-              </Tabs.Tab>
-            </Link>
-          </Tabs.List>
-        </Tabs>
+        <PurchaseTabs />
 
         <PurchaseOrderList
           isLoading={isLoading}
           rows={pendingList || []}
+          noOffset={(Number(params.page) - 1) * Number(params.limit)}
           header={
-            <Flex justify="end" gap={10} wrap="wrap">
-              <DateRangeInput
-                onChange={(v) => {
-                  setParams((prev) => ({
-                    ...prev,
-                    start_date: (first(v) as string) || "",
-                    end_date: (last(v) as string) || "",
-                  }));
-                }}
-              />
-              <CustomSearchInput
-                placeholder="Search by Username or User Id or Course Id"
-                w={{ base: "100%", sm: 400 }}
-                searchFn={(value) => {
-                  handleSearch(value);
-                }}
-                clearFn={() => {
-                  handleSearchClear();
-                }}
-              />
-            </Flex>
+            <div className="flex items-center justify-between gap-2.5">
+              <div className="min-w-0 flex-1 sm:max-w-100">
+                <CustomSearchInput
+                  placeholder="Search by username, user ID, order no, txn no or product ID"
+                  searchFn={(value) => {
+                    handleSearch(value);
+                  }}
+                  clearFn={() => {
+                    handleSearchClear();
+                  }}
+                />
+              </div>
+              <div className="w-40 shrink-0 sm:w-62.5">
+                <DateRangeInput
+                  onChange={(v) => {
+                    setParams((prev) => ({
+                      ...prev,
+                      start_date: (first(v) as string) || "",
+                      end_date: (last(v) as string) || "",
+                    }));
+                  }}
+                />
+              </div>
+            </div>
           }
-          renderItemAction={(item) => (
-            <Button size="xs" onClick={() => confirmApprove(item)}>
-              Approve
-            </Button>
-          )}
           footer={
             <>
               <Flex justify="end" align={"center"} gap={10}>

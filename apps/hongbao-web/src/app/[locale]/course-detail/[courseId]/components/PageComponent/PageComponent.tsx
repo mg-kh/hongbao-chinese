@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import RubyButtonComponent from "@/components/Buttons/RubyButtonComponent/RubyButtonComponent";
 import LoaderComponent from "@/components/LoaderComponent/LoaderComponent";
 import PriceText from "@/components/MiscellaneousComponents/PriceText/PriceText";
@@ -250,8 +251,7 @@ const PageComponent = () => {
                           <SealQuestionIcon size={13} weight="fill" />
                         }
                       >
-                        {totalQuizCount}{" "}
-                        {totalQuizCount === 1 ? "Quiz" : "Quizzes"}
+                        {pluralize(totalQuizCount, "Quiz", "Quizzes")}
                       </Badge>
                     )}
                   </Group>
@@ -298,8 +298,7 @@ const PageComponent = () => {
                                 {lesson.title}
                               </Text>
                               <Text size="xs" c={"gray.6"}>
-                                {itemCount}{" "}
-                                {itemCount === 1 ? "item" : "items"}
+                                {pluralize(itemCount, "item")}
                               </Text>
                             </Stack>
                           </Group>

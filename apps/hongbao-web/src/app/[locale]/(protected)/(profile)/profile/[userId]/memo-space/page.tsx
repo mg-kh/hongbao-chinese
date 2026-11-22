@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import { Box, Paper, Progress, Stack, Text } from "@mantine/core";
 import {
   ArrowLeftIcon,
@@ -322,7 +323,7 @@ const SpacedRepetitionPage = () => {
             </Text>
             <Text size="sm" c="gray.6" className="max-w-[360px]!">
               {reviewedThisSession > 0
-                ? `You reviewed ${reviewedThisSession} card${reviewedThisSession === 1 ? "" : "s"} this session.`
+                ? `You reviewed ${pluralize(reviewedThisSession, "card")} this session.`
                 : "Nothing is due right now - come back later."}
             </Text>
             <button

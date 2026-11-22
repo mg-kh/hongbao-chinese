@@ -20,6 +20,9 @@ export const MOCK_TEST_LIST = "/dashboard/assets/mock-tests";
 export const USERS = "/dashboard/users";
 export const PURCHASES_APPROVED = "/dashboard/users/purchases/approved";
 export const PURCHASES_PENDING = "/dashboard/users/purchases/pending-approved";
+export const PURCHASES_REJECTED = "/dashboard/users/purchases/rejected";
+export const PURCHASE_DETAIL = (purchaseId: string) =>
+  `/dashboard/users/purchases/${purchaseId}`;
 export const FEED_BACKS = "/dashboard/users/feedbacks";
 
 // Pricing

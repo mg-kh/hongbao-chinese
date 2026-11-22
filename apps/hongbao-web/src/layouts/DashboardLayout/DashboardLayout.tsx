@@ -56,13 +56,18 @@ const DashboardLayout: React.FC<Props> = ({ children, size = "xl" }) => {
           }
         />
       </AppShell.Header>
-      <AppShell.Navbar zIndex={210}>
+      {/*
+        Layout layers stay below Mantine's dialog layer (modal / drawer = 200,
+        popover = 300) so every dialog backdrop covers the whole page.
+        Header = 100 (AppShell default) < mobile overlay < navbar.
+      */}
+      <AppShell.Navbar zIndex={102}>
         <SideBarMenu onNavigate={closeMobile} />
       </AppShell.Navbar>
       {mobileOpened && (
         <Overlay
           onClick={closeMobile}
-          zIndex={199}
+          zIndex={101}
           backgroundOpacity={0.45}
           hiddenFrom="sm"
           fixed

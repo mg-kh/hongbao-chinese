@@ -20,17 +20,15 @@ export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType];
 
 export const PurchaseStatus = {
   PENDING: "PENDING",
-  PAID: "PAID",
-  FAILED: "FAILED",
+  APPROVED: "APPROVED",
   CANCELLED: "CANCELLED",
-  REFUNDED: "REFUNDED",
 } as const;
 export type PurchaseStatus =
   (typeof PurchaseStatus)[keyof typeof PurchaseStatus];
 
 export const EnrollmentStatus = {
   PENDING: "PENDING",
-  ACTIVE: "ACTIVE",
+  APPROVED: "APPROVED",
   EXPIRED: "EXPIRED",
 } as const;
 export type EnrollmentStatus =

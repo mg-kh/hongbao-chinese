@@ -1,6 +1,8 @@
 import useApiQuery from "@/hooks/fetching/useApiQuery";
 import useMutationQuery from "@/hooks/fetching/useMutationQuery";
-import useCourseDetail from "@/hooks/global-data-fetching/useCourseDetail";
+import useLearnCourseDetail, {
+  learnCourseDetailKey,
+} from "@/hooks/global-data-fetching/useLearnCourseDetail";
 import { useParams } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { completedVideosKey } from "@/hooks/global-data-fetching/useCompletedVideos";
@@ -18,7 +20,7 @@ const useContainer = () => {
     select: (data) => data?.data,
   });
 
-  const { courseDetail } = useCourseDetail();
+  const { courseDetail } = useLearnCourseDetail();
 
   // ---------- completion tracking ----------
   const [playerDuration, setPlayerDuration] = useState<number | null>(null);
@@ -28,7 +30,7 @@ const useContainer = () => {
   const { mutate: markVideoComplete } = useMutationQuery({
     url: `video/${videoId}/complete`,
     invalidateKeys: [
-      ["course-detail", courseId],
+      learnCourseDetailKey(courseId),
       completedVideosKey(Array.isArray(userId) ? userId[0] : userId),
     ],
   });

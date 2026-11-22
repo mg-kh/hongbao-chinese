@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import EditDrawerFrame from "@/components/EditDrawerFrame/EditDrawerFrame";
 import CustomDateTimeInput from "@/components/Inputs/CustomDateTimeInput/CustomDateTimeInput";
 import CustomNumberInput from "@/components/Inputs/CustomNumberInput/CustomNumberInput";
@@ -153,7 +154,7 @@ const EditDrawer = () => {
               <Badge color="orange" variant="light" radius="xl">
                 {daysUntilExpiry === 0
                   ? "Expires today"
-                  : `${daysUntilExpiry} day${daysUntilExpiry > 1 ? "s" : ""} from now`}
+                  : `${pluralize(daysUntilExpiry, "day")} from now`}
               </Badge>
             )}
           </FormSectionWrapper>

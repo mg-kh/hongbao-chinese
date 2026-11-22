@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import calculateDiscountPrice from "@/utils/calculateDiscountPrice";
 import { currencyFormatter } from "@/utils/currencyFormatter";
 import {
@@ -82,7 +83,7 @@ const CartSummary: React.FC<Props> = ({
                 </Text>
                 {!product.isFree && (
                   <Text size="xs" c="gray.5">
-                    × {m} {m === 1 ? "month" : "months"}
+                    × {pluralize(m, "month")}
                   </Text>
                 )}
               </Group>
