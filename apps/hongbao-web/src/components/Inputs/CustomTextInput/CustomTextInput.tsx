@@ -15,10 +15,12 @@ const CustomTextInput = <T extends FieldValues>({
     <Controller
       control={control}
       name={name}
-      render={({ field }) => {
+      render={({ field, fieldState }) => {
         return (
           <TextInput
             {...field}
+            value={field.value ?? ""}
+            error={fieldState.error?.message}
             placeholder={`Please Enter ${props.label || ""} here...`}
             {...props}
           />

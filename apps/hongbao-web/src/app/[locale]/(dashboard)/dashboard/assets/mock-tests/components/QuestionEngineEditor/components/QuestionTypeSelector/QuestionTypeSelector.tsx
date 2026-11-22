@@ -2,6 +2,7 @@ import FormSectionWrapper from "@/components/Inputs/FormSectionWrapper/FormSecti
 import { Group, Radio, SimpleGrid, Text } from "@mantine/core";
 import { Controller, useFormContext } from "react-hook-form";
 import { QuestionType } from "@repo/shared";
+import { getEmptyValues } from "../../quiz-editor-schema";
 
 export { QuestionType };
 
@@ -21,7 +22,7 @@ const questionTypes = [
 ];
 
 const QuestionTypeSelector = () => {
-  const { control, reset, getValues } = useFormContext();
+  const { control, reset } = useFormContext();
   return (
     <FormSectionWrapper sectionTitle="Choose Question type">
       <Controller
@@ -33,9 +34,7 @@ const QuestionTypeSelector = () => {
               value={value}
               onChange={(v) => {
                 onChange(v);
-                reset({
-                  type: getValues("type"),
-                });
+                reset(getEmptyValues(v as QuestionType));
               }}
             >
               <SimpleGrid cols={{ base: 1, xs: 2, sm: 3, md: 4 }}>

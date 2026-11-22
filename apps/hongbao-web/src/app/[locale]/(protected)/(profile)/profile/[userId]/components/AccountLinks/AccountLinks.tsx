@@ -2,11 +2,7 @@
 
 import { Link } from "@/i18n/navigation";
 import { Box, Paper, Text } from "@mantine/core";
-import {
-  CaretRightIcon,
-  GearIcon,
-  ReceiptIcon,
-} from "@phosphor-icons/react";
+import { CaretRightIcon, GearIcon, ReceiptIcon } from "@phosphor-icons/react";
 import { useParams } from "next/navigation";
 
 type Row = {

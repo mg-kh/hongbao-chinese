@@ -23,9 +23,14 @@ const CustomRadioGroup = <T extends FieldValues>({
     <Controller
       control={control}
       name={name}
-      render={({ field: { value, onChange } }) => {
+      render={({ field: { value, onChange }, fieldState }) => {
         return (
-          <Radio.Group {...props} value={value} onChange={onChange}>
+          <Radio.Group
+            error={fieldState.error?.message}
+            {...props}
+            value={value ?? ""}
+            onChange={onChange}
+          >
             <Stack gap="xs" mt="xs">
               {data.map((option) => (
                 <Radio.Card

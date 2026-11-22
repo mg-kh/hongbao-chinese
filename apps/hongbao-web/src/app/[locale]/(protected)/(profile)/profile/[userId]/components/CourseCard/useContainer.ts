@@ -40,9 +40,7 @@ const fmt = (d: string) => format(new Date(d), "dd MMM yyyy");
  * One-line status detail shown under the title. Expired cards have none -
  * the status badge already says it.
  */
-const getMeta = (
-  data: TMyCourse,
-): { kind: TMetaKind; text: string } | null => {
+const getMeta = (data: TMyCourse): { kind: TMetaKind; text: string } | null => {
   switch (data.status) {
     case "APPROVED":
       return {

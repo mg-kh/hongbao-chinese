@@ -15,8 +15,13 @@ import {
 import {
   QuizFormField,
   QuizSchema,
+  getEmptyValues,
+  getFirstErrorMessage,
 } from "../../../../components/QuestionEngineEditor/quiz-editor-schema";
 import { QuestionType } from "../../../../components/QuestionEngineEditor/components/QuestionTypeSelector/QuestionTypeSelector";
+import { normalizeRearrange } from "@/utils/normalizeRearrange";
+import { normalizeTrueOrFalse } from "@/utils/normalizeTrueOrFalse";
+import { nanoid } from "nanoid";
 
 const useContainer = () => {
   const { quizzId, questionId } = useParams();
@@ -27,15 +32,7 @@ const useContainer = () => {
   const form = useForm<QuizFormField>({
     mode: "onChange",
     resolver: zodResolver(QuizSchema),
-    defaultValues: {
-      type: QuestionType.MULTIPLE_CHOICES,
-      title: "",
-      data: {
-        question: "",
-        options: [],
-        answer: "",
-      },
-    },
+    defaultValues: getEmptyValues(QuestionType.MULTIPLE_CHOICES),
   });
 
   const { handleSubmit, reset } = form;
@@ -55,25 +52,32 @@ const useContainer = () => {
     method: isEdit ? "patch" : "post",
   });
 
-  const handleFormSubmit = handleSubmit((data) => {
-    save(
-      {
-        quizId: quizzId,
-        type: data?.type,
-        title: data?.title,
-        data: data?.data,
-      },
-      {
-        onSuccess: () => {
-          showSuccessNoti();
-          router.push(`/dashboard/assets/quizzes/${quizzId}/questions`);
+  const handleFormSubmit = handleSubmit(
+    (data) => {
+      save(
+        {
+          quizId: quizzId,
+          type: data?.type,
+          title: data?.title,
+          data: data?.data,
         },
-        onError: (e: TErrorOptions) => {
-          showErrorNoti(e.message);
+        {
+          onSuccess: () => {
+            showSuccessNoti();
+            router.push(`/dashboard/assets/quizzes/${quizzId}/questions`);
+          },
+          onError: (e: TErrorOptions) => {
+            showErrorNoti(e.message);
+          },
         },
-      },
-    );
-  });
+      );
+    },
+    (errors) => {
+      showErrorNoti(
+        getFirstErrorMessage(errors) ?? "Please fill in all required fields",
+      );
+    },
+  );
 
   useEffect(() => {
     if (isEdit) {
@@ -98,8 +102,11 @@ const useContainer = () => {
               title: questionDetail?.title,
               data: {
                 question: questionDetail?.data?.question,
-                options: (questionDetail?.data?.options as string[]) ?? [],
-                answer: questionDetail?.data?.answer,
+                ...normalizeTrueOrFalse(
+                  questionDetail?.data?.options,
+                  questionDetail?.data?.answer,
+                  () => nanoid(),
+                ),
               },
             });
             break;
@@ -107,10 +114,10 @@ const useContainer = () => {
             reset({
               type: QuestionType.REARRANGE,
               title: questionDetail?.title,
-              data: {
-                questions: questionDetail?.data?.questions || [],
-                answers: questionDetail?.data?.answers || [],
-              },
+              data: normalizeRearrange(
+                questionDetail?.data?.questions,
+                questionDetail?.data?.answers,
+              ),
             });
             break;
         }

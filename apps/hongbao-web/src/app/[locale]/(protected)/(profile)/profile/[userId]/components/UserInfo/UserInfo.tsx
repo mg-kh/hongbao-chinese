@@ -1,13 +1,15 @@
 "use client";
 
+import LearningStreak from "@/app/[locale]/(protected)/(profile)/profile/[userId]/components/LearningStreak/LearningStreak";
+import MetaItem from "@/app/[locale]/(protected)/(profile)/profile/[userId]/components/UserInfo/components/MetaItem/MetaItem";
+import { Link } from "@/i18n/navigation";
 import {
   ActionIcon,
   Avatar,
   Badge,
-  Box,
+  Button,
   CopyButton,
-  Group,
-  Stack,
+  Skeleton,
   Text,
   Tooltip,
 } from "@mantine/core";
@@ -16,168 +18,177 @@ import {
   CheckIcon,
   CopyIcon,
   EnvelopeIcon,
+  GearSixIcon,
+  GraduationCapIcon,
+  IdentificationCardIcon,
   SparkleIcon,
 } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
-import useContainer from "./useContainer";
+import { memo } from "react";
+import useContainer, { TRole } from "./useContainer";
 
-type Role = "ADMIN" | "TEACHER" | "STAFF" | "STUDENT";
-
-const roleColor: Record<Role, string> = {
+const roleColor: Record<TRole, string> = {
   ADMIN: "hongbao-maroon",
   TEACHER: "hongbao-gold",
   STAFF: "hongbao-brown",
   STUDENT: "hongbao-red",
 };
 
-/** A small pill for a single piece of profile metadata (email, join date, ...). */
-const InfoPill: React.FC<{
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}> = ({ icon, children }) => (
-  <Group
-    gap={8}
-    wrap="nowrap"
-    px={12}
-    py={6}
-    className="min-w-0! max-w-full! rounded-full! border! border-hongbao-red-100! bg-white/70!"
-  >
-    <Box className="flex! items-center! justify-center! shrink-0! text-hongbao-red-500!">
-      {icon}
-    </Box>
-    <Text size="sm" c="gray.7" lineClamp={2} className="min-w-0!">
-      {children}
-    </Text>
-  </Group>
-);
+/** Shortens a long opaque id to "prefix…suffix" so it fits on one line;
+ * the full value stays available via the tooltip and the copy button. */
+const elideMiddle = (value: string, head = 6, tail = 4) =>
+  value.length > head + tail + 1
+    ? `${value.slice(0, head)}…${value.slice(-tail)}`
+    : value;
 
+/**
+ * Profile dashboard header: one card split into two flat panels - identity
+ * (who you are, recognisable at a glance) and learning streak (how you're
+ * doing). Identity is a compact horizontal row rather than a tall cover so
+ * the streak stays above the fold.
+ */
 const UserInfo = () => {
-  const { user } = useContainer();
-  const role = (user?.role as Role) || "STUDENT";
-
-  const joinedAt = user?.createdAt ? new Date(user.createdAt) : null;
-  const joinedLabel = joinedAt
-    ? joinedAt.toLocaleDateString("en-US", { month: "short", year: "numeric" })
-    : null;
-
-  // Date.now() is impure, so the "days learning" count is computed after
-  // mount rather than during render.
-  const [daysLearning, setDaysLearning] = useState<number | null>(null);
-  useEffect(() => {
-    if (!user?.createdAt) return;
-    const joined = new Date(user.createdAt).getTime();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setDaysLearning(
-      Math.max(0, Math.floor((Date.now() - joined) / (1000 * 60 * 60 * 24))),
-    );
-  }, [user?.createdAt]);
+  const { user, isLoading, role, joinedLabel, daysSinceJoin, settingsHref } =
+    useContainer();
 
   return (
-    <Box className="relative! overflow-hidden! rounded-3xl! border! border-hongbao-red-100! bg-gradient-to-br! from-white! via-hongbao-cream-50! to-hongbao-red-50! shadow-sm!">
-      {/* decorative glow */}
-      <Box className="pointer-events-none absolute -top-16 -right-16 w-56 h-56 rounded-full bg-hongbao-gold-200/35 blur-3xl" />
-      <Box className="pointer-events-none absolute -bottom-20 -left-10 w-48 h-48 rounded-full bg-hongbao-red-100/50 blur-3xl" />
+    <article className="group overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+      {/* ---------- identity panel ---------- */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-hongbao-red-50 via-white to-hongbao-gold-50 px-5 py-5 sm:px-7 sm:py-6">
+        {/* decorative texture + watermark, hidden from screen readers */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 w-1/2 opacity-40 bg-[radial-gradient(circle,var(--color-hongbao-red-200)_1px,transparent_1px)] bg-size-[14px_14px] [mask-image:linear-gradient(to_left,black,transparent)]"
+        />
+        <GraduationCapIcon
+          aria-hidden
+          weight="fill"
+          className="pointer-events-none absolute -right-6 -bottom-8 w-36 h-36 text-hongbao-red-100 -rotate-12 transition-transform duration-300 ease-out group-hover:-rotate-6"
+        />
 
-      <Stack
-        p={{ base: 20, sm: 28 }}
-        gap={18}
-        className="relative! sm:flex-row!"
-      >
-        <Box className="relative! shrink-0! w-fit!">
-          <Avatar
-            src="/assets/logo-head.svg"
-            alt={user?.name || ""}
-            name={user?.name || ""}
-            size={84}
-            p={17}
-            variant="outline"
-            className="ring-4! ring-white! shadow-md!"
-            bg={"hongbao-gold.3"}
-          />
-          {daysLearning !== null && daysLearning >= 30 && (
-            <Tooltip label={`Learning for ${daysLearning} days`} withArrow>
-              <Box className="absolute! -bottom-1! -right-1! flex! items-center! justify-center! w-7! h-7! rounded-full! bg-hongbao-gold-500! text-white! ring-2! ring-white! shadow-sm!">
-                <SparkleIcon size={14} weight="fill" />
-              </Box>
-            </Tooltip>
-          )}
-        </Box>
-
-        <Stack gap={12} className="min-w-0! flex-1!">
-          <Text size="sm" c="gray.6">
-            မင်္ဂလာပါ။ HongBao Chinese မှကြိုဆိုပါတယ်။
-          </Text>
-
-          <Group gap={10} wrap="wrap" align="center">
-            <Text
-              fw={800}
-              className="text-xl! sm:text-2xl! leading-tight!"
-              lineClamp={1}
-            >
-              {user?.name || ""}
-            </Text>
-            <Badge color={roleColor[role]} radius="sm">
-              {role}
-            </Badge>
-          </Group>
-
-          <Group gap={8} wrap="wrap">
-            {user?.email && (
-              <InfoPill icon={<EnvelopeIcon size={14} />}>
-                {user.email}
-              </InfoPill>
+        <div className="relative flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
+          {/* avatar + milestone badge */}
+          <div className="relative shrink-0 w-fit">
+            <Avatar
+              src={user?.imageUrl || "/assets/logo-head.svg"}
+              alt={user?.name || ""}
+              name={user?.name || ""}
+              size={76}
+              radius="xl"
+              p={user?.imageUrl ? 0 : 14}
+              bg="hongbao-gold.3"
+              className="ring-4! ring-white! shadow-md!"
+            />
+            {daysSinceJoin !== null && daysSinceJoin >= 30 && (
+              <Tooltip label={`Learning for ${daysSinceJoin} days`} withArrow>
+                <div className="absolute -bottom-1 -right-1 flex items-center justify-center w-7 h-7 rounded-full bg-hongbao-gold-500 text-white ring-2 ring-white shadow-sm">
+                  <SparkleIcon size={14} weight="fill" />
+                </div>
+              </Tooltip>
             )}
-            {joinedLabel && (
-              <InfoPill icon={<CalendarIcon size={14} />}>
-                Joined {joinedLabel}
-                {daysLearning !== null ? ` · ${daysLearning}d` : ""}
-              </InfoPill>
-            )}
-          </Group>
+          </div>
 
-          {user?.id && (
-            <Group
-              gap={6}
-              wrap="nowrap"
-              px={10}
-              py={4}
-              className="w-fit! max-w-full! rounded-lg! border! border-hongbao-red-100/70! bg-white/50!"
-            >
-              <Text
-                size="xs"
-                ff="monospace"
-                c="gray.5"
-                lineClamp={1}
-                className="min-w-0!"
-              >
-                {user.id}
-              </Text>
-              <CopyButton value={user.id}>
-                {({ copied, copy }) => (
-                  <Tooltip label={copied ? "Copied" : "Copy ID"} withArrow>
-                    <ActionIcon
-                      onClick={copy}
-                      color={copied ? "green" : "hongbao-red"}
-                      variant="subtle"
-                      size="sm"
-                      aria-label="Copy user ID"
-                      className="shrink-0!"
-                    >
-                      {copied ? (
-                        <CheckIcon size={14} />
-                      ) : (
-                        <CopyIcon size={14} />
+          {/* identity */}
+          <div className="min-w-0 flex-1">
+            {isLoading ? (
+              <>
+                <Skeleton height={24} width={180} radius="md" />
+                <Skeleton height={14} width={260} radius="md" mt={10} />
+              </>
+            ) : (
+              <>
+                <div className="flex flex-wrap items-center gap-2.5 pr-24 sm:pr-0">
+                  <Text
+                    component="h1"
+                    fw={800}
+                    c="gray.9"
+                    lineClamp={1}
+                    className="text-xl! sm:text-2xl! leading-tight!"
+                  >
+                    {user?.name || ""}
+                  </Text>
+                  <Badge color={roleColor[role]} radius="sm" variant="light">
+                    {role}
+                  </Badge>
+                </div>
+                <Text size="sm" c="gray.6" mt={4}>
+                  မင်္ဂလာပါ။ HongBao Chinese မှကြိုဆိုပါတယ်။
+                </Text>
+              </>
+            )}
+
+            {/* meta row - wraps on narrow screens */}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 mt-3">
+              {user?.email && (
+                <MetaItem icon={<EnvelopeIcon size={16} />} label="Email">
+                  <span title={user.email}>{user.email}</span>
+                </MetaItem>
+              )}
+              {joinedLabel && (
+                <MetaItem icon={<CalendarIcon size={16} />} label="Joined">
+                  Joined <time dateTime={user?.createdAt}>{joinedLabel}</time>
+                </MetaItem>
+              )}
+              {user?.id && (
+                <MetaItem
+                  icon={<IdentificationCardIcon size={16} />}
+                  label="User ID"
+                  action={
+                    <CopyButton value={user.id}>
+                      {({ copied, copy }) => (
+                        <Tooltip
+                          label={copied ? "ID copied" : "Copy ID"}
+                          withArrow
+                        >
+                          <ActionIcon
+                            onClick={copy}
+                            color={copied ? "green" : "gray"}
+                            variant="subtle"
+                            size="sm"
+                            radius="md"
+                            aria-label="Copy user ID"
+                          >
+                            {copied ? (
+                              <CheckIcon size={14} />
+                            ) : (
+                              <CopyIcon size={14} />
+                            )}
+                          </ActionIcon>
+                        </Tooltip>
                       )}
-                    </ActionIcon>
+                    </CopyButton>
+                  }
+                >
+                  <Tooltip label={user.id} withArrow openDelay={300}>
+                    <span className="font-mono">{elideMiddle(user.id)}</span>
                   </Tooltip>
-                )}
-              </CopyButton>
-            </Group>
-          )}
-        </Stack>
-      </Stack>
-    </Box>
+                </MetaItem>
+              )}
+            </div>
+          </div>
+
+          {/* primary action - pinned top-right on mobile, inline on desktop */}
+          <Button
+            component={Link}
+            href={settingsHref}
+            variant="default"
+            radius="md"
+            size="xs"
+            leftSection={<GearSixIcon size={14} />}
+            className="absolute! top-0! right-0! sm:static! sm:self-start! shrink-0!"
+          >
+            Settings
+          </Button>
+        </div>
+      </div>
+
+      {/* ---------- streak panel ---------- */}
+      <div className="border-t border-gray-100 px-5 py-5 sm:px-7 sm:py-6">
+        <LearningStreak />
+      </div>
+    </article>
   );
 };
 
-export default UserInfo;
+// No props - memo keeps the profile page's own state updates and query
+// resolutions (stats, flashcards, memo progress) from re-rendering the card.
+export default memo(UserInfo);

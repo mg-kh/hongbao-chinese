@@ -95,9 +95,11 @@ const CustomBreadCrumb = ({
           </Breadcrumbs>
         )}
 
-        <Title order={3} lh={1.25} lineClamp={1}>
-          {title}
-        </Title>
+        {title && (
+          <Title order={3} lh={1.25} lineClamp={1}>
+            {title}
+          </Title>
+        )}
       </Stack>
     </Group>
   );

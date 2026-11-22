@@ -10,26 +10,15 @@ import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { TMultipleChoiceOption, TQuestion } from "../../types/question.type";
 import { QuestionType } from "./components/QuestionTypeSelector/QuestionTypeSelector";
-import { QuizFormField, QuizSchema } from "./quiz-editor-schema";
-
-const getEmptyValues = (type: QuestionType): QuizFormField => {
-  switch (type) {
-    case QuestionType.REARRANGE:
-      return { type, title: "", data: { questions: [], answers: [] } };
-    case QuestionType.TRUE_OR_FALSE:
-      return {
-        type,
-        title: "",
-        data: { question: "", options: [], answer: "" },
-      };
-    default:
-      return {
-        type: QuestionType.MULTIPLE_CHOICES,
-        title: "",
-        data: { question: "", options: [], answer: "" },
-      };
-  }
-};
+import {
+  QuizFormField,
+  QuizSchema,
+  getEmptyValues,
+  getFirstErrorMessage,
+} from "./quiz-editor-schema";
+import { normalizeRearrange } from "@/utils/normalizeRearrange";
+import { normalizeTrueOrFalse } from "@/utils/normalizeTrueOrFalse";
+import { nanoid } from "nanoid";
 
 const useContainer = () => {
   const { quizzId, questionId, sectionId } = useParams();
@@ -81,36 +70,43 @@ const useContainer = () => {
     method: isEdit ? "patch" : "post",
   });
 
-  const handleFormSubmit = handleSubmit((data) => {
-    const payload = isUndefined(sectionId)
-      ? {
-          quizId: quizzId,
-          type: data?.type,
-          title: data?.title,
-          data: data?.data,
-        }
-      : {
-          quizId: quizzId,
-          sectionId: sectionId,
-          type: data?.type,
-          title: data?.title,
-          data: data?.data,
-        };
-    save(
-      {
-        ...payload,
-      },
-      {
-        onSuccess: () => {
-          showSuccessNoti();
-          router.back();
+  const handleFormSubmit = handleSubmit(
+    (data) => {
+      const payload = isUndefined(sectionId)
+        ? {
+            quizId: quizzId,
+            type: data?.type,
+            title: data?.title,
+            data: data?.data,
+          }
+        : {
+            quizId: quizzId,
+            sectionId: sectionId,
+            type: data?.type,
+            title: data?.title,
+            data: data?.data,
+          };
+      save(
+        {
+          ...payload,
         },
-        onError: (e: TErrorOptions) => {
-          showErrorNoti(e.message);
+        {
+          onSuccess: () => {
+            showSuccessNoti();
+            router.back();
+          },
+          onError: (e: TErrorOptions) => {
+            showErrorNoti(e.message);
+          },
         },
-      },
-    );
-  });
+      );
+    },
+    (errors) => {
+      showErrorNoti(
+        getFirstErrorMessage(errors) ?? "Please fill in all required fields",
+      );
+    },
+  );
 
   useEffect(() => {
     if (isEdit) {
@@ -135,8 +131,11 @@ const useContainer = () => {
               title: questionDetail?.title,
               data: {
                 question: questionDetail?.data?.question,
-                options: (questionDetail?.data?.options as string[]) ?? [],
-                answer: questionDetail?.data?.answer,
+                ...normalizeTrueOrFalse(
+                  questionDetail?.data?.options,
+                  questionDetail?.data?.answer,
+                  () => nanoid(),
+                ),
               },
             });
             break;
@@ -144,10 +143,10 @@ const useContainer = () => {
             reset({
               type: QuestionType.REARRANGE,
               title: questionDetail?.title,
-              data: {
-                questions: questionDetail?.data?.questions || [],
-                answers: questionDetail?.data?.answers || [],
-              },
+              data: normalizeRearrange(
+                questionDetail?.data?.questions,
+                questionDetail?.data?.answers,
+              ),
             });
             break;
         }
