@@ -1,11 +1,7 @@
 import useMyCourses from "@/hooks/global-data-fetching/useMyCourses";
-import { useMemo, useState } from "react";
-
-/** Status buckets the list can be narrowed to. */
-export type CourseFilter = "ALL" | "APPROVED" | "PENDING" | "EXPIRED";
+import { CourseFilter } from "../../../types/my-courses.type";
 
 const useContainer = () => {
-  const [filter, setFilter] = useState<CourseFilter>("ALL");
   const {
     coursesRes,
     isLoading,
@@ -14,13 +10,9 @@ const useContainer = () => {
     page,
     setPage,
     totalPages,
+    filter,
+    setFilter,
   } = useMyCourses();
-
-  const filteredCourses = useMemo(() => {
-    const list = coursesRes || [];
-    if (filter === "ALL") return list;
-    return list.filter((c) => c?.status === filter);
-  }, [coursesRes, filter]);
 
   /** Tab config lives here so the counts stay in sync with `stats`. */
   const filters: { value: CourseFilter; label: string; count: number }[] = [
@@ -40,7 +32,9 @@ const useContainer = () => {
     filter,
     setFilter,
     filters,
-    filteredCourses,
+    /** Item count for the selected status tab. */
+    activeCount: filters.find((f) => f.value === filter)?.count ?? 0,
+    filteredCourses: coursesRes,
   };
 };
 

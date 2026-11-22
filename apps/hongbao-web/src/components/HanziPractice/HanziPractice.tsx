@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import {
   ArrowClockwiseIcon,
   CheckCircleIcon,
@@ -271,7 +272,7 @@ const HanziPractice: React.FC<Props> = ({
           <div className="flex! shrink-0! items-center! gap-2!">
             {displayMistakes > 0 && (
               <span className="text-xs! font-medium! text-hongbao-brown-800/60!">
-                {displayMistakes} miss{displayMistakes === 1 ? "" : "es"}
+                {pluralize(displayMistakes, "miss", "misses")}
               </span>
             )}
             <button

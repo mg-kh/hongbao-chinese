@@ -1,6 +1,8 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { type User } from '@prisma/client';
 import { Public } from '../../auth/auth-public.decorator';
+import { CurrentUser } from '../../decorators/current-user.decorator';
 import { ClientCourseService } from './client-course.service';
 
 @ApiTags('# Client - Course')
@@ -19,5 +21,11 @@ export class ClientCourseController {
   @Get('course-detail/:id')
   getCourseDetail(@Param('id') id: string) {
     return this.clientCourseService.getCourseDetail(id);
+  }
+
+  // Learn pages: same payload as course-detail, but requires active access.
+  @Get('learn/course-detail/:id')
+  getLearnCourseDetail(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.clientCourseService.getLearnCourseDetail(id, user.id);
   }
 }

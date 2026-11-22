@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import LoaderComponent from "@/components/LoaderComponent/LoaderComponent";
 import MobileBottomNav from "@/components/Navbar/MobileBottomNav/MobileBottomNav";
 import { publicBottomNavItems } from "@/components/Navbar/MobileBottomNav/publicNavItems";
@@ -133,7 +134,7 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
             color="hongbao-red"
             fullWidth
           >
-            Show {total} {total === 1 ? "result" : "results"}
+            Show {pluralize(total, "result")}
           </Button>
         </Stack>
       </Drawer>

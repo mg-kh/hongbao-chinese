@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import useCart from "@/hooks/useCart";
 import { Link } from "@/i18n/navigation";
 import calculateDiscountPrice from "@/utils/calculateDiscountPrice";
@@ -42,7 +43,7 @@ const CheckoutSummary = () => {
             Order
           </Text>
           <Text fw={700} size="sm" lineClamp={1}>
-            {count} {count === 1 ? "item" : "items"}
+            {pluralize(count, "item")}
           </Text>
         </Group>
         <Group gap={10} wrap="nowrap" className="shrink-0!">
@@ -81,8 +82,7 @@ const CheckoutSummary = () => {
                     <Text size="xs" c="gray.5">
                       {SHOP_TYPE_META[product.type].label}
                       {product.level ? ` · ${product.level}` : ""}
-                      {!product.isFree &&
-                        ` · ${m} ${m === 1 ? "month" : "months"}`}
+                      {!product.isFree && ` · ${pluralize(m, "month")}`}
                     </Text>
                     {itemPromo && (
                       <Text size="xs" c="hongbao-red-600" fw={600}>

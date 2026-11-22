@@ -1,75 +1,100 @@
 "use client";
 
-import LoaderComponent from "@/components/LoaderComponent/LoaderComponent";
-import { TPurchaseCourse } from "@/app/[locale]/(dashboard)/dashboard/users/purchases/types/purchases.type";
-import { Paper, Stack, Text } from "@mantine/core";
-import { ReceiptIcon } from "@phosphor-icons/react";
-import PurchaseOrderCard from "./components/PurchaseOrderCard/PurchaseOrderCard";
-import useContainer from "./useContainer";
+import useContainer from "@/app/[locale]/(dashboard)/dashboard/users/purchases/components/PurchaseOrderList/useContainer";
+import { TPurchase } from "@/app/[locale]/(dashboard)/dashboard/users/purchases/types/purchases.type";
+import CustomTable from "@/components/CustomTable/CustomTable";
+import { Text } from "@mantine/core";
 
 interface Props {
-  rows: TPurchaseCourse[];
+  rows: TPurchase[];
   isLoading?: boolean;
-  /** Filters / search bar shown above the list. */
+  /** Filters / search bar shown above the table. */
   header?: React.ReactNode;
-  /** Pagination shown below the list. */
+  /** Pagination shown below the table. */
   footer?: React.ReactNode;
-  /** Right-hand side of each order line (e.g. an Approve button). */
-  renderItemAction?: (item: TPurchaseCourse) => React.ReactNode;
   emptyLabel?: string;
+  /** Rows before this page, for the "No." column: `(page - 1) * limit`. */
+  noOffset?: number;
 }
 
+/** Purchases table; clicking a row opens the purchase detail page. */
 const PurchaseOrderList: React.FC<Props> = ({
   rows,
   isLoading,
   header,
   footer,
-  renderItemAction,
   emptyLabel = "No orders found",
+  noOffset = 0,
 }) => {
-  const { orders } = useContainer(rows);
+  const { openDetail, formatTotal, formatOrderedAt, formatOrderedAgo } =
+    useContainer();
+
+  const columns = [
+    {
+      id: "orderNo",
+      header: "Order No",
+      element: (p: TPurchase) => (
+        <Text
+          size="sm"
+          fw={700}
+          className="font-mono! tracking-tight! whitespace-nowrap! text-gray-900!"
+        >
+          {p.orderNo}
+        </Text>
+      ),
+    },
+    {
+      id: "customer",
+      header: "Customer",
+      element: (p: TPurchase) => (
+        <Text size="sm" fw={600} c="gray.8" lineClamp={1}>
+          {p.user?.name || "-"}
+        </Text>
+      ),
+    },
+    {
+      id: "ordered",
+      header: "Ordered",
+      element: (p: TPurchase) => (
+        <div className="whitespace-nowrap">
+          <Text size="sm" c="gray.8">
+            {formatOrderedAt(p)}
+          </Text>
+          <Text size="xs" c="gray.5">
+            {formatOrderedAgo(p)}
+          </Text>
+        </div>
+      ),
+    },
+    {
+      id: "total",
+      header: "Total",
+      headerClass: "text-right!",
+      columnClass: "text-right!",
+      element: (p: TPurchase) => (
+        <Text
+          size="sm"
+          fw={800}
+          c="hongbao-red.7"
+          className="whitespace-nowrap! tabular-nums!"
+        >
+          {formatTotal(p)}
+        </Text>
+      ),
+    },
+  ];
 
   return (
-    <Stack gap={12}>
-      {header && (
-        <Paper withBorder bdrs={12} className="border-gray-200! px-4! py-3!">
-          {header}
-        </Paper>
-      )}
-
-      {isLoading ? (
-        <LoaderComponent />
-      ) : orders.length === 0 ? (
-        <Paper
-          withBorder
-          bdrs={16}
-          className="flex! flex-col! items-center! gap-3! border-dashed! border-gray-300! bg-gray-50/60! py-12!"
-        >
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-gray-400">
-            <ReceiptIcon size={22} />
-          </div>
-          <Text size="sm" c="dimmed" fw={500}>
-            {emptyLabel}
-          </Text>
-        </Paper>
-      ) : (
-        <Stack gap={12}>
-          {orders.map((order) => (
-            <PurchaseOrderCard
-              key={order.orderNo}
-              order={order}
-              renderItemAction={renderItemAction}
-            />
-          ))}
-        </Stack>
-      )}
-
-      {footer && (
-        <Paper withBorder bdrs={12} className="border-gray-200! px-4! py-3!">
-          {footer}
-        </Paper>
-      )}
-    </Stack>
+    <CustomTable<TPurchase>
+      header={header}
+      footer={footer}
+      rows={rows}
+      columns={columns}
+      isLoading={isLoading}
+      emptyLabel={emptyLabel}
+      noOffset={noOffset}
+      onTableRowClick={openDetail}
+    />
   );
 };
 

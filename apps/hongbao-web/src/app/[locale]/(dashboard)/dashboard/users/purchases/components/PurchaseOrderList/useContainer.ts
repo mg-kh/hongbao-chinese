@@ -1,26 +1,22 @@
-import { TPurchaseCourse } from "@/app/[locale]/(dashboard)/dashboard/users/purchases/types/purchases.type";
-import { useMemo } from "react";
+import { TPurchase } from "@/app/[locale]/(dashboard)/dashboard/users/purchases/types/purchases.type";
+import { PURCHASE_DETAIL } from "@/constants/DashboardRoutes";
+import { useRouter } from "@/i18n/navigation";
+import { money } from "@/utils/purchaseOrder";
+import { format, formatDistanceToNow } from "date-fns";
 
-export type TPurchaseOrderGroup = {
-  orderNo: string;
-  items: TPurchaseCourse[];
-};
+const useContainer = () => {
+  const router = useRouter();
 
-/**
- * Groups enrollment rows into orders by `orderNo`, keeping the order the
- * first row of each appears in. Rows without an order number stand alone.
- */
-const useContainer = (rows: TPurchaseCourse[]) => {
-  const orders = useMemo<TPurchaseOrderGroup[]>(() => {
-    const map = new Map<string, TPurchaseCourse[]>();
-    rows.forEach((row) => {
-      const key = row?.orderNo || row?.id;
-      map.set(key, [...(map.get(key) ?? []), row]);
-    });
-    return Array.from(map, ([orderNo, items]) => ({ orderNo, items }));
-  }, [rows]);
-
-  return { orders };
+  return {
+    openDetail: (purchase: TPurchase) =>
+      router.push(PURCHASE_DETAIL(purchase.id)),
+    formatTotal: (purchase: TPurchase) =>
+      money(purchase.totalAmount, purchase.currency),
+    formatOrderedAt: (purchase: TPurchase) =>
+      format(purchase.createdAt, "d MMM yyyy, hh:mm a"),
+    formatOrderedAgo: (purchase: TPurchase) =>
+      formatDistanceToNow(new Date(purchase.createdAt), { addSuffix: true }),
+  };
 };
 
 export default useContainer;

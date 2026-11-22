@@ -1,3 +1,4 @@
+import { pluralize } from "@/utils/pluralize";
 import { Text } from "@mantine/core";
 import React from "react";
 
@@ -8,7 +9,7 @@ interface Props {
 
 const PriceText: React.FC<Props> = ({ data, size = "lg" }) => {
   const months = data?.perTime || 1;
-  const monthLabel = `${months} ${months > 1 ? "months" : "month"}`;
+  const monthLabel = pluralize(months, "month");
   const priceClassName =
     size === "lg"
       ? "text-[40px]! text-hongbao-red-600!"

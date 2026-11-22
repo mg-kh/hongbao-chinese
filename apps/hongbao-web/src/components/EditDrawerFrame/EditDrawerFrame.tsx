@@ -70,7 +70,6 @@ const EditDrawerFrame: React.FC<Props> = ({
         opened={opened}
         onClose={close}
         position="right"
-        zIndex={250}
         classNames={{
           body: "bg-gray-100! h-full p-0! overflow-auto",
         }}

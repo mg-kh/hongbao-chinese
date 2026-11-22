@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@/utils/pluralize";
 import useCart from "@/hooks/useCart";
 import { Link } from "@/i18n/navigation";
 import { Indicator } from "@mantine/core";
@@ -52,7 +53,7 @@ const CartButton: React.FC<Props> = ({ variant = "icon", onNavigate }) => {
     <Link
       href="/shop/cart"
       onClick={onNavigate}
-      aria-label={`Cart${badge > 0 ? `, ${badge} items` : ""}`}
+      aria-label={`Cart${badge > 0 ? `, ${pluralize(badge, "item")}` : ""}`}
       className="no-underline! flex! items-center! justify-center! w-10! h-10! rounded-full! border! border-gray-200! bg-white! text-gray-700! transition-colors! duration-200! ease-out! hover:border-hongbao-red-200! hover:bg-hongbao-cream-50! hover:text-hongbao-red-600!"
     >
       <Indicator

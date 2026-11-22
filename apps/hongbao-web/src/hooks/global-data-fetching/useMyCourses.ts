@@ -2,6 +2,7 @@ import useApiQuery from "@/hooks/fetching/useApiQuery";
 import { keepPreviousData } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import {
+  CourseFilter,
   TMyCourse,
   TMyEnrollment,
   TMyEnrollmentRes,
@@ -9,31 +10,58 @@ import {
 
 const PAGE_LIMIT = 10;
 
-const toCourse = (e: TMyEnrollment): TMyCourse => {
+/**
+ * The API never writes EXPIRED - an enrollment stays APPROVED and only its
+ * `expiredAt` passes - so derive it here. Null `expiredAt` means lifetime.
+ */
+const resolveStatus = (
+  e: TMyEnrollment,
+  now: number,
+): TMyEnrollment["status"] => {
+  if (
+    e.status === "APPROVED" &&
+    e.expiredAt &&
+    new Date(e.expiredAt).getTime() <= now
+  ) {
+    return "EXPIRED";
+  }
+  return e.status;
+};
+
+const toCourse = (e: TMyEnrollment, now = Date.now()): TMyCourse => {
   const product = e.course ?? e.mockTest;
+  const status = resolveStatus(e, now);
   return {
     id: e.id,
     productId: e.courseId ?? e.mockTestId ?? product?.id ?? "",
     type: e.courseId ? "course" : "mock-test",
     title: product?.title ?? "",
+    thumbnail: product?.thumbnail ?? null,
     perTime: product?.perTime ?? 1,
-    status: e.status,
+    status,
     startedAt: e.startedAt,
     expiredAt: e.expiredAt,
     createdAt: e.createdAt,
-    hasAccess: e.hasAccess,
+    hasAccess: e.hasAccess && status !== "EXPIRED",
   };
 };
 
 /**
  * The user's enrolments (courses + mock tests) from
- * `purchase/my-enrollments`, one page at a time, plus the counts derived from
- * them. Shared by the profile overview (stat tiles) and the My courses page
- * (filter tabs). `stats.total` is the server-side total; the per-status
- * counts only cover the loaded page.
+ * `purchase/my-enrollments`, one page at a time. The status filter is applied
+ * server-side; `stats` are server-side totals that ignore the status filter.
+ * Shared by the profile overview (stat tiles) and the My courses page
+ * (filter tabs).
  */
 const useMyCourses = () => {
   const [page, setPage] = useState(1);
+  const [filter, setFilterState] = useState<CourseFilter>("ALL");
+
+  /** Switching tabs starts over from the first page. */
+  const setFilter = (value: CourseFilter) => {
+    setFilterState(value);
+    setPage(1);
+  };
 
   const { data, isLoading, isFetching } = useApiQuery<
     { data: TMyEnrollmentRes },
@@ -41,25 +69,30 @@ const useMyCourses = () => {
   >({
     url: `purchase/my-enrollments`,
     key: "my-enrollments",
-    params: { page, limit: PAGE_LIMIT, type: "all" },
+    params: {
+      page,
+      limit: PAGE_LIMIT,
+      type: "all",
+      ...(filter !== "ALL" && { status: filter }),
+    },
     select: (res) => res?.data,
     placeholderData: keepPreviousData,
   });
 
   const coursesRes = useMemo<TMyCourse[]>(
-    () => (data?.items ?? []).map(toCourse),
+    () => {
+      const now = Date.now();
+      return (data?.items ?? []).map((e) => toCourse(e, now));
+    },
     [data],
   );
 
-  const stats = useMemo(
-    () => ({
-      total: data?.total ?? 0,
-      active: coursesRes.filter((c) => c.status === "APPROVED").length,
-      pending: coursesRes.filter((c) => c.status === "PENDING").length,
-      expired: coursesRes.filter((c) => c.status === "EXPIRED").length,
-    }),
-    [coursesRes, data?.total],
-  );
+  const stats = {
+    total: data?.counts?.ALL ?? 0,
+    active: data?.counts?.APPROVED ?? 0,
+    pending: data?.counts?.PENDING ?? 0,
+    expired: data?.counts?.EXPIRED ?? 0,
+  };
 
   return {
     coursesRes,
@@ -69,6 +102,8 @@ const useMyCourses = () => {
     page,
     setPage,
     totalPages: data?.totalPage || 1,
+    filter,
+    setFilter,
   };
 };
 

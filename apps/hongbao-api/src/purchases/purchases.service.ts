@@ -17,6 +17,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { PurchaseApproveDto } from './dto/purchase-approve.dto';
 import { PurchasePaginationDto } from './dto/purchase-pagination.dto';
+import { PurchaseRejectDto } from './dto/purchase-reject.dto';
 
 @Injectable()
 export class PurchasesService {
@@ -34,14 +35,18 @@ export class PurchasesService {
     });
 
     const approvedCount =
-      counts.find((item) => item.status === 'PAID')?._count._all ?? 0;
+      counts.find((item) => item.status === 'APPROVED')?._count._all ?? 0;
     const pendingCount =
       counts.find((item) => item.status === 'PENDING')?._count._all ?? 0;
+    // Admin rejections are stored as CANCELLED (see purchaseReject).
+    const rejectedCount =
+      counts.find((item) => item.status === 'CANCELLED')?._count._all ?? 0;
 
     return successResponse({
       data: {
         approvedCount,
         pendingCount,
+        rejectedCount,
       },
     });
   }
@@ -51,7 +56,39 @@ export class PurchasesService {
   }
 
   async getAllApprovedCourse(query: PurchasePaginationDto) {
-    return this.getPurchasesByStatus('PAID', query);
+    return this.getPurchasesByStatus('APPROVED', query);
+  }
+
+  async getAllRejectedPurchases(query: PurchasePaginationDto) {
+    return this.getPurchasesByStatus('CANCELLED', query);
+  }
+
+  /** One purchase with everything the dashboard detail page shows. */
+  async getPurchaseDetail(id: string) {
+    return withErrorHandling(async () => {
+      const purchase = await this.prisma.purchase.findUnique({
+        where: { id },
+        include: {
+          user: {
+            select: selectFromResponse(['id', 'name', 'email', 'imageUrl']),
+          },
+          items: {
+            include: {
+              course: { select: selectFromResponse(['id', 'title']) },
+              mockTest: { select: selectFromResponse(['id', 'title']) },
+            },
+            orderBy: { createdAt: 'asc' },
+          },
+        },
+      });
+      if (!purchase) {
+        throw new NotFoundException('Purchase not found');
+      }
+
+      return successResponse({
+        data: purchase,
+      });
+    });
   }
 
   async purchaseApprove(data: PurchaseApproveDto) {
@@ -80,8 +117,114 @@ export class PurchasesService {
   }
 
   /**
-   * Marks a purchase PAID and grants/extends access for each item in one
-   * transaction. Idempotent: only the PENDING -> PAID transition grants access,
+   * Rejects a PENDING purchase (status -> CANCELLED), records the reason and
+   * removes the PENDING enrollment requests checkout created for it, in one
+   * transaction. Repeating a reject on an already-CANCELLED order is a no-op.
+   */
+  async purchaseReject(data: PurchaseRejectDto) {
+    return withErrorHandling(async () => {
+      const count = await this.prisma.$transaction(async (tx) => {
+        const { count } = await tx.purchase.updateMany({
+          where: { id: data.purchaseId, status: 'PENDING' },
+          data: { status: 'CANCELLED', rejectReason: data.reason },
+        });
+        if (count > 0) {
+          await this.removePendingEnrollments(tx, data.purchaseId);
+        }
+        return count;
+      });
+
+      const purchase = await this.prisma.purchase.findUnique({
+        where: { id: data.purchaseId },
+        include: { items: true },
+      });
+      if (!purchase) {
+        throw new NotFoundException('Purchase not found');
+      }
+      if (count === 0 && purchase.status !== 'CANCELLED') {
+        throw new BadRequestException(
+          `Purchase is ${purchase.status} and cannot be rejected`,
+        );
+      }
+
+      if (count > 0) {
+        try {
+          const names = purchase.items.map((item) => item.productName);
+          await this.notificationsService.sendToUser(
+            {
+              title: 'Order Rejected',
+              body: `Your order ${purchase.orderNo} for "${names.join('", "')}" was rejected. Reason: ${data.reason}`,
+            },
+            purchase.userId,
+          );
+        } catch {
+          // Notification delivery is best-effort and must not fail the rejection.
+        }
+      }
+
+      return successResponse({
+        data: purchase,
+      });
+    });
+  }
+
+  /**
+   * Drops the PENDING enrollment requests a rejected order created at checkout.
+   *
+   * Only rows still PENDING and tagged with this order are touched, so active
+   * access (APPROVED, incl. a renewal in progress) is never removed. Because
+   * enrollments are unique per user+product, a second pending order for the
+   * same product shares this row (checkout uses skipDuplicates); in that case
+   * the request is handed over to that order instead of deleted.
+   */
+  private async removePendingEnrollments(
+    tx: Prisma.TransactionClient,
+    purchaseId: string,
+  ) {
+    const purchase = await tx.purchase.findUniqueOrThrow({
+      where: { id: purchaseId },
+      select: { userId: true, orderNo: true },
+    });
+
+    const requests = await tx.enrollment.findMany({
+      where: {
+        userId: purchase.userId,
+        orderNo: purchase.orderNo,
+        status: 'PENDING',
+      },
+      select: { id: true, courseId: true, mockTestId: true },
+    });
+
+    for (const request of requests) {
+      const product = request.courseId
+        ? { courseId: request.courseId }
+        : { mockTestId: request.mockTestId };
+
+      const otherPending = await tx.purchase.findFirst({
+        where: {
+          userId: purchase.userId,
+          status: 'PENDING',
+          id: { not: purchaseId },
+          items: { some: product },
+        },
+        orderBy: { createdAt: 'desc' },
+        select: { orderNo: true },
+      });
+
+      if (otherPending) {
+        await tx.enrollment.update({
+          where: { id: request.id },
+          data: { orderNo: otherPending.orderNo },
+        });
+      } else {
+        await tx.enrollment.delete({ where: { id: request.id } });
+      }
+    }
+  }
+
+  /**
+   * Marks a purchase APPROVED and grants/extends access for each item in one
+   * transaction. Idempotent: only the PENDING -> APPROVED transition grants access,
    * so repeated confirmations (double clicks, retried webhooks) are no-ops.
    */
   async confirmPurchase(purchaseId: string) {
@@ -89,7 +232,7 @@ export class PurchasesService {
       const paidAt = new Date();
       const { count } = await tx.purchase.updateMany({
         where: { id: purchaseId, status: 'PENDING' },
-        data: { status: 'PAID', paidAt },
+        data: { status: 'APPROVED', paidAt },
       });
       if (count === 0) {
         return false;
@@ -123,7 +266,7 @@ export class PurchasesService {
     if (!purchase) {
       throw new NotFoundException('Purchase not found');
     }
-    if (!granted && purchase.status !== 'PAID') {
+    if (!granted && purchase.status !== 'APPROVED') {
       throw new BadRequestException(
         `Purchase is ${purchase.status} and cannot be confirmed`,
       );
@@ -175,7 +318,7 @@ export class PurchasesService {
       await tx.enrollment.update({
         where: { id: existing.id },
         data: {
-          status: 'ACTIVE',
+          status: 'APPROVED',
           orderNo,
           expiredAt,
           ...(!isActive && { startedAt: now }),
@@ -187,7 +330,7 @@ export class PurchasesService {
           userId,
           ...product,
           orderNo,
-          status: 'ACTIVE',
+          status: 'APPROVED',
           startedAt: now,
           expiredAt,
         },

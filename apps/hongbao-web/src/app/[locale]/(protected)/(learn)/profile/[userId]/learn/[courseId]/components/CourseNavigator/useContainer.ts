@@ -1,4 +1,4 @@
-import useCourseDetail from "@/hooks/global-data-fetching/useCourseDetail";
+import useLearnCourseDetail from "@/hooks/global-data-fetching/useLearnCourseDetail";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useCompletedVideos } from "@/hooks/global-data-fetching/useCompletedVideos";
@@ -6,7 +6,7 @@ import { useCompletedVideos } from "@/hooks/global-data-fetching/useCompletedVid
 const useContainer = () => {
   const { courseId, userId, videoId, quizId } = useParams();
   const [expandSidbar, setExpendSidebar] = useState(true);
-  const { courseDetail, isLoading } = useCourseDetail();
+  const { courseDetail, isLoading } = useLearnCourseDetail();
   const { completedIds, isVideoCompleted } = useCompletedVideos();
 
   /**
