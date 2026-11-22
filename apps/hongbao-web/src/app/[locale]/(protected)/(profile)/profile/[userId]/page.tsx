@@ -1,6 +1,8 @@
 "use client";
 
+import QuizIcon from "@/components/icons/QuizIcon";
 import useAllFlashcardList from "@/hooks/global-data-fetching/useAllFlashcardList";
+import { useCompletedQuizzes } from "@/hooks/global-data-fetching/useCompletedQuizzes";
 import { useCompletedVideos } from "@/hooks/global-data-fetching/useCompletedVideos";
 import useMyCourses from "@/hooks/global-data-fetching/useMyCourses";
 import { Group, Stack, Text } from "@mantine/core";
@@ -41,6 +43,7 @@ const Profile = () => {
   const { userId } = useParams();
   const uid = String(userId);
   const { completedCount } = useCompletedVideos();
+  const { completedCount: answeredQuizCount } = useCompletedQuizzes();
   const { stats } = useMyCourses();
   const { flashcards } = useAllFlashcardList();
 
@@ -91,41 +94,31 @@ const Profile = () => {
         </Group>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <StatTile
+            layout="graphic"
             icon={<BookOpenIcon size={18} weight="fill" />}
             value={stats.total}
             label="Enrolled"
-            caption={
-              stats.total > 0
-                ? "You're enrolled and learning"
-                : "Browse courses to get started"
-            }
             tone={stats.total > 0 ? "brand" : "neutral"}
           />
           <StatTile
+            layout="graphic"
             icon={<PlayCircleIcon size={18} weight="fill" />}
             value={stats.active}
             label="In progress"
-            caption={
-              stats.active > 0 ? "Keep up the momentum" : "Nothing in progress"
-            }
             tone={stats.active > 0 ? "brand" : "neutral"}
           />
           <StatTile
+            layout="graphic"
             icon={<ClockIcon size={18} weight="fill" />}
             value={stats.pending}
             label="Pending approval"
-            caption={
-              stats.pending > 0 ? "Awaiting staff review" : "Nothing pending"
-            }
             tone={stats.pending > 0 ? "attention" : "neutral"}
           />
           <StatTile
+            layout="graphic"
             icon={<CalendarXIcon size={18} weight="fill" />}
             value={stats.expired}
             label="Expired"
-            caption={
-              stats.expired > 0 ? "Renew to keep learning" : "None expired"
-            }
             tone={stats.expired > 0 ? "attention" : "neutral"}
           />
         </div>
@@ -134,7 +127,7 @@ const Profile = () => {
       {/* activity */}
       <Stack gap={10}>
         <StatGroupLabel>Learning activity</StatGroupLabel>
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <StatTile
             icon={<CheckCircleIcon size={18} weight="fill" />}
             value={completedCount}
@@ -145,6 +138,17 @@ const Profile = () => {
                 : "Finish a lesson to start your streak"
             }
             tone={completedCount > 0 ? "success" : "neutral"}
+          />
+          <StatTile
+            icon={<QuizIcon width={18} height={18} />}
+            value={answeredQuizCount}
+            label="Quizzes answered"
+            caption={
+              answeredQuizCount > 0
+                ? "Quizzes completed across your courses"
+                : "Answer a quiz to test yourself"
+            }
+            tone={answeredQuizCount > 0 ? "success" : "neutral"}
           />
           <StatTile
             icon={<CardsIcon size={18} weight="fill" />}
@@ -160,7 +164,6 @@ const Profile = () => {
             label="Due for review"
             caption={dueCount > 0 ? "Ready to review now" : "All caught up!"}
             tone={dueCount > 0 ? "attention" : "success"}
-            className="max-lg:col-span-2!"
           />
         </div>
       </Stack>

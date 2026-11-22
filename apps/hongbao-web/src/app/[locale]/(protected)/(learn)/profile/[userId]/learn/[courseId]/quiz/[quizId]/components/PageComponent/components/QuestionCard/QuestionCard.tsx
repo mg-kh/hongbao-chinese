@@ -1,19 +1,15 @@
-import { Badge, Box, Group, Paper, Stack, Text } from "@mantine/core";
+import { Box, Group, Paper, Stack, Text } from "@mantine/core";
 import { ArrowCounterClockwiseIcon, CheckIcon } from "@phosphor-icons/react";
 import { useFormContext, useWatch } from "react-hook-form";
+import QuestionTypeBadge from "@/components/MiscellaneousComponents/QuestionTypeBadge/QuestionTypeBadge";
 import { decodeEscapedHtml } from "@/utils/decodeEscapedHtml";
+import { normalizeRearrange } from "@/utils/normalizeRearrange";
 import { QuizAnswersFormField } from "../../quiz-answers-schema";
 import { QuestionType, TAnswer, TQuizQuestion } from "../../types/quiz.type";
 
 interface Props {
   question: TQuizQuestion;
 }
-
-const typeLabel: Record<string, string> = {
-  [QuestionType.MULTIPLE_CHOICES]: "Multiple choice",
-  [QuestionType.TRUE_OR_FALSE]: "True or false",
-  [QuestionType.REARRANGE]: "Re-arrange",
-};
 
 /** A - B - C … so options are referable and easier to scan. */
 const optionLetter = (i: number) => String.fromCharCode(65 + i);
@@ -33,19 +29,21 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
 
   const isRearrange = question.type === QuestionType.REARRANGE;
   const picked = Array.isArray(answer) ? answer : [];
-  const bank = question.data.questions || [];
+  // Words carry ids (legacy plain-string questions are converted), and the
+  // learner's answer is the ordered list of picked word ids.
+  const bank = normalizeRearrange(
+    question.data.questions,
+    question.data.answers,
+  ).questions;
+  const labelOf = (id: string) => bank.find((w) => w.value === id)?.label ?? "";
 
   const onSelect = (value: string) => setAnswer(value);
-  const onPushWord = (word: string) => setAnswer([...picked, word]);
+  const onPushWord = (id: string) => setAnswer([...picked, id]);
   const onPopWordAt = (position: number) =>
     setAnswer(picked.filter((_, i) => i !== position));
 
-  /** A word is spent once it's been used as many times as it appears. */
-  const remaining = bank.filter((word, i) => {
-    const usedBefore = bank.slice(0, i).filter((w) => w === word).length;
-    const usedTotal = picked.filter((w) => w === word).length;
-    return usedTotal <= usedBefore;
-  });
+  /** A word is spent once its id has been picked. */
+  const remaining = bank.filter((w) => !picked.includes(w.value));
 
   return (
     <Paper
@@ -56,9 +54,7 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
     >
       <Stack gap={18}>
         <Group gap={10} wrap="wrap">
-          <Badge size="sm" radius="sm" variant="light" color="hongbao-red">
-            {typeLabel[question.type] ?? "Question"}
-          </Badge>
+          <QuestionTypeBadge size="sm" type={question.type} />
           <Text
             component="div"
             size="sm"
@@ -95,14 +91,14 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
                 </Text>
               ) : (
                 <Group gap={8} wrap="wrap">
-                  {picked.map((word, i) => (
+                  {picked.map((id, i) => (
                     <button
-                      key={`${word}-${i}`}
+                      key={id}
                       type="button"
                       onClick={() => onPopWordAt(i)}
                       className="rounded-xl! bg-hongbao-red-600! px-3.5! py-2! text-sm! font-semibold! text-white! cursor-pointer! transition-transform! duration-150! hover:-translate-y-0.5! active:scale-95!"
                     >
-                      {word}
+                      {labelOf(id)}
                     </button>
                   ))}
                 </Group>
@@ -111,14 +107,14 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
 
             {remaining.length > 0 && (
               <Group gap={8} wrap="wrap">
-                {remaining.map((word, i) => (
+                {remaining.map((word) => (
                   <button
-                    key={`${word}-bank-${i}`}
+                    key={word.value}
                     type="button"
-                    onClick={() => onPushWord(word)}
+                    onClick={() => onPushWord(word.value)}
                     className="rounded-xl! border! border-gray-200! bg-white! px-3.5! py-2! text-sm! font-semibold! text-gray-700! cursor-pointer! transition-all! duration-150! hover:border-hongbao-red-300! hover:text-hongbao-red-600! active:scale-95!"
                   >
-                    {word}
+                    {word.label}
                   </button>
                 ))}
               </Group>

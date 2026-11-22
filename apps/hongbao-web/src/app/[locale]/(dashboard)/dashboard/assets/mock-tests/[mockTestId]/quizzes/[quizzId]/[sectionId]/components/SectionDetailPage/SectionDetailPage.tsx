@@ -16,8 +16,8 @@ import {
 } from "@mantine/core";
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useParams, useRouter } from "next/navigation";
-import { QuestionType } from "../../../../../../components/QuestionEngineEditor/components/QuestionTypeSelector/QuestionTypeSelector";
 import EditSectionDrawer from "../EditSectionDrawer/EditSectionDrawer";
+import QuestionTypeBadge from "@/components/MiscellaneousComponents/QuestionTypeBadge/QuestionTypeBadge";
 import useContainer from "./useContainer";
 import { TQuestion } from "../../../../../../types/question.type";
 import Link from "next/link";
@@ -105,21 +105,7 @@ const SectionDetailPage = () => {
             {
               id: "type",
               header: "Question Type",
-              element: (v) => {
-                return (
-                  <>
-                    {v.type === QuestionType.MULTIPLE_CHOICES && (
-                      <Badge color="blue">Multiple Choice</Badge>
-                    )}
-                    {v.type === QuestionType.TRUE_OR_FALSE && (
-                      <Badge color="indigo">True Or False</Badge>
-                    )}
-                    {v.type === QuestionType.REARRANGE && (
-                      <Badge color="green">Rearrange</Badge>
-                    )}
-                  </>
-                );
-              },
+              element: (v) => <QuestionTypeBadge type={v.type} />,
               columnClass: "min-w-[80px]! max-w-[120px]!",
             },
             {

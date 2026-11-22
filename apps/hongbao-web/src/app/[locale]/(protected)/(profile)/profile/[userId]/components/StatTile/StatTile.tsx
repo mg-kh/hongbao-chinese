@@ -10,27 +10,43 @@ export type StatTone = "brand" | "neutral" | "attention" | "success";
 
 const statTones: Record<
   StatTone,
-  { tile: string; value: string; progress: string }
+  {
+    tile: string;
+    value: string;
+    progress: string;
+    /** Soft corner blob behind the watermark in the "graphic" layout. */
+    blob: string;
+    /** Faded oversized icon colour in the "graphic" layout. */
+    mark: string;
+  }
 > = {
   brand: {
     tile: "bg-hongbao-red-50! text-hongbao-red-600!",
     value: "text-hongbao-red-700!",
     progress: "hongbao-red",
+    blob: "bg-hongbao-red-50!",
+    mark: "text-hongbao-red-200!",
   },
   neutral: {
     tile: "bg-gray-100! text-gray-400!",
     value: "text-gray-400!",
     progress: "gray",
+    blob: "bg-gray-50!",
+    mark: "text-gray-200!",
   },
   attention: {
     tile: "bg-hongbao-gold-50! text-hongbao-gold-700!",
     value: "text-hongbao-gold-800!",
     progress: "hongbao-gold",
+    blob: "bg-hongbao-gold-50!",
+    mark: "text-hongbao-gold-200!",
   },
   success: {
     tile: "bg-green-50! text-green-600!",
     value: "text-green-700!",
     progress: "green",
+    blob: "bg-green-50!",
+    mark: "text-green-200!",
   },
 };
 
@@ -38,9 +54,13 @@ interface Props {
   icon: React.ReactNode;
   value: number | string;
   label: string;
-  caption: string;
+  caption?: string;
   tone: StatTone;
   progress?: number;
+  /** "stacked" (default): icon above the number. "graphic": no icon chip -
+   * the icon becomes a large faded watermark over a soft tone-coloured blob
+   * bleeding off the bottom-right corner, so the number leads. */
+  layout?: "stacked" | "graphic";
   className?: string;
 }
 
@@ -53,9 +73,63 @@ const StatTile: React.FC<Props> = ({
   caption,
   tone,
   progress,
+  layout = "stacked",
   className = "",
 }) => {
   const t = statTones[tone];
+
+  if (layout === "graphic") {
+    return (
+      <Paper
+        withBorder
+        bdrs={16}
+        p={{ base: 14, sm: 16 }}
+        className={`relative! overflow-hidden! bg-white! border-gray-200! transition-all! duration-200! ease-out! hover:-translate-y-0.5! hover:shadow-md! group ${className}`}
+      >
+        {/* decorative background - hidden from screen readers */}
+        <Box
+          aria-hidden
+          className={`pointer-events-none! absolute! -right-8! -bottom-10! w-28! h-28! rounded-full! ${t.blob}`}
+        />
+        <Box
+          aria-hidden
+          className={`pointer-events-none! absolute! -right-3! -bottom-4! w-[72px]! h-[72px]! -rotate-12! transition-transform! duration-300! ease-out! group-hover:-rotate-6! group-hover:scale-105! [&_svg]:w-full! [&_svg]:h-full! ${t.mark}`}
+        >
+          {icon}
+        </Box>
+
+        <div className="relative pr-10">
+          <Text
+            fw={800}
+            className={`text-2xl! sm:text-3xl! leading-none! ${t.value}`}
+          >
+            {value}
+          </Text>
+          <Text
+            fw={600}
+            size="sm"
+            c="gray.7"
+            mt={6}
+            lineClamp={1}
+            className="leading-snug!"
+          >
+            {label}
+          </Text>
+          {caption ? (
+            <Text
+              size="xs"
+              c="gray.5"
+              mt={4}
+              lineClamp={1}
+              className="leading-snug!"
+            >
+              {caption}
+            </Text>
+          ) : null}
+        </div>
+      </Paper>
+    );
+  }
 
   return (
     <Paper
@@ -94,9 +168,11 @@ const StatTile: React.FC<Props> = ({
         />
       ) : null}
 
-      <Text size="xs" c="gray.5" mt={6} className="leading-snug!">
-        {caption}
-      </Text>
+      {caption ? (
+        <Text size="xs" c="gray.5" mt={6} className="leading-snug!">
+          {caption}
+        </Text>
+      ) : null}
     </Paper>
   );
 };

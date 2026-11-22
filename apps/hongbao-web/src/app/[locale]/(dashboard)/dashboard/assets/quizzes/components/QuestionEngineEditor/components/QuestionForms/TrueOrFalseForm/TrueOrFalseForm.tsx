@@ -1,17 +1,11 @@
+import CustomRadioGroup from "@/components/Inputs/CustomRadioGroup/CustomRadioGroup";
 import CustomRichTextEditor from "@/components/Inputs/CustomRichTextEditor/CustomRichTextEditor";
 import CustomTextInput from "@/components/Inputs/CustomTextInput/CustomTextInput";
-import { ActionIcon, Button, Flex, Stack, Text } from "@mantine/core";
-import { IconPlus, IconTrash } from "@tabler/icons-react";
-import { isEmpty } from "lodash";
-import React from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { Stack, Text, TextInput } from "@mantine/core";
+import useContainer from "@/app/[locale]/(dashboard)/dashboard/assets/quizzes/components/QuestionEngineEditor/components/QuestionForms/TrueOrFalseForm/useContainer";
 
 const TrueOrFalseForm = () => {
-  const { control } = useFormContext();
-  const options = useFieldArray({
-    control,
-    name: "data.options",
-  });
+  const { control, options } = useContainer();
   return (
     <Stack>
       <CustomTextInput
@@ -28,61 +22,23 @@ const TrueOrFalseForm = () => {
       />
       <Stack gap={5}>
         <Text size="md">Options</Text>
-        <Stack>
-          {!isEmpty(options?.fields) ? (
-            <>
-              {options?.fields?.map((o, i) => {
-                return (
-                  <React.Fragment key={o.id}>
-                    <Flex gap={10} align="stretch">
-                      <CustomTextInput
-                        control={control}
-                        name={`data.options.${i}`}
-                        className="w-full!"
-                      />
-                      <ActionIcon
-                        onClick={() => {
-                          options.remove(i);
-                        }}
-                        size="lg"
-                        bg="red"
-                      >
-                        <IconTrash />
-                      </ActionIcon>
-                      <ActionIcon
-                        onClick={() => {
-                          options.append("-");
-                        }}
-                        size="lg"
-                      >
-                        <IconPlus />
-                      </ActionIcon>
-                    </Flex>
-                  </React.Fragment>
-                );
-              })}
-            </>
-          ) : (
-            <Button
-              onClick={() => {
-                options.append("-");
-              }}
-              w={300}
-            >
-              Add New Option
-            </Button>
-          )}
-        </Stack>
+        {/* Options are fixed to True / False and can't be edited. */}
+        <div className="flex flex-col gap-2.5 sm:flex-row">
+          {options.map((o, i) => (
+            <TextInput
+              key={o.value}
+              label={`Option ${i + 1}`}
+              value={o.label}
+              readOnly
+              variant="filled"
+              className="w-full"
+            />
+          ))}
+        </div>
       </Stack>
       <Stack gap={5}>
         <Text size="md">Answer</Text>
-        <Stack>
-          <CustomTextInput
-            control={control}
-            name="data.answer"
-            className="w-full!"
-          />
-        </Stack>
+        <CustomRadioGroup control={control} name="data.answer" data={options} />
       </Stack>
     </Stack>
   );

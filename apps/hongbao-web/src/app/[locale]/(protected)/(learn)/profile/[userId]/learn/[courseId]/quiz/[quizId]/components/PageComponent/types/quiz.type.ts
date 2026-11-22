@@ -1,3 +1,4 @@
+import { TRearrangeWord } from "@/utils/normalizeRearrange";
 import { QuestionType } from "@repo/shared";
 
 export { QuestionType };
@@ -18,9 +19,9 @@ export type TQuizQuestion = {
     options?: Array<{ label: string; value: string }>;
     /** Always plain text, even when `options` is HTML. */
     answer?: string;
-    /** REARRANGE: the shuffled word bank. */
-    questions?: string[];
-    /** REARRANGE: the words in their correct order. */
+    /** REARRANGE: the word bank (legacy questions store plain strings). */
+    questions?: string[] | TRearrangeWord[];
+    /** REARRANGE: the word ids in their correct order (legacy: the words). */
     answers?: string[];
   };
   sectionId?: string | null;

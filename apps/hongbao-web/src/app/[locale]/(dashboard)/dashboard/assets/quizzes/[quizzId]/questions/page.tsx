@@ -7,7 +7,6 @@ import DeleteDialog from "@/components/Modals/DeleteDialog/DeleteDialog";
 import { DASHBOARD, QUIZZES_LIST } from "@/constants/DashboardRoutes";
 import {
   ActionIcon,
-  Badge,
   Box,
   Button,
   Group,
@@ -18,7 +17,9 @@ import {
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { QuestionType } from "../../components/QuestionEngineEditor/components/QuestionTypeSelector/QuestionTypeSelector";
 import { TQuestion } from "../../types/question.type";
+import QuestionTypeBadge from "@/components/MiscellaneousComponents/QuestionTypeBadge/QuestionTypeBadge";
 import useContainer from "./useContainer";
+import { normalizeRearrange } from "@/utils/normalizeRearrange";
 
 const Questions = () => {
   const {
@@ -89,10 +90,12 @@ const Questions = () => {
                             <Stack>
                               <Text>{v?.title}</Text>
                               <Group gap={5}>
-                                {v?.data?.questions?.map((q) => {
+                                {normalizeRearrange(
+                                  v?.data?.questions,
+                                ).questions.map((q) => {
                                   return (
-                                    <Paper withBorder key={q} px={4}>
-                                      <Text size="xs">{q}</Text>
+                                    <Paper withBorder key={q.value} px={4}>
+                                      <Text size="xs">{q.label}</Text>
                                     </Paper>
                                   );
                                 })}
@@ -108,21 +111,7 @@ const Questions = () => {
                 {
                   id: "type",
                   header: "Question Type",
-                  element: (v) => {
-                    return (
-                      <>
-                        {v?.type === QuestionType.MULTIPLE_CHOICES && (
-                          <Badge color="blue">Multiple Choice</Badge>
-                        )}
-                        {v?.type === QuestionType.TRUE_OR_FALSE && (
-                          <Badge color="indigo">True Or False</Badge>
-                        )}
-                        {v?.type === QuestionType.REARRANGE && (
-                          <Badge color="green">Rearrange</Badge>
-                        )}
-                      </>
-                    );
-                  },
+                  element: (v) => <QuestionTypeBadge type={v?.type} />,
                   columnClass: "min-w-[80px]! max-w-[120px]!",
                 },
                 {
