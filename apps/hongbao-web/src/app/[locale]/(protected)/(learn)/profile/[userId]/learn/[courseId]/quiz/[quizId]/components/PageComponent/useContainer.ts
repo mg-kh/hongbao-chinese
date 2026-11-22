@@ -1,13 +1,14 @@
 import useApiQuery from "@/hooks/fetching/useApiQuery";
 import useMutationQuery from "@/hooks/fetching/useMutationQuery";
+import { addCompletedToCache } from "@/hooks/global-data-fetching/useCompletedProgress";
 import {
   completedQuizzesKey,
   useCompletedQuizzes,
 } from "@/hooks/global-data-fetching/useCompletedQuizzes";
-import useLearnCourseDetail, {
-  learnCourseDetailKey,
-} from "@/hooks/global-data-fetching/useLearnCourseDetail";
+import useLearnCourseDetail from "@/hooks/global-data-fetching/useLearnCourseDetail";
+import { flattenCourseItems } from "@/utils/flattenCourseItems";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import {
   BaseSyntheticEvent,
@@ -87,6 +88,13 @@ const bandFor = (percent: number) => {
 /** Stable fallback so `answers` keeps referential identity across renders
  * before the form has any values yet. */
 const EMPTY_ANSWERS: QuizAnswersFormField["answers"] = {};
+const EMPTY_GRADED: TGradedQuestion[] = [];
+const EMPTY_QUESTIONS: TQuizQuestion[] = [];
+
+/** Quiz content rarely changes; keep it cached across navigations. */
+const QUIZ_STALE_TIME = 5 * 60 * 1000;
+
+const selectQuestions = (data: { data: TQuiz }) => data?.data?.questions;
 
 /** A short, actionable tip per question on the review screen. */
 const suggestionFor = (g: TGradedQuestion) => {
@@ -118,10 +126,11 @@ const useContainer = () => {
     url: `learning-progress/quiz/${quizId}`,
     enabled: !!quizId,
     retry: false,
-    select: (data) => data?.data?.questions,
+    select: selectQuestions,
+    staleTime: QUIZ_STALE_TIME,
   });
 
-  const questions = useMemo(() => apiQuestions ?? [], [apiQuestions]);
+  const questions = apiQuestions ?? EMPTY_QUESTIONS;
 
   const form = useForm<QuizAnswersFormField>({
     mode: "onChange",
@@ -148,13 +157,14 @@ const useContainer = () => {
   const { isQuizCompleted } = useCompletedQuizzes();
   const isCompleted = isQuizCompleted(quizId);
 
+  // The course detail carries no completion state, so only the completed
+  // list changes - patched in place rather than refetched.
+  const queryClient = useQueryClient();
   const { mutate: markQuizComplete, isPending: isMarkingComplete } =
     useMutationQuery({
       url: `learning-progress/quiz/${quizId}/complete`,
-      invalidateKeys: [
-        learnCourseDetailKey(courseId),
-        completedQuizzesKey(userId),
-      ],
+      onSuccess: () =>
+        addCompletedToCache(queryClient, completedQuizzesKey(userId), quizId),
     });
 
   const handleMarkComplete = () => {
@@ -163,28 +173,9 @@ const useContainer = () => {
   };
 
   // ---------- next item ----------
-  /** Flattened, in-order list of every video/quiz in the course - mirrors
-   * CourseNavigator's order so "next" matches the sidebar. */
   const { courseDetail } = useLearnCourseDetail();
   const { nextItem, quizTitle } = useMemo(() => {
-    const items: { type: "video" | "quiz"; id: string; title?: string }[] = [];
-    courseDetail?.lessons?.forEach((lesson) => {
-      lesson?.subLessons?.forEach((sub) => {
-        sub?.videos?.forEach((v) =>
-          items.push({ type: "video", id: v.id, title: v.title }),
-        );
-        sub?.quizzes?.forEach((q) =>
-          items.push({ type: "quiz", id: q.id, title: q.title }),
-        );
-      });
-      lesson?.quizzes?.forEach((q) =>
-        items.push({ type: "quiz", id: q.id, title: q.title }),
-      );
-    });
-    courseDetail?.quizzes?.forEach((q) =>
-      items.push({ type: "quiz", id: q.id, title: q.title }),
-    );
-
+    const items = flattenCourseItems(courseDetail);
     const i = items.findIndex((it) => it.type === "quiz" && it.id === quizId);
     return {
       nextItem: i >= 0 ? items[i + 1] : undefined,
@@ -248,21 +239,25 @@ const useContainer = () => {
     setElapsed(0);
   };
 
+  // Only needed on the results screen - skip grading on every answer change
+  // while the quiz is still being taken.
   const graded = useMemo<TGradedQuestion[]>(
     () =>
-      questions.map((q) => {
-        const given = answers[q.id];
-        const givenValue = toValue(given);
-        return {
-          question: q,
-          given,
-          correct: correctLabelOf(q),
-          givenLabel: answerLabelOf(q, given),
-          isAnswered: Array.isArray(given) ? given.length > 0 : !!given,
-          isCorrect: !!givenValue && givenValue === correctValueOf(q),
-        };
-      }),
-    [questions, answers],
+      !submitted
+        ? EMPTY_GRADED
+        : questions.map((q) => {
+            const given = answers[q.id];
+            const givenValue = toValue(given);
+            return {
+              question: q,
+              given,
+              correct: correctLabelOf(q),
+              givenLabel: answerLabelOf(q, given),
+              isAnswered: Array.isArray(given) ? given.length > 0 : !!given,
+              isCorrect: !!givenValue && givenValue === correctValueOf(q),
+            };
+          }),
+    [submitted, questions, answers],
   );
 
   const score = graded.filter((g) => g.isCorrect).length;

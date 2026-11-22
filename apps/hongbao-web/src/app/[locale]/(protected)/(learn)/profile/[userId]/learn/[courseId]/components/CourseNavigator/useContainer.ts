@@ -1,55 +1,86 @@
+import { useCompletedQuizzes } from "@/hooks/global-data-fetching/useCompletedQuizzes";
+import { useCompletedVideos } from "@/hooks/global-data-fetching/useCompletedVideos";
 import useLearnCourseDetail from "@/hooks/global-data-fetching/useLearnCourseDetail";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import { useCompletedVideos } from "@/hooks/global-data-fetching/useCompletedVideos";
-import { useCompletedQuizzes } from "@/hooks/global-data-fetching/useCompletedQuizzes";
+
+type TItem = { id: string; isCompleted?: boolean };
+type TLessonStats = { done: number; total: number; isDone: boolean };
 
 const useContainer = () => {
-  const { courseId, userId, videoId, quizId } = useParams();
+  const { courseId, userId, videoId, quizId } = useParams<{
+    courseId: string;
+    userId: string;
+    videoId?: string;
+    quizId?: string;
+  }>();
   const [expandSidbar, setExpendSidebar] = useState(true);
   const { courseDetail, isLoading } = useLearnCourseDetail();
-  const { completedIds, isVideoCompleted } = useCompletedVideos();
-  const { completedIds: completedQuizIds, isQuizCompleted } =
+  const { completedSet: completedVideoSet, isVideoCompleted } =
+    useCompletedVideos();
+  const { completedSet: completedQuizSet, isQuizCompleted } =
     useCompletedQuizzes();
 
   /**
-   * Overall completion across every video/quiz in the course. The course
-   * detail API doesn't carry completion state, so both videos and quizzes
-   * are checked against the user's `learning-progress` completed lists.
+   * One pass over the course for overall progress and per-lesson counts. The
+   * course detail API doesn't carry completion state, so both videos and
+   * quizzes are checked against the user's `learning-progress` completed
+   * lists. Recomputed only when the course or a completed list changes - not
+   * on route changes or accordion toggles.
    */
-  const progress = useMemo(() => {
+  const { progress, lessonStats } = useMemo(() => {
     let total = 0;
     let completed = 0;
+    const stats: Record<string, TLessonStats> = {};
 
-    const countVideos = (items?: { id: string; isCompleted?: boolean }[]) => {
+    const count = (items: TItem[] | undefined, set: Set<string>) => {
+      let t = 0;
+      let d = 0;
       items?.forEach((item) => {
-        total += 1;
-        if (item?.isCompleted || completedIds.includes(item.id)) completed += 1;
+        t += 1;
+        if (item?.isCompleted || set.has(item.id)) d += 1;
       });
-    };
-    const countQuizzes = (items?: { id: string; isCompleted?: boolean }[]) => {
-      items?.forEach((item) => {
-        total += 1;
-        if (item?.isCompleted || completedQuizIds.includes(item.id))
-          completed += 1;
-      });
+      return [t, d] as const;
     };
 
     courseDetail?.lessons?.forEach((lesson) => {
+      let lessonTotal = 0;
+      let lessonDone = 0;
+      const add = ([t, d]: readonly [number, number]) => {
+        lessonTotal += t;
+        lessonDone += d;
+      };
       lesson?.subLessons?.forEach((sub) => {
-        countVideos(sub?.videos);
-        countQuizzes(sub?.quizzes);
+        add(count(sub?.videos, completedVideoSet));
+        add(count(sub?.quizzes, completedQuizSet));
       });
-      countQuizzes(lesson?.quizzes);
+      add(count(lesson?.quizzes, completedQuizSet));
+
+      stats[lesson.id] = {
+        total: lessonTotal,
+        done: lessonDone,
+        isDone: lessonTotal > 0 && lessonDone === lessonTotal,
+      };
+      total += lessonTotal;
+      completed += lessonDone;
     });
-    countQuizzes(courseDetail?.quizzes);
+
+    const [finalTotal, finalDone] = count(
+      courseDetail?.quizzes,
+      completedQuizSet,
+    );
+    total += finalTotal;
+    completed += finalDone;
 
     return {
-      total,
-      completed,
-      percent: total ? Math.round((completed / total) * 100) : 0,
+      lessonStats: stats,
+      progress: {
+        total,
+        completed,
+        percent: total ? Math.round((completed / total) * 100) : 0,
+      },
     };
-  }, [courseDetail, completedIds, completedQuizIds]);
+  }, [courseDetail, completedVideoSet, completedQuizSet]);
 
   /** The lesson containing the currently open video/quiz, if any - drives
    * auto-expanding that lesson's accordion item in CourseNavigator. */
@@ -57,21 +88,15 @@ const useContainer = () => {
     const activeId = videoId || quizId;
     if (!activeId) return undefined;
 
-    return courseDetail?.lessons?.find((lesson) => {
-      const subVideoIds =
-        lesson?.subLessons?.flatMap(
-          (sub) => sub?.videos?.map((v) => v.id) || [],
-        ) || [];
-      const subQuizIds =
-        lesson?.subLessons?.flatMap(
-          (sub) => sub?.quizzes?.map((q) => q.id) || [],
-        ) || [];
-      const lessonQuizIds = lesson?.quizzes?.map((q) => q.id) || [];
-
-      return [...subVideoIds, ...subQuizIds, ...lessonQuizIds].includes(
-        activeId as string,
-      );
-    })?.id;
+    return courseDetail?.lessons?.find(
+      (lesson) =>
+        lesson?.quizzes?.some((q) => q.id === activeId) ||
+        lesson?.subLessons?.some(
+          (sub) =>
+            sub?.videos?.some((v) => v.id === activeId) ||
+            sub?.quizzes?.some((q) => q.id === activeId),
+        ),
+    )?.id;
   }, [courseDetail, videoId, quizId]);
 
   return {
@@ -84,6 +109,7 @@ const useContainer = () => {
     videoId,
     quizId,
     progress,
+    lessonStats,
     isVideoCompleted,
     isQuizCompleted,
     activeLessonId,

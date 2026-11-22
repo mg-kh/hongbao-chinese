@@ -18,79 +18,11 @@ import {
   CheckCircleIcon,
   ListBulletsIcon,
   SealQuestionIcon,
-  VideoIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import NavItem from "./components/NavItem/NavItem";
 import useContainer from "./useContainer";
-
-type NavItemType = "video" | "quiz";
-
-interface NavItemProps {
-  title?: string;
-  href: string;
-  type: NavItemType;
-  isCompleted?: boolean;
-  isActive?: boolean;
-  onNavigate?: () => void;
-}
-
-/** A single video/quiz row inside a lesson. */
-const NavItem: React.FC<NavItemProps> = ({
-  title,
-  href,
-  type,
-  isCompleted,
-  isActive,
-  onNavigate,
-}) => (
-  <Link href={href} className="no-underline!" onClick={onNavigate}>
-    <Group
-      gap={10}
-      wrap="nowrap"
-      py={10}
-      px={10}
-      className={`rounded-xl! transition-colors! duration-200! ease-out! ${
-        isActive
-          ? "bg-hongbao-red-50! ring-1! ring-hongbao-red-200!"
-          : "hover:bg-gray-50! active:bg-gray-100!"
-      }`}
-    >
-      <Box
-        className={`flex! items-center! justify-center! w-7! h-7! rounded-lg! shrink-0! ${
-          isCompleted
-            ? "bg-green-100! text-green-600!"
-            : isActive
-              ? "bg-hongbao-red-100! text-hongbao-red-600!"
-              : "bg-gray-100! text-gray-500!"
-        }`}
-      >
-        {isCompleted ? (
-          <CheckCircleIcon size={15} weight="fill" />
-        ) : type === "video" ? (
-          <VideoIcon size={14} weight="fill" />
-        ) : (
-          <SealQuestionIcon size={14} weight="fill" />
-        )}
-      </Box>
-
-      <Text
-        size="sm"
-        lineClamp={2}
-        fw={isActive ? 700 : 500}
-        c={
-          isCompleted && !isActive
-            ? "gray.6"
-            : isActive
-              ? "hongbao-red.7"
-              : "gray.8"
-        }
-      >
-        {title}
-      </Text>
-    </Group>
-  </Link>
-);
 
 const CourseNavigator = () => {
   const {
@@ -102,6 +34,7 @@ const CourseNavigator = () => {
     videoId,
     quizId,
     progress,
+    lessonStats,
     isVideoCompleted,
     isQuizCompleted,
     activeLessonId,
@@ -209,22 +142,11 @@ const CourseNavigator = () => {
         }}
       >
         {courseDetail?.lessons?.map((lesson, index) => {
-          const videos =
-            lesson?.subLessons?.flatMap((sub) => sub?.videos || []) || [];
-          const subQuizzes =
-            lesson?.subLessons?.flatMap((sub) => sub?.quizzes || []) || [];
-          const lessonQuizzes = lesson?.quizzes || [];
-          const totalCount =
-            videos.length + subQuizzes.length + lessonQuizzes.length;
-          const doneCount =
-            videos.filter((v) => v?.isCompleted || isVideoCompleted(v?.id))
-              .length +
-            subQuizzes.filter((q) => q?.isCompleted || isQuizCompleted(q?.id))
-              .length +
-            lessonQuizzes.filter(
-              (q) => q?.isCompleted || isQuizCompleted(q?.id),
-            ).length;
-          const isLessonDone = totalCount > 0 && doneCount === totalCount;
+          const {
+            total: totalCount = 0,
+            done: doneCount = 0,
+            isDone: isLessonDone = false,
+          } = lessonStats[lesson.id] ?? {};
 
           return (
             <Accordion.Item key={lesson.id} value={lesson.id}>
@@ -301,7 +223,9 @@ const CourseNavigator = () => {
                           title={quiz?.title}
                           href={quizHref(quiz?.id)}
                           type="quiz"
-                          isCompleted={quiz?.isCompleted || isQuizCompleted(quiz?.id)}
+                          isCompleted={
+                            quiz?.isCompleted || isQuizCompleted(quiz?.id)
+                          }
                           isActive={quiz?.id === quizId}
                           onNavigate={onNavigate}
                         />
@@ -315,7 +239,9 @@ const CourseNavigator = () => {
                       title={quiz?.title}
                       href={quizHref(quiz?.id)}
                       type="quiz"
-                      isCompleted={quiz?.isCompleted || isQuizCompleted(quiz?.id)}
+                      isCompleted={
+                        quiz?.isCompleted || isQuizCompleted(quiz?.id)
+                      }
                       isActive={quiz?.id === quizId}
                       onNavigate={onNavigate}
                     />
