@@ -23,7 +23,7 @@ const useContainer = (order: TPurchaseOrder) => {
     if (order.status === "EXPIRED") {
       return { label: "Renew access", href: "/shop", variant: "filled" };
     }
-    if (order.status === "REJECTED") {
+    if (order.status === "CANCELLED") {
       return { label: "Try again", href: "/shop", variant: "filled" };
     }
     // PENDING, or an APPROVED order with no course item

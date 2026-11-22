@@ -25,12 +25,17 @@ export type TMyEnrollment = {
   hasAccess: boolean;
 };
 
+/** Status buckets the list can be narrowed to (server-side). */
+export type CourseFilter = "ALL" | "APPROVED" | "PENDING" | "EXPIRED";
+
 export type TMyEnrollmentRes = {
   items: TMyEnrollment[];
   page: number;
   limit: number;
   total: number;
   totalPage: number;
+  /** Per-status totals; independent of the selected status filter. */
+  counts: Record<CourseFilter, number>;
 };
 
 /* ---------------- UI shape ---------------- */

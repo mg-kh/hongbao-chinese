@@ -9,10 +9,14 @@ import type {
   TPurchaseCardItem,
   TPurchaseCardOrder,
 } from "@/types/purchase-order.type";
-import type { PurchaseStatus } from "@repo/shared";
+import type { OrderStatus, PurchaseStatus } from "@repo/shared";
 
-/** UI-facing order status; mapped from the raw `PurchaseStatus` in `toOrder`. */
-export type TOrderStatus = "PENDING" | "APPROVED" | "REJECTED" | "EXPIRED";
+/**
+ * Customer-facing order status, computed by the API (`orderStatus`):
+ * APPROVED = still grants access, EXPIRED = approved but access has ended,
+ * CANCELLED = declined by an admin.
+ */
+export type TOrderStatus = OrderStatus;
 
 /* ---------------- API response ---------------- */
 
@@ -46,6 +50,8 @@ export type TMyPurchase = {
   /** Admin's reason, set when the order was rejected (CANCELLED). */
   rejectReason: string | null;
   updatedAt: string;
+  /** Status the customer sees; derived server-side. */
+  orderStatus: TOrderStatus;
   items: TMyPurchaseItem[];
 };
 
@@ -55,6 +61,8 @@ export type TMyPurchaseRes = {
   limit: number;
   total: number;
   totalPage: number;
+  /** Orders per status tab within the date range (ignores `status`). */
+  counts: Record<OrderFilter, number>;
 };
 
 /* ---------------- UI shape ---------------- */

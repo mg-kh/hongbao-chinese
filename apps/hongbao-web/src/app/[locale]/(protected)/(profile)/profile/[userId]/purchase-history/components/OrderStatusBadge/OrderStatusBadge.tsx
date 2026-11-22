@@ -21,7 +21,7 @@ const statusMeta: Record<
     color: "green",
     icon: <CheckCircleIcon size={12} weight="fill" />,
   },
-  REJECTED: {
+  CANCELLED: {
     label: "Declined",
     color: "gray",
     icon: <XCircleIcon size={12} weight="fill" />,

@@ -1,7 +1,7 @@
-import useCourseDetail from "@/hooks/global-data-fetching/useCourseDetail";
+import useLearnCourseDetail from "@/hooks/global-data-fetching/useLearnCourseDetail";
 
 const useContainer = () => {
-  const { courseDetail, isLoading } = useCourseDetail();
+  const { courseDetail, isLoading } = useLearnCourseDetail();
   return {
     courseDetail,
     isLoading,

@@ -49,7 +49,7 @@ const buildSteps = (order: TPurchaseOrder): Step[] => {
     ];
   }
 
-  if (order.status === "REJECTED") {
+  if (order.status === "CANCELLED") {
     return [
       placed,
       {
