@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ClientLearningProgressService } from './client-learning-progress.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { type User } from '@prisma/client';
@@ -11,6 +11,21 @@ export class ClientLearningProgressController {
   constructor(
     private readonly clientLearningProgressService: ClientLearningProgressService,
   ) {}
+
+  // ---------- activity ----------
+
+  @Get('activity')
+  getActivity(
+    @CurrentUser() user: User,
+    @Query('days') days?: string,
+    @Query('year') year?: string,
+  ) {
+    return this.clientLearningProgressService.getActivity(
+      user.id,
+      Number(days),
+      year === undefined ? undefined : Number(year),
+    );
+  }
 
   // ---------- video ----------
   // "completed" routes are declared before ":id" so they aren't captured as ids

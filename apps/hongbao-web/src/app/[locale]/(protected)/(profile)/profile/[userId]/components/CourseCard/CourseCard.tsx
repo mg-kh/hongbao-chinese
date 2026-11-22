@@ -120,8 +120,7 @@ const CourseCard: React.FC<Props> = ({ data }) => {
 
   const cardClass = cn(
     "block! no-underline! border! border-gray-100! transition-all! duration-200!",
-    isActive &&
-      "group! hover:border-hongbao-red-200! hover:shadow-sm!",
+    isActive && "group! hover:border-hongbao-red-200! hover:shadow-sm!",
     isMuted && "bg-gray-50/70!",
     // expired keeps the muted body with a dashed gray frame
     isExpired && "border-dashed! border-gray-300!",

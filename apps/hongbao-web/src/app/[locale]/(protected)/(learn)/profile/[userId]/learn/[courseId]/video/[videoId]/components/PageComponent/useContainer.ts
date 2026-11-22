@@ -1,3 +1,4 @@
+import { learningActivityKey } from "@/hooks/global-data-fetching/useLearningActivity";
 import useApiQuery from "@/hooks/fetching/useApiQuery";
 import useMutationQuery from "@/hooks/fetching/useMutationQuery";
 import { addCompletedToCache } from "@/hooks/global-data-fetching/useCompletedProgress";
@@ -51,8 +52,13 @@ const useContainer = () => {
   const { mutate: markVideoComplete, isPending: isMarkingComplete } =
     useMutationQuery({
       url: `learning-progress/video/${videoId}/complete`,
-      onSuccess: () =>
-        addCompletedToCache(queryClient, completedVideosKey(userId), videoId),
+      onSuccess: () => {
+        addCompletedToCache(queryClient, completedVideosKey(userId), videoId);
+        // Marked stale; refetched next time the profile streak mounts.
+        queryClient.invalidateQueries({
+          queryKey: learningActivityKey(userId),
+        });
+      },
     });
 
   // Refs let the player callbacks below stay referentially stable while

@@ -18,7 +18,6 @@ import {
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import AccountLinks from "./components/AccountLinks/AccountLinks";
 import StatTile from "./components/StatTile/StatTile";
 import UserInfo from "./components/UserInfo/UserInfo";
 import { loadLearnedIds } from "./flashcards/learned";
@@ -72,7 +71,7 @@ const Profile = () => {
     : 0;
 
   return (
-    <Stack gap={28} className="flex-1!">
+    <Stack gap={28} className="flex-1! pb-12! sm:pb-16!">
       {/* identity */}
       <UserInfo />
 
@@ -166,12 +165,6 @@ const Profile = () => {
             tone={dueCount > 0 ? "attention" : "success"}
           />
         </div>
-      </Stack>
-
-      {/* account */}
-      <Stack gap={10}>
-        <StatGroupLabel>Account</StatGroupLabel>
-        <AccountLinks />
       </Stack>
     </Stack>
   );

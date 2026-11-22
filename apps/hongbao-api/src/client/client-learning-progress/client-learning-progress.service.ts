@@ -9,6 +9,72 @@ import { withErrorHandling } from '../../utils/withErrorHandling';
 export class ClientLearningProgressService {
   constructor(private readonly prisma: PrismaService) {}
 
+  // ---------- activity ----------
+
+  /**
+   * Completion timestamps from the last `days` days (any entity type), used
+   * for the profile's daily streak calendar. Raw timestamps rather than
+   * server-bucketed dates, so the client can group them in the user's own
+   * timezone.
+   *
+   * With `year`, returns that calendar year instead of the last `days` days.
+   * The range is padded by a day on each side because the client buckets by
+   * its local timezone, which can shift a UTC timestamp across Jan 1; the
+   * client drops anything outside the year itself.
+   */
+  async getActivity(userId: string, days: number, year?: number) {
+    return withErrorHandling(async () => {
+      const DAY_MS = 24 * 60 * 60 * 1000;
+      let completedAt: { gte: Date; lt?: Date };
+
+      if (
+        year !== undefined &&
+        Number.isInteger(year) &&
+        year >= 2000 &&
+        year <= 9999
+      ) {
+        completedAt = {
+          gte: new Date(Date.UTC(year, 0, 1) - DAY_MS),
+          lt: new Date(Date.UTC(year + 1, 0, 1) + DAY_MS),
+        };
+      } else {
+        const span = Number.isFinite(days)
+          ? Math.min(Math.max(Math.floor(days), 1), 366)
+          : 120;
+        completedAt = { gte: new Date(Date.now() - span * DAY_MS) };
+      }
+
+      const completed = { userId, status: ProgressStatus.COMPLETED };
+
+      // The earliest completion ever lets the client know how far back the
+      // year switcher should go - an account can hold records from before
+      // its own createdAt (imports, seeded data).
+      const [rows, first] = await Promise.all([
+        this.prisma.userProgress.findMany({
+          where: { ...completed, completedAt },
+          orderBy: { completedAt: 'desc' },
+          select: { completedAt: true },
+        }),
+        this.prisma.userProgress.findFirst({
+          where: { ...completed, completedAt: { not: null } },
+          orderBy: { completedAt: 'asc' },
+          select: { completedAt: true },
+        }),
+      ]);
+
+      const timestamps = rows
+        .map((r) => r.completedAt?.toISOString())
+        .filter((d): d is string => !!d);
+
+      return successResponse({
+        data: {
+          completedAt: timestamps,
+          firstCompletedAt: first?.completedAt?.toISOString() ?? null,
+        },
+      });
+    });
+  }
+
   // ---------- video ----------
 
   async findVideo(id: string) {

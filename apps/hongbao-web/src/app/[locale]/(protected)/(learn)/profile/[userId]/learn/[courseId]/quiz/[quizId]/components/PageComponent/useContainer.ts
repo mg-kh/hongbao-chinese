@@ -1,3 +1,4 @@
+import { learningActivityKey } from "@/hooks/global-data-fetching/useLearningActivity";
 import useApiQuery from "@/hooks/fetching/useApiQuery";
 import useMutationQuery from "@/hooks/fetching/useMutationQuery";
 import { addCompletedToCache } from "@/hooks/global-data-fetching/useCompletedProgress";
@@ -193,8 +194,13 @@ const useContainer = () => {
   const { mutate: markQuizComplete, isPending: isMarkingComplete } =
     useMutationQuery({
       url: `learning-progress/quiz/${quizId}/complete`,
-      onSuccess: () =>
-        addCompletedToCache(queryClient, completedQuizzesKey(userId), quizId),
+      onSuccess: () => {
+        addCompletedToCache(queryClient, completedQuizzesKey(userId), quizId);
+        // Marked stale; refetched next time the profile streak mounts.
+        queryClient.invalidateQueries({
+          queryKey: learningActivityKey(userId),
+        });
+      },
     });
 
   const handleMarkComplete = () => {
