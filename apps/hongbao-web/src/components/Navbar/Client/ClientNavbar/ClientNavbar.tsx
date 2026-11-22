@@ -211,10 +211,12 @@ const ClientNavbar = () => {
                     className="cursor-pointer! rounded-full! border! border-gray-200! bg-white! transition-colors! duration-200! ease-out! hover:border-hongbao-red-200! hover:bg-hongbao-cream-50!"
                   >
                     <Avatar
+                      src={user?.imageUrl || "/assets/logo-head.svg"}
                       name={user?.name || ""}
                       alt={user?.name || ""}
                       size={32}
-                      color="hongbao-red"
+                      p={user?.imageUrl ? 0 : 5}
+                      bg="hongbao-gold.3"
                     />
                     <Text
                       size="sm"
@@ -240,10 +242,12 @@ const ClientNavbar = () => {
                   >
                     <Group gap={10} wrap="nowrap">
                       <Avatar
+                        src={user?.imageUrl || "/assets/logo-head.svg"}
                         name={user?.name || ""}
                         alt={user?.name || ""}
                         size={42}
-                        color="hongbao-red"
+                        p={user?.imageUrl ? 0 : 7}
+                        bg="hongbao-gold.3"
                         className="ring-2! ring-white!"
                       />
                       <Stack gap={2} className="min-w-0!">
@@ -381,9 +385,12 @@ const ClientNavbar = () => {
             >
               <Group gap={12} wrap="nowrap">
                 <Avatar
+                  src={user?.imageUrl || "/assets/logo-head.svg"}
                   name={user?.name || ""}
                   alt={user?.name || ""}
                   size={48}
+                  p={user?.imageUrl ? 0 : 8}
+                  bg="hongbao-gold.3"
                   className="ring-2! ring-white/40!"
                   styles={{
                     placeholder: {

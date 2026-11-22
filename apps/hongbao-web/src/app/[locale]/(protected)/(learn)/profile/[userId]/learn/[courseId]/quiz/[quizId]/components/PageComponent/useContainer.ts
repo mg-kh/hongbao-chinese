@@ -1,5 +1,20 @@
+import { learningActivityKey } from "@/hooks/global-data-fetching/useLearningActivity";
 import useApiQuery from "@/hooks/fetching/useApiQuery";
+import useMutationQuery from "@/hooks/fetching/useMutationQuery";
+import { addCompletedToCache } from "@/hooks/global-data-fetching/useCompletedProgress";
+import {
+  completedQuizzesKey,
+  useCompletedQuizzes,
+} from "@/hooks/global-data-fetching/useCompletedQuizzes";
+import useLearnCourseDetail from "@/hooks/global-data-fetching/useLearnCourseDetail";
+import { flattenCourseItems } from "@/utils/flattenCourseItems";
+import {
+  normalizeRearrange,
+  rearrangeLabels,
+} from "@/utils/normalizeRearrange";
+import { normalizeTrueOrFalse } from "@/utils/normalizeTrueOrFalse";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import {
   BaseSyntheticEvent,
@@ -23,16 +38,28 @@ import {
  * always plain text, so tags need stripping before comparing the two. */
 const stripHtml = (value: string) => value.replace(/<[^>]+>/g, "").trim();
 
+/** Re-arrange answers are word ids (like option values); resolves them to the
+ * space-joined sentence. Comparing words rather than ids means two identical
+ * words (e.g. two 的) placed in swapped slots still count as correct. */
+const rearrangeSentence = (q: TQuizQuestion, ids: string[] = []) => {
+  const { questions } = normalizeRearrange(q.data.questions, q.data.answers);
+  return stripHtml(rearrangeLabels(questions, ids).join(" "));
+};
+
+/** The expected re-arrange answer's word ids (legacy word lists converted). */
+const rearrangeAnswerIds = (q: TQuizQuestion) =>
+  normalizeRearrange(q.data.questions, q.data.answers).answers;
+
 /** An answer flattened to one comparable string - option codes for
- * single-choice, space-joined words for re-arrange. For grading, not display. */
-const toValue = (value: TAnswer) =>
-  stripHtml(Array.isArray(value) ? value.join(" ") : (value ?? ""));
+ * single-choice, the resolved sentence for re-arrange. For grading, not display. */
+const toValue = (q: TQuizQuestion, value: TAnswer) =>
+  Array.isArray(value) ? rearrangeSentence(q, value) : stripHtml(value ?? "");
 
 /** Resolves an answer to display text: a single-choice option's label
- * (options carry nanoid values, not words) or the space-joined word list for
- * re-arrange. May contain rich text (e.g. ruby) - render it as HTML. */
+ * (options carry nanoid values, not words) or the sentence for re-arrange.
+ * May contain rich text (e.g. ruby) - render it as HTML. */
 const answerLabelOf = (q: TQuizQuestion, value: TAnswer) => {
-  if (Array.isArray(value)) return stripHtml(value.join(" "));
+  if (Array.isArray(value)) return rearrangeSentence(q, value);
   const option = (q.data.options || []).find((o) => o.value === value);
   return option?.label ?? value ?? "";
 };
@@ -40,13 +67,13 @@ const answerLabelOf = (q: TQuizQuestion, value: TAnswer) => {
 /** The expected answer's raw value(s), for the correctness check. */
 const correctValueOf = (q: TQuizQuestion) =>
   q.type === QuestionType.REARRANGE
-    ? stripHtml((q.data.answers || []).join(" "))
+    ? rearrangeSentence(q, rearrangeAnswerIds(q))
     : stripHtml(q.data.answer ?? "");
 
 /** The expected answer as display text for the review screen. */
 const correctLabelOf = (q: TQuizQuestion) =>
   q.type === QuestionType.REARRANGE
-    ? stripHtml((q.data.answers || []).join(" "))
+    ? rearrangeSentence(q, rearrangeAnswerIds(q))
     : answerLabelOf(q, q.data.answer);
 
 /** Performance bands drive the headline message on the results screen. */
@@ -79,6 +106,26 @@ const bandFor = (percent: number) => {
 /** Stable fallback so `answers` keeps referential identity across renders
  * before the form has any values yet. */
 const EMPTY_ANSWERS: QuizAnswersFormField["answers"] = {};
+const EMPTY_GRADED: TGradedQuestion[] = [];
+const EMPTY_QUESTIONS: TQuizQuestion[] = [];
+
+/** Quiz content rarely changes; keep it cached across navigations. */
+const QUIZ_STALE_TIME = 5 * 60 * 1000;
+
+/** Converts legacy true/false questions (plain option strings, answer stored
+ * as the option text) to id-based options so picking and grading use ids. */
+const selectQuestions = (data: { data: TQuiz }) =>
+  data?.data?.questions?.map((q) =>
+    q.type === QuestionType.TRUE_OR_FALSE
+      ? {
+          ...q,
+          data: {
+            ...q.data,
+            ...normalizeTrueOrFalse(q.data.options, q.data.answer),
+          },
+        }
+      : q,
+  );
 
 /** A short, actionable tip per question on the review screen. */
 const suggestionFor = (g: TGradedQuestion) => {
@@ -107,13 +154,14 @@ const useContainer = () => {
     { data: TQuiz },
     TQuizQuestion[]
   >({
-    url: `quiz/${quizId}`,
+    url: `learning-progress/quiz/${quizId}`,
     enabled: !!quizId,
     retry: false,
-    select: (data) => data?.data?.questions,
+    select: selectQuestions,
+    staleTime: QUIZ_STALE_TIME,
   });
 
-  const questions = useMemo(() => apiQuestions ?? [], [apiQuestions]);
+  const questions = apiQuestions ?? EMPTY_QUESTIONS;
 
   const form = useForm<QuizAnswersFormField>({
     mode: "onChange",
@@ -135,6 +183,45 @@ const useContainer = () => {
   useEffect(() => {
     startedAt.current = Date.now();
   }, []);
+
+  // ---------- completion ----------
+  const { isQuizCompleted } = useCompletedQuizzes();
+  const isCompleted = isQuizCompleted(quizId);
+
+  // The course detail carries no completion state, so only the completed
+  // list changes - patched in place rather than refetched.
+  const queryClient = useQueryClient();
+  const { mutate: markQuizComplete, isPending: isMarkingComplete } =
+    useMutationQuery({
+      url: `learning-progress/quiz/${quizId}/complete`,
+      onSuccess: () => {
+        addCompletedToCache(queryClient, completedQuizzesKey(userId), quizId);
+        // Marked stale; refetched next time the profile streak mounts.
+        queryClient.invalidateQueries({
+          queryKey: learningActivityKey(userId),
+        });
+      },
+    });
+
+  const handleMarkComplete = () => {
+    if (isCompleted || isMarkingComplete) return;
+    markQuizComplete({});
+  };
+
+  // ---------- next item ----------
+  const { courseDetail } = useLearnCourseDetail();
+  const { nextItem, quizTitle } = useMemo(() => {
+    const items = flattenCourseItems(courseDetail);
+    const i = items.findIndex((it) => it.type === "quiz" && it.id === quizId);
+    return {
+      nextItem: i >= 0 ? items[i + 1] : undefined,
+      quizTitle: i >= 0 ? items[i].title : undefined,
+    };
+  }, [courseDetail, quizId]);
+
+  const nextHref = nextItem
+    ? `/profile/${userId}/learn/${courseId}/${nextItem.type}/${nextItem.id}`
+    : undefined;
 
   const total = questions.length;
   const current = questions[index];
@@ -167,9 +254,10 @@ const useContainer = () => {
   });
 
   const onValid = (values: QuizAnswersFormField) => {
-    console.log(buildSubmission(values));
     setSubmission(buildSubmission(values));
     setSubmitted(true);
+    // submitting a quiz counts as finishing it - no-op if already completed
+    handleMarkComplete();
   };
 
   const submit = (e?: BaseSyntheticEvent) => {
@@ -187,21 +275,25 @@ const useContainer = () => {
     setElapsed(0);
   };
 
+  // Only needed on the results screen - skip grading on every answer change
+  // while the quiz is still being taken.
   const graded = useMemo<TGradedQuestion[]>(
     () =>
-      questions.map((q) => {
-        const given = answers[q.id];
-        const givenValue = toValue(given);
-        return {
-          question: q,
-          given,
-          correct: correctLabelOf(q),
-          givenLabel: answerLabelOf(q, given),
-          isAnswered: Array.isArray(given) ? given.length > 0 : !!given,
-          isCorrect: !!givenValue && givenValue === correctValueOf(q),
-        };
-      }),
-    [questions, answers],
+      !submitted
+        ? EMPTY_GRADED
+        : questions.map((q) => {
+            const given = answers[q.id];
+            const givenValue = toValue(q, given);
+            return {
+              question: q,
+              given,
+              correct: correctLabelOf(q),
+              givenLabel: answerLabelOf(q, given),
+              isAnswered: Array.isArray(given) ? given.length > 0 : !!given,
+              isCorrect: !!givenValue && givenValue === correctValueOf(q),
+            };
+          }),
+    [submitted, questions, answers],
   );
 
   const score = graded.filter((g) => g.isCorrect).length;
@@ -230,7 +322,14 @@ const useContainer = () => {
     elapsed,
     band: bandFor(percent),
     suggestionFor,
+    isCompleted,
+    isMarkingComplete,
+    handleMarkComplete,
     courseHref: `/profile/${userId}/learn/${courseId}`,
+    myCoursesHref: `/profile/${userId}/my-courses`,
+    courseTitle: courseDetail?.title,
+    quizTitle,
+    nextHref,
   };
 };
 

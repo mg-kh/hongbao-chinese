@@ -14,7 +14,6 @@ import {
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
-  CaretRightIcon,
   CheckCircleIcon,
   ClockIcon,
   PlayCircleIcon,
@@ -26,6 +25,7 @@ import {
   DefaultVideoLayout,
   defaultLayoutIcons,
 } from "@vidstack/react/player/layouts/default";
+import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 import useContainer from "./useContainer";
 
 const PageComponent = () => {
@@ -34,6 +34,7 @@ const PageComponent = () => {
     isLoading,
     courseTitle,
     courseHref,
+    myCoursesHref,
     prevHref,
     nextHref,
     nextItem,
@@ -42,32 +43,22 @@ const PageComponent = () => {
     handleTimeUpdate,
     handleDurationChange,
     handleEnded,
+    isCompleted,
+    isMarkingComplete,
+    handleMarkComplete,
   } = useContainer();
 
   const duration = formatDuration(video?.duration);
 
   return (
     <Stack gap={18} className="w-full!">
-      {/* breadcrumb */}
-      <Group gap={6} wrap="nowrap" className="min-w-0!">
-        <Link
-          href={courseHref}
-          className="flex! items-center! gap-1! w-fit! shrink-0! no-underline! text-gray-500! hover:text-hongbao-red-600! transition-colors! duration-200!"
-        >
-          <ArrowLeftIcon size={13} weight="bold" />
-          <Text size="xs" fw={600}>
-            Back to course
-          </Text>
-        </Link>
-        {courseTitle && (
-          <>
-            <CaretRightIcon size={10} className="text-gray-300! shrink-0!" />
-            <Text size="xs" c="gray.5" lineClamp={1} className="min-w-0!">
-              {courseTitle}
-            </Text>
-          </>
-        )}
-      </Group>
+      <CustomBreadCrumb
+        links={[
+          { label: "My courses", href: myCoursesHref, isActive: true },
+          { label: courseTitle || "Course", href: courseHref, isActive: true },
+          { label: video?.title || "Video", href: "", isActive: false },
+        ]}
+      />
 
       {isLoading ? (
         <LoaderComponent
@@ -194,6 +185,29 @@ const PageComponent = () => {
                   {duration}
                 </Badge>
               )}
+              <Button
+                ml="auto"
+                size="xs"
+                radius="md"
+                variant={isCompleted ? "light" : "outline"}
+                color="green"
+                leftSection={
+                  <CheckCircleIcon
+                    size={14}
+                    weight={isCompleted ? "fill" : "regular"}
+                  />
+                }
+                loading={isMarkingComplete}
+                disabled={isCompleted}
+                onClick={handleMarkComplete}
+                className={
+                  isCompleted
+                    ? "disabled:bg-green-50! disabled:text-green-700! disabled:cursor-default!"
+                    : undefined
+                }
+              >
+                {isCompleted ? "Completed" : "Mark as complete"}
+              </Button>
             </Group>
 
             <Text

@@ -23,8 +23,7 @@ import { R2Module } from './r2/r2.module';
 import { SubLessonModule } from './sub_lesson/sub_lesson.module';
 import { CustomThrottlerGuard } from './throttler/custom-throttler.guard';
 import { VideoModule } from './video/video.module';
-import { ClientVideoModule } from './client/video/video.module';
-import { ClientQuizModule } from './client/quiz/quiz.module';
+import { ClientLearningProgressModule } from './client/client-learning-progress/client-learning-progress.module';
 import { CouponModule } from './coupon/coupon.module';
 import { ClientCouponModule } from './client/client-coupon/client-coupon.module';
 import { CategoryModule } from './category/category.module';
@@ -74,10 +73,9 @@ import { TelegramModule } from './telegram/telegram.module';
     LessonModule,
     SubLessonModule,
     QuizModule,
-    ClientQuizModule,
+    ClientLearningProgressModule,
     QuestionModule,
     VideoModule,
-    ClientVideoModule,
     ClientCourseModule,
     PurchasesModule,
     FeedbackModule,

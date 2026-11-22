@@ -12,6 +12,7 @@ import {
 import {
   ArrowCounterClockwiseIcon,
   ArrowLeftIcon,
+  ArrowRightIcon,
   CheckCircleIcon,
   ClockIcon,
   LightbulbIcon,
@@ -34,7 +35,12 @@ interface Props {
   };
   suggestionFor: (g: TGradedQuestion) => string;
   onRetake: () => void;
+  isCompleted: boolean;
+  isMarkingComplete: boolean;
+  onMarkComplete: () => void;
   courseHref: string;
+  /** Next video/quiz in the course; undefined when this is the last item. */
+  nextHref?: string;
 }
 
 const toneStyles = {
@@ -70,7 +76,11 @@ const QuizResult: React.FC<Props> = ({
   band,
   suggestionFor,
   onRetake,
+  isCompleted,
+  isMarkingComplete,
+  onMarkComplete,
   courseHref,
+  nextHref,
 }) => {
   const t = toneStyles[band.tone];
   const wrongCount = graded.filter((g) => g.isAnswered && !g.isCorrect).length;
@@ -172,16 +182,52 @@ const QuizResult: React.FC<Props> = ({
           mt={20}
           className="flex-col-reverse! sm:flex-row! sm:justify-end! items-stretch! sm:items-center!"
         >
+          {nextHref ? (
+            <Button
+              component={Link}
+              href={nextHref}
+              variant="default"
+              size="md"
+              radius="md"
+              rightSection={<ArrowRightIcon size={15} weight="bold" />}
+              className="w-full! sm:w-auto!"
+            >
+              Next
+            </Button>
+          ) : (
+            <Button
+              component={Link}
+              href={courseHref}
+              variant="default"
+              size="md"
+              radius="md"
+              leftSection={<ArrowLeftIcon size={15} weight="bold" />}
+              className="w-full! sm:w-auto!"
+            >
+              Back to course
+            </Button>
+          )}
           <Button
-            component={Link}
-            href={courseHref}
-            variant="default"
             size="md"
             radius="md"
-            leftSection={<ArrowLeftIcon size={15} weight="bold" />}
-            className="w-full! sm:w-auto!"
+            variant={isCompleted ? "light" : "outline"}
+            color="green"
+            leftSection={
+              <CheckCircleIcon
+                size={15}
+                weight={isCompleted ? "fill" : "regular"}
+              />
+            }
+            loading={isMarkingComplete}
+            disabled={isCompleted}
+            onClick={onMarkComplete}
+            className={`w-full! sm:w-auto! ${
+              isCompleted
+                ? "disabled:bg-green-50! disabled:text-green-700! disabled:cursor-default!"
+                : ""
+            }`}
           >
-            Back to course
+            {isCompleted ? "Completed" : "Mark as complete"}
           </Button>
           <Button
             onClick={onRetake}

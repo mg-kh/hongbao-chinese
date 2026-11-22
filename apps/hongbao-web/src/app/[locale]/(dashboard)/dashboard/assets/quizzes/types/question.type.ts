@@ -1,3 +1,4 @@
+import { TRearrangeWord } from "@/utils/normalizeRearrange";
 export type TMultipleChoiceOption = {
   value: string;
   label: string;
@@ -12,7 +13,7 @@ export type TQuestion = {
     options: string[] | TMultipleChoiceOption[];
     question: string;
     answers?: string[];
-    questions?: string[];
+    questions?: string[] | TRearrangeWord[];
   };
   createdAt: string;
   title: string;

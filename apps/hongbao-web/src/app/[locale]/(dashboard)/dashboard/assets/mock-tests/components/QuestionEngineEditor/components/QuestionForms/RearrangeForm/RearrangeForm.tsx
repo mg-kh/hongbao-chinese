@@ -1,19 +1,27 @@
 import CustomTextInput from "@/components/Inputs/CustomTextInput/CustomTextInput";
-import { ActionIcon, Box, Flex, Stack, Text } from "@mantine/core";
-import { IconPlus, IconX } from "@tabler/icons-react";
-import React from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { closestCenter, DndContext } from "@dnd-kit/core";
+import {
+  horizontalListSortingStrategy,
+  SortableContext,
+} from "@dnd-kit/sortable";
+import { ActionIcon, Stack, Text } from "@mantine/core";
+import { IconPlus } from "@tabler/icons-react";
+import SortableQuestionSlot from "@/app/[locale]/(dashboard)/dashboard/assets/mock-tests/components/QuestionEngineEditor/components/QuestionForms/RearrangeForm/components/SortableQuestionSlot/SortableQuestionSlot";
+import SortableWord from "@/app/[locale]/(dashboard)/dashboard/assets/mock-tests/components/QuestionEngineEditor/components/QuestionForms/RearrangeForm/components/SortableWord/SortableWord";
+import useContainer from "@/app/[locale]/(dashboard)/dashboard/assets/mock-tests/components/QuestionEngineEditor/components/QuestionForms/RearrangeForm/useContainer";
 
 const RearrangeForm = () => {
-  const { control } = useFormContext();
-  const questions = useFieldArray({
+  const {
     control,
-    name: "data.questions",
-  });
-  const answers = useFieldArray({
-    control,
-    name: "data.answers",
-  });
+    questionFields,
+    answerWords,
+    sensors,
+    handleAddWord,
+    handleRemoveWord,
+    handleQuestionDragEnd,
+    handleAnswerDragEnd,
+  } = useContainer();
+
   return (
     <Stack gap={20}>
       <CustomTextInput
@@ -22,81 +30,65 @@ const RearrangeForm = () => {
         placeholder="Re-arrange to get the correct answer"
         label="Title"
       />
-      <Stack>
+      <Stack gap={8}>
         <Text size="lg">Question</Text>
-        <Flex gap={10}>
-          {questions?.fields?.map((o, i) => {
-            return (
-              <React.Fragment key={o.id}>
-                <Box className="relative">
-                  <CustomTextInput
-                    control={control}
-                    name={`data.questions.${i}`}
-                    placeholder="-"
-                    w={70}
-                  />
-                  <ActionIcon
-                    size="xs"
-                    color="red"
-                    className="absolute! -right-1.25 -top-2.25"
-                    onClick={() => {
-                      questions.remove(i);
-                    }}
-                  >
-                    <IconX size={10} />
-                  </ActionIcon>
-                </Box>
-              </React.Fragment>
-            );
-          })}
-          <ActionIcon
-            size="lg"
-            onClick={() => {
-              questions.append("-");
-            }}
-            variant="light"
+        <Text size="xs" c="dimmed">
+          Add the words in the order learners will see them. Drag the handle to
+          reorder.
+        </Text>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleQuestionDragEnd}
+        >
+          <SortableContext
+            items={questionFields.map((o) => o.id)}
+            strategy={horizontalListSortingStrategy}
           >
-            <IconPlus />
-          </ActionIcon>
-        </Flex>
+            <div className="flex flex-wrap gap-2.5">
+              {questionFields.map((o, i) => (
+                <SortableQuestionSlot
+                  key={o.id}
+                  id={o.id}
+                  name={`data.questions.${i}.label`}
+                  control={control}
+                  onRemove={() => handleRemoveWord(i)}
+                />
+              ))}
+              <ActionIcon size="lg" onClick={handleAddWord} variant="light">
+                <IconPlus />
+              </ActionIcon>
+            </div>
+          </SortableContext>
+        </DndContext>
       </Stack>
-      <Stack>
+      <Stack gap={8}>
         <Text size="lg">Answer</Text>
-        <Flex gap={10}>
-          {answers?.fields?.map((o, i) => {
-            return (
-              <React.Fragment key={o.id}>
-                <Box className="relative">
-                  <CustomTextInput
-                    control={control}
-                    name={`data.answers.${i}`}
-                    placeholder="-"
-                    w={70}
-                  />
-                  <ActionIcon
-                    size="xs"
-                    color="red"
-                    className="absolute! -right-1.25 -top-2.25"
-                    onClick={() => {
-                      answers.remove(i);
-                    }}
-                  >
-                    <IconX size={10} />
-                  </ActionIcon>
-                </Box>
-              </React.Fragment>
-            );
-          })}
-          <ActionIcon
-            size="lg"
-            onClick={() => {
-              answers.append("-");
-            }}
-            variant="light"
+        <Text size="xs" c="dimmed">
+          Drag the words into the correct order.
+        </Text>
+        {answerWords.length > 0 ? (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleAnswerDragEnd}
           >
-            <IconPlus />
-          </ActionIcon>
-        </Flex>
+            <SortableContext
+              items={answerWords.map((w) => w.value)}
+              strategy={horizontalListSortingStrategy}
+            >
+              <div className="flex flex-wrap gap-2.5">
+                {answerWords.map((w) => (
+                  <SortableWord key={w.value} id={w.value} label={w.label} />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
+        ) : (
+          <Text size="sm" c="dimmed">
+            Add question words to arrange the answer.
+          </Text>
+        )}
       </Stack>
     </Stack>
   );

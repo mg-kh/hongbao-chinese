@@ -1,7 +1,6 @@
 "use client";
 
 import LoaderComponent from "@/components/LoaderComponent/LoaderComponent";
-import { Link } from "@/i18n/navigation";
 import {
   Box,
   Button,
@@ -21,6 +20,7 @@ import { FormProvider } from "react-hook-form";
 import QuestionCard from "./components/QuestionCard/QuestionCard";
 import QuizResult from "./components/QuizResult/QuizResult";
 import useContainer from "./useContainer";
+import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 
 const PageComponent = () => {
   const {
@@ -45,7 +45,14 @@ const PageComponent = () => {
     elapsed,
     band,
     suggestionFor,
+    isCompleted,
+    isMarkingComplete,
+    handleMarkComplete,
     courseHref,
+    myCoursesHref,
+    courseTitle,
+    quizTitle,
+    nextHref,
   } = useContainer();
 
   if (isLoading) {
@@ -74,15 +81,17 @@ const PageComponent = () => {
   return (
     <FormProvider {...form}>
       <Stack gap={18} className="flex-1! w-full!">
-        <Link
-          href={courseHref}
-          className="flex! items-center! gap-1.5! w-fit! no-underline! text-gray-500! hover:text-hongbao-red-600! transition-colors! duration-200!"
-        >
-          <ArrowLeftIcon size={13} weight="bold" />
-          <Text size="xs" fw={600}>
-            Back to course
-          </Text>
-        </Link>
+        <CustomBreadCrumb
+          links={[
+            { label: "My courses", href: myCoursesHref, isActive: true },
+            {
+              label: courseTitle || "Course",
+              href: courseHref,
+              isActive: true,
+            },
+            { label: quizTitle || "Quiz", href: "", isActive: false },
+          ]}
+        />
 
         {submitted ? (
           <QuizResult
@@ -94,7 +103,11 @@ const PageComponent = () => {
             band={band}
             suggestionFor={suggestionFor}
             onRetake={retake}
+            isCompleted={isCompleted}
+            isMarkingComplete={isMarkingComplete}
+            onMarkComplete={handleMarkComplete}
             courseHref={courseHref}
+            nextHref={nextHref}
           />
         ) : (
           <form onSubmit={submit}>
@@ -122,9 +135,7 @@ const PageComponent = () => {
                 />
               </Stack>
 
-              {current && (
-                <QuestionCard key={current.id} question={current} />
-              )}
+              {current && <QuestionCard key={current.id} question={current} />}
 
               {/* jump dots - lets learners revisit a skipped question directly */}
               <Group gap={6} wrap="wrap">
@@ -172,8 +183,12 @@ const PageComponent = () => {
                   နောက်သို့
                 </Button>
 
+                {/* distinct keys stop React reusing one <button> node: otherwise
+                    clicking "next" on the second-to-last question flips that
+                    same node to type="submit" mid-click and submits the form */}
                 {isLast ? (
                   <Button
+                    key="submit"
                     type="submit"
                     size="md"
                     color="hongbao-red"
@@ -186,6 +201,7 @@ const PageComponent = () => {
                   </Button>
                 ) : (
                   <Button
+                    key="next"
                     type="button"
                     size="md"
                     color="hongbao-red"

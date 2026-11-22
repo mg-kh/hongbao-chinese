@@ -152,7 +152,7 @@ const PageComponent = () => {
         </Paper>
       ) : (
         <Stack
-          gap={12}
+          gap={8}
           className={`transition-opacity! duration-200! ${isFetching ? "opacity-60!" : ""}`}
         >
           {filteredCourses.map((c) => (
