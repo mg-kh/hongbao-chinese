@@ -103,6 +103,7 @@ const CourseNavigator = () => {
     quizId,
     progress,
     isVideoCompleted,
+    isQuizCompleted,
     activeLessonId,
   } = useContainer();
   const [drawerOpened, { open: openDrawer, close: closeDrawer }] =
@@ -218,8 +219,11 @@ const CourseNavigator = () => {
           const doneCount =
             videos.filter((v) => v?.isCompleted || isVideoCompleted(v?.id))
               .length +
-            subQuizzes.filter((q) => q?.isCompleted).length +
-            lessonQuizzes.filter((q) => q?.isCompleted).length;
+            subQuizzes.filter((q) => q?.isCompleted || isQuizCompleted(q?.id))
+              .length +
+            lessonQuizzes.filter(
+              (q) => q?.isCompleted || isQuizCompleted(q?.id),
+            ).length;
           const isLessonDone = totalCount > 0 && doneCount === totalCount;
 
           return (
@@ -297,7 +301,7 @@ const CourseNavigator = () => {
                           title={quiz?.title}
                           href={quizHref(quiz?.id)}
                           type="quiz"
-                          isCompleted={quiz?.isCompleted}
+                          isCompleted={quiz?.isCompleted || isQuizCompleted(quiz?.id)}
                           isActive={quiz?.id === quizId}
                           onNavigate={onNavigate}
                         />
@@ -311,7 +315,7 @@ const CourseNavigator = () => {
                       title={quiz?.title}
                       href={quizHref(quiz?.id)}
                       type="quiz"
-                      isCompleted={quiz?.isCompleted}
+                      isCompleted={quiz?.isCompleted || isQuizCompleted(quiz?.id)}
                       isActive={quiz?.id === quizId}
                       onNavigate={onNavigate}
                     />
@@ -342,7 +346,7 @@ const CourseNavigator = () => {
               title={quiz?.title}
               href={quizHref(quiz?.id)}
               type="quiz"
-              isCompleted={quiz?.isCompleted}
+              isCompleted={quiz?.isCompleted || isQuizCompleted(quiz?.id)}
               isActive={quiz?.id === quizId}
               onNavigate={onNavigate}
             />
@@ -412,10 +416,10 @@ const CourseNavigator = () => {
           w={350}
           withBorder
           bdrs={20}
-          className="hidden! lg:block! shrink-0! sticky! top-21! overflow-hidden! border-gray-200! shadow-sm!"
+          className="hidden! lg:flex! flex-col! shrink-0! sticky! top-21! h-[calc(100vh-6.25rem)]! overflow-hidden! border-gray-200! shadow-sm!"
         >
-          {header(true)}
-          <Box className="max-h-[calc(100vh-260px)]! overflow-y-auto!">
+          <Box className="shrink-0!">{header(true)}</Box>
+          <Box className="flex-1! min-h-0! overflow-y-auto!">
             {lessonList()}
           </Box>
         </Paper>

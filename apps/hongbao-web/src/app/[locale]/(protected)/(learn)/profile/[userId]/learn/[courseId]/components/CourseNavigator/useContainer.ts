@@ -2,18 +2,20 @@ import useLearnCourseDetail from "@/hooks/global-data-fetching/useLearnCourseDet
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useCompletedVideos } from "@/hooks/global-data-fetching/useCompletedVideos";
+import { useCompletedQuizzes } from "@/hooks/global-data-fetching/useCompletedQuizzes";
 
 const useContainer = () => {
   const { courseId, userId, videoId, quizId } = useParams();
   const [expandSidbar, setExpendSidebar] = useState(true);
   const { courseDetail, isLoading } = useLearnCourseDetail();
   const { completedIds, isVideoCompleted } = useCompletedVideos();
+  const { completedIds: completedQuizIds, isQuizCompleted } =
+    useCompletedQuizzes();
 
   /**
-   * Overall completion across every video/quiz in the course. Quiz
-   * `isCompleted` is not returned by the API yet, so quizzes read as
-   * incomplete until the backend sends it. Videos additionally check the
-   * local "watched" record, since that's tracked client-side for now too.
+   * Overall completion across every video/quiz in the course. The course
+   * detail API doesn't carry completion state, so both videos and quizzes
+   * are checked against the user's `learning-progress` completed lists.
    */
   const progress = useMemo(() => {
     let total = 0;
@@ -25,10 +27,11 @@ const useContainer = () => {
         if (item?.isCompleted || completedIds.includes(item.id)) completed += 1;
       });
     };
-    const countQuizzes = (items?: { isCompleted?: boolean }[]) => {
+    const countQuizzes = (items?: { id: string; isCompleted?: boolean }[]) => {
       items?.forEach((item) => {
         total += 1;
-        if (item?.isCompleted) completed += 1;
+        if (item?.isCompleted || completedQuizIds.includes(item.id))
+          completed += 1;
       });
     };
 
@@ -46,7 +49,7 @@ const useContainer = () => {
       completed,
       percent: total ? Math.round((completed / total) * 100) : 0,
     };
-  }, [courseDetail, completedIds]);
+  }, [courseDetail, completedIds, completedQuizIds]);
 
   /** The lesson containing the currently open video/quiz, if any - drives
    * auto-expanding that lesson's accordion item in CourseNavigator. */
@@ -82,6 +85,7 @@ const useContainer = () => {
     quizId,
     progress,
     isVideoCompleted,
+    isQuizCompleted,
     activeLessonId,
   };
 };

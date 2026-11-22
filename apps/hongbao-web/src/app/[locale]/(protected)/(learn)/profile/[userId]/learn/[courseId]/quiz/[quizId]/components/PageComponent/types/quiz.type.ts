@@ -26,7 +26,7 @@ export type TQuizQuestion = {
   sectionId?: string | null;
 };
 
-/** The single-quiz endpoint's response shape (`quiz/:quizId`). */
+/** The single-quiz endpoint's response shape (`learning-progress/quiz/:quizId`). */
 export type TQuiz = {
   id: string;
   title: string;

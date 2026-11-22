@@ -1,4 +1,12 @@
 import useApiQuery from "@/hooks/fetching/useApiQuery";
+import useMutationQuery from "@/hooks/fetching/useMutationQuery";
+import {
+  completedQuizzesKey,
+  useCompletedQuizzes,
+} from "@/hooks/global-data-fetching/useCompletedQuizzes";
+import useLearnCourseDetail, {
+  learnCourseDetailKey,
+} from "@/hooks/global-data-fetching/useLearnCourseDetail";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "next/navigation";
 import {
@@ -107,7 +115,7 @@ const useContainer = () => {
     { data: TQuiz },
     TQuizQuestion[]
   >({
-    url: `quiz/${quizId}`,
+    url: `learning-progress/quiz/${quizId}`,
     enabled: !!quizId,
     retry: false,
     select: (data) => data?.data?.questions,
@@ -135,6 +143,58 @@ const useContainer = () => {
   useEffect(() => {
     startedAt.current = Date.now();
   }, []);
+
+  // ---------- completion ----------
+  const { isQuizCompleted } = useCompletedQuizzes();
+  const isCompleted = isQuizCompleted(quizId);
+
+  const { mutate: markQuizComplete, isPending: isMarkingComplete } =
+    useMutationQuery({
+      url: `learning-progress/quiz/${quizId}/complete`,
+      invalidateKeys: [
+        learnCourseDetailKey(courseId),
+        completedQuizzesKey(userId),
+      ],
+    });
+
+  const handleMarkComplete = () => {
+    if (isCompleted || isMarkingComplete) return;
+    markQuizComplete({});
+  };
+
+  // ---------- next item ----------
+  /** Flattened, in-order list of every video/quiz in the course - mirrors
+   * CourseNavigator's order so "next" matches the sidebar. */
+  const { courseDetail } = useLearnCourseDetail();
+  const { nextItem, quizTitle } = useMemo(() => {
+    const items: { type: "video" | "quiz"; id: string; title?: string }[] = [];
+    courseDetail?.lessons?.forEach((lesson) => {
+      lesson?.subLessons?.forEach((sub) => {
+        sub?.videos?.forEach((v) =>
+          items.push({ type: "video", id: v.id, title: v.title }),
+        );
+        sub?.quizzes?.forEach((q) =>
+          items.push({ type: "quiz", id: q.id, title: q.title }),
+        );
+      });
+      lesson?.quizzes?.forEach((q) =>
+        items.push({ type: "quiz", id: q.id, title: q.title }),
+      );
+    });
+    courseDetail?.quizzes?.forEach((q) =>
+      items.push({ type: "quiz", id: q.id, title: q.title }),
+    );
+
+    const i = items.findIndex((it) => it.type === "quiz" && it.id === quizId);
+    return {
+      nextItem: i >= 0 ? items[i + 1] : undefined,
+      quizTitle: i >= 0 ? items[i].title : undefined,
+    };
+  }, [courseDetail, quizId]);
+
+  const nextHref = nextItem
+    ? `/profile/${userId}/learn/${courseId}/${nextItem.type}/${nextItem.id}`
+    : undefined;
 
   const total = questions.length;
   const current = questions[index];
@@ -167,9 +227,10 @@ const useContainer = () => {
   });
 
   const onValid = (values: QuizAnswersFormField) => {
-    console.log(buildSubmission(values));
     setSubmission(buildSubmission(values));
     setSubmitted(true);
+    // submitting a quiz counts as finishing it - no-op if already completed
+    handleMarkComplete();
   };
 
   const submit = (e?: BaseSyntheticEvent) => {
@@ -230,7 +291,14 @@ const useContainer = () => {
     elapsed,
     band: bandFor(percent),
     suggestionFor,
+    isCompleted,
+    isMarkingComplete,
+    handleMarkComplete,
     courseHref: `/profile/${userId}/learn/${courseId}`,
+    myCoursesHref: `/profile/${userId}/my-courses`,
+    courseTitle: courseDetail?.title,
+    quizTitle,
+    nextHref,
   };
 };
 

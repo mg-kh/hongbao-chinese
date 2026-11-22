@@ -3,7 +3,7 @@ import { useParams } from "next/navigation";
 
 /**
  * Tracks which videos a user has finished watching, so the "complete" badge
- * in CourseNavigator lights up correctly. Backed by the `video/completed`
+ * in CourseNavigator lights up correctly. Backed by the `learning-progress/video/completed`
  * endpoint, which returns every completed video id for the current user.
  */
 export type TCompletedVideos = {
@@ -24,7 +24,7 @@ export const useCompletedVideos = () => {
     { data: TCompletedVideos },
     TCompletedVideos
   >({
-    url: "video/completed",
+    url: "learning-progress/video/completed",
     key: completedVideosKey(uid),
     enabled: !!uid,
     select: (res) => res?.data,

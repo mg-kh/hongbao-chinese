@@ -5,7 +5,10 @@ import useLearnCourseDetail, {
 } from "@/hooks/global-data-fetching/useLearnCourseDetail";
 import { useParams } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
-import { completedVideosKey } from "@/hooks/global-data-fetching/useCompletedVideos";
+import {
+  completedVideosKey,
+  useCompletedVideos,
+} from "@/hooks/global-data-fetching/useCompletedVideos";
 import { TVideo } from "./types/video.type";
 
 type FlatItem = { type: "video" | "quiz"; id: string; title?: string };
@@ -16,7 +19,7 @@ const COMPLETE_THRESHOLD = 0.9;
 const useContainer = () => {
   const { videoId, courseId, userId } = useParams();
   const { data: video, isLoading } = useApiQuery<{ data: TVideo }, TVideo>({
-    url: `video/${videoId}`,
+    url: `learning-progress/video/${videoId}`,
     select: (data) => data?.data,
   });
 
@@ -27,13 +30,19 @@ const useContainer = () => {
   const [showCompleteOverlay, setShowCompleteOverlay] = useState(false);
   const hasTriggeredRef = useRef(false);
 
-  const { mutate: markVideoComplete } = useMutationQuery({
-    url: `video/${videoId}/complete`,
-    invalidateKeys: [
-      learnCourseDetailKey(courseId),
-      completedVideosKey(Array.isArray(userId) ? userId[0] : userId),
-    ],
-  });
+  const { isVideoCompleted } = useCompletedVideos();
+  const isCompleted = isVideoCompleted(
+    Array.isArray(videoId) ? videoId[0] : videoId,
+  );
+
+  const { mutate: markVideoComplete, isPending: isMarkingComplete } =
+    useMutationQuery({
+      url: `learning-progress/video/${videoId}/complete`,
+      invalidateKeys: [
+        learnCourseDetailKey(courseId),
+        completedVideosKey(Array.isArray(userId) ? userId[0] : userId),
+      ],
+    });
 
   const triggerComplete = () => {
     if (hasTriggeredRef.current) return;
@@ -59,6 +68,13 @@ const useContainer = () => {
   };
 
   const closeCompleteOverlay = () => setShowCompleteOverlay(false);
+
+  /** Manual "Mark as complete" - skips the in-player overlay. */
+  const handleMarkComplete = () => {
+    if (isCompleted || isMarkingComplete) return;
+    hasTriggeredRef.current = true;
+    markVideoComplete({});
+  };
 
   // ---------- prev / next ----------
   /** Flattened, in-order list of every video/quiz in the course - mirrors
@@ -113,6 +129,7 @@ const useContainer = () => {
     isLoading,
     courseTitle: courseDetail?.title,
     courseHref: `/profile/${userId}/learn/${courseId}`,
+    myCoursesHref: `/profile/${userId}/my-courses`,
     prevHref: itemHref(prevItem),
     nextHref: itemHref(nextItem),
     nextItem,
@@ -121,6 +138,9 @@ const useContainer = () => {
     handleTimeUpdate,
     handleDurationChange,
     handleEnded,
+    isCompleted,
+    isMarkingComplete,
+    handleMarkComplete,
   };
 };
 
