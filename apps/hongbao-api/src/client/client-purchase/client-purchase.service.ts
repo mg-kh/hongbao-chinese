@@ -19,6 +19,7 @@ const purchaseInclude = {
     include: {
       course: { select: { id: true, title: true } },
       mockTest: { select: { id: true, title: true } },
+      flashcard: { select: { id: true, name: true } },
     },
   },
 } satisfies Prisma.PurchaseInclude;
@@ -26,7 +27,23 @@ const purchaseInclude = {
 const enrollmentInclude = {
   course: { select: { id: true, title: true, perTime: true } },
   mockTest: { select: { id: true, title: true, perTime: true } },
+  flashcard: { select: { id: true, name: true } },
 } satisfies Prisma.EnrollmentInclude;
+
+type ShopProduct = {
+  title: string;
+  price: number | null;
+  perTime: number | null;
+};
+
+const productLabel: Record<CheckoutProductType, string> = {
+  [ProductType.COURSE]: 'Course',
+  [ProductType.MOCK_TEST]: 'Mock test',
+  [ProductType.FLASHCARD]: 'Flashcard',
+};
+
+type CheckoutProductType =
+  CreateClientPurchaseDto['items'][number]['productType'];
 
 @Injectable()
 export class ClientPurchaseService {
@@ -39,18 +56,18 @@ export class ClientPurchaseService {
       const purchaseItems: Prisma.PurchaseItemCreateManyPurchaseInput[] = [];
 
       for (const { productType, productId } of items) {
-        const isCourse = productType === ProductType.COURSE;
-
         const product = await this.findPublishedProduct(productType, productId);
         if (!product) {
           throw new NotFoundException(
-            `${isCourse ? 'Course' : 'Mock test'} ${productId} not found`,
+            `${productLabel[productType]} ${productId} not found`,
           );
         }
 
-        const productWhere = isCourse
-          ? { courseId: productId }
-          : { mockTestId: productId };
+        const productWhere = {
+          [ProductType.COURSE]: { courseId: productId },
+          [ProductType.MOCK_TEST]: { mockTestId: productId },
+          [ProductType.FLASHCARD]: { flashcardId: productId },
+        }[productType];
 
         // Name/price/duration are snapshotted.
         const price = product.price ?? 0;
@@ -111,26 +128,34 @@ export class ClientPurchaseService {
     items: Prisma.PurchaseItemCreateManyPurchaseInput[],
   ) {
     return tx.enrollment.createMany({
-      data: items.map(({ courseId, mockTestId }) => ({
+      data: items.map(({ courseId, mockTestId, flashcardId }) => ({
         userId,
         orderNo,
         courseId,
         mockTestId,
+        flashcardId,
       })),
       skipDuplicates: true,
     });
   }
 
-  private findPublishedProduct(
-    productType: CreateClientPurchaseDto['items'][number]['productType'],
+  private async findPublishedProduct(
+    productType: CheckoutProductType,
     id: string,
-  ) {
+  ): Promise<ShopProduct | null> {
     const where = { id, published: true };
     switch (productType) {
       case ProductType.COURSE:
         return this.prisma.course.findFirst({ where });
       case ProductType.MOCK_TEST:
         return this.prisma.mockTest.findFirst({ where });
+      case ProductType.FLASHCARD: {
+        // Decks have no access period: lifetime access.
+        const flashcard = await this.prisma.flashcard.findFirst({ where });
+        return flashcard
+          ? { title: flashcard.name, price: flashcard.price, perTime: null }
+          : null;
+      }
       default:
         return null;
     }
@@ -244,6 +269,7 @@ export class ClientPurchaseService {
         userId,
         ...(type === ProductType.COURSE && { courseId: { not: null } }),
         ...(type === ProductType.MOCK_TEST && { mockTestId: { not: null } }),
+        ...(type === ProductType.FLASHCARD && { flashcardId: { not: null } }),
       };
       const withStatus = (
         s: EnrollmentStatus,

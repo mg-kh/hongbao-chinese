@@ -1,22 +1,19 @@
-export type TFlashcardExampleUsage = {
-  pinyin: string;
-  chinese: string;
-  meaningEn: string;
-  meaningMm: string;
-};
+import { TCardRes } from "../../card/types/card.type";
 
 export type TFlashcardRes = {
   id: string;
-  cnWord: string;
-  pinyin: string;
-  type: string;
-  meaningEn: string;
-  meaningMm: string;
-  exampleUsage: TFlashcardExampleUsage[];
+  name: string;
+  price: number;
+  published: boolean;
   categoryId: string;
   category?: {
     id: string;
     name: string;
   };
+  _count?: {
+    cards: number;
+  };
+  cards?: TCardRes[];
   createdAt: string;
+  updatedAt: string;
 };

@@ -1,11 +1,11 @@
 import HanziPractice from "@/components/HanziPractice/HanziPractice";
-import type { TFlashcard } from "@/hooks/global-data-fetching/useAllFlashcardList";
+import type { TCard } from "@/hooks/global-data-fetching/useAllCardList";
 import { Text } from "@mantine/core";
 import { HandTapIcon } from "@phosphor-icons/react";
 import SpeakButton from "../SpeakButton/SpeakButton";
 
 interface Props {
-  card: TFlashcard;
+  card: TCard;
   flipped: boolean;
   showPinyin: boolean;
   onFlip: () => void;
@@ -30,7 +30,7 @@ const wordTypeLabels: Record<string, string> = {
 /** Big study card shown inside the dialog - front holds the prompt, the meaning
  * and examples are revealed on top of it with a cross-fade (no 3D flip, so the
  * back's scroll area works on mobile). */
-const FlashcardFlipCard: React.FC<Props> = ({
+const CardFlipCard: React.FC<Props> = ({
   card,
   flipped,
   showPinyin,
@@ -60,9 +60,9 @@ const FlashcardFlipCard: React.FC<Props> = ({
             {/* metadata zone */}
             <div className="flex! items-start! justify-between! gap-2! px-5! pt-5!">
               <div className="flex! flex-wrap! items-center! gap-1.5!">
-                {card.category?.name && (
+                {card.flashcard?.category?.name && (
                   <span className="inline-flex! items-center! rounded-full! bg-hongbao-red-50! px-2.5! py-1! text-[11px]! font-bold! uppercase! tracking-[0.08em]! text-hongbao-red-600!">
-                    {card.category.name}
+                    {card.flashcard.category.name}
                   </span>
                 )}
                 {typeLabel && (
@@ -209,4 +209,4 @@ const FlashcardFlipCard: React.FC<Props> = ({
   );
 };
 
-export default FlashcardFlipCard;
+export default CardFlipCard;

@@ -6,13 +6,12 @@ import { cn } from "@/utils/cn";
 import { Badge, Box, Button, Image, Paper, Text } from "@mantine/core";
 import {
   ArrowRightIcon,
-  BookOpenTextIcon,
   CalendarDotIcon,
   CaretRightIcon,
-  ExamIcon,
   HourglassIcon,
   XCircleIcon,
 } from "@phosphor-icons/react";
+import { PRODUCT_TYPE_ICONS } from "@/components/icons/productTypeIcons";
 import useContainer, { TMetaKind } from "./useContainer";
 
 interface Props {
@@ -28,7 +27,7 @@ const metaIcons: Record<TMetaKind, React.ReactNode> = {
 const CourseCard: React.FC<Props> = ({ data }) => {
   const { type, status, meta, isActive, isExpired, isMuted, href, renewHref } =
     useContainer(data);
-  const TypeIcon = data.type === "course" ? BookOpenTextIcon : ExamIcon;
+  const TypeIcon = PRODUCT_TYPE_ICONS[data.type];
 
   const body = (
     <div className="flex flex-col sm:flex-row sm:items-center gap-3">

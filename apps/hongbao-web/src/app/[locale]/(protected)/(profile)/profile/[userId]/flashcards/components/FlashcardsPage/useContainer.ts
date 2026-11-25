@@ -1,7 +1,7 @@
 "use client";
 
 import useAllCategoryList from "@/hooks/global-data-fetching/useAllCategoryList";
-import useAllFlashcardList from "@/hooks/global-data-fetching/useAllFlashcardList";
+import useAllCardList from "@/hooks/global-data-fetching/useAllCardList";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { markLearned } from "../../learned";
@@ -17,7 +17,7 @@ const useContainer = () => {
   const [flipped, setFlipped] = useState(false);
   const [showPinyin, setShowPinyin] = useState(true);
 
-  const { flashcards: cards, isLoading } = useAllFlashcardList({
+  const { cards, isLoading } = useAllCardList({
     categoryId: category === ALL_CATEGORIES ? undefined : category,
   });
   const { categoryOptions } = useAllCategoryList();

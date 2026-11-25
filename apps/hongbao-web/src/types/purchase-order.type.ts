@@ -8,6 +8,7 @@ export type TRawPurchaseItem = {
   id: string;
   courseId: string | null;
   mockTestId: string | null;
+  flashcardId?: string | null;
   /** Snapshot of the product name at checkout. */
   productName: string;
   price: number;
@@ -16,6 +17,7 @@ export type TRawPurchaseItem = {
   quantity: number;
   course: { title: string } | null;
   mockTest: { title: string } | null;
+  flashcard?: { name: string } | null;
 };
 
 /** Purchase fields both endpoints return. */
@@ -31,12 +33,18 @@ export type TRawPurchase = {
   items: TRawPurchaseItem[];
 };
 
-export type TPurchaseCardItemType = "course" | "mock-test";
+export type TPurchaseCardItemType = "course" | "mock-test" | "flashcard";
+
+export const PURCHASE_ITEM_TYPE_LABEL: Record<TPurchaseCardItemType, string> = {
+  course: "Course",
+  "mock-test": "Mock Test",
+  flashcard: "Flashcard",
+};
 
 export type TPurchaseCardItem = {
   /** Order line id - unique within the order. */
   id: string;
-  /** The course / mock test the line grants access to. */
+  /** The course / mock test / flashcard deck the line grants access to. */
   productId: string | null;
   type: TPurchaseCardItemType;
   title: string;

@@ -2,12 +2,11 @@
 
 import { Box, Collapse, Paper, Text, UnstyledButton } from "@mantine/core";
 import {
-  BookOpenIcon,
-  CaretDownIcon,
-  CreditCardIcon,
-  ExamIcon,
-  InfoIcon,
-} from "@phosphor-icons/react";
+  CourseTypeIcon,
+  FlashcardTypeIcon,
+  MockTestTypeIcon,
+} from "@/components/icons/productTypeIcons";
+import { CaretDownIcon, CreditCardIcon, InfoIcon } from "@phosphor-icons/react";
 import { format } from "date-fns";
 import {
   TPurchaseCardItem,
@@ -24,12 +23,17 @@ const typeMeta: Record<
   course: {
     label: "Course",
     tile: "bg-hongbao-red-50! text-hongbao-red-600!",
-    icon: <BookOpenIcon size={14} weight="fill" />,
+    icon: <CourseTypeIcon size={14} weight="fill" />,
   },
   "mock-test": {
     label: "Mock Test",
     tile: "bg-hongbao-orange-50! text-hongbao-orange-600!",
-    icon: <ExamIcon size={14} weight="fill" />,
+    icon: <MockTestTypeIcon size={14} weight="fill" />,
+  },
+  flashcard: {
+    label: "Flashcard",
+    tile: "bg-hongbao-gold-50! text-hongbao-gold-700!",
+    icon: <FlashcardTypeIcon size={14} weight="fill" />,
   },
 };
 

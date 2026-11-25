@@ -31,10 +31,15 @@ export const paymentLabel = (
 export const toPurchaseCardOrder = (p: TRawPurchase): TPurchaseCardOrder => {
   const items: TPurchaseCardItem[] = p.items.map((i) => ({
     id: i.id,
-    productId: i.courseId ?? i.mockTestId,
-    type: i.mockTestId ? "mock-test" : "course",
+    productId: i.courseId ?? i.mockTestId ?? i.flashcardId ?? null,
+    type: i.mockTestId ? "mock-test" : i.flashcardId ? "flashcard" : "course",
     // Live title, falling back to the name captured at checkout.
-    title: i.course?.title || i.mockTest?.title || i.productName || "-",
+    title:
+      i.course?.title ||
+      i.mockTest?.title ||
+      i.flashcard?.name ||
+      i.productName ||
+      "-",
     durationDays: i.durationDays,
     quantity: i.quantity,
     lineTotal: i.price * i.quantity,

@@ -1,13 +1,9 @@
 "use client";
 
+import { CourseTypeIcon } from "@/components/icons/productTypeIcons";
 import { TUser } from "@/types/user";
 import { Avatar, Badge, Container, Group, Menu } from "@mantine/core";
-import {
-  IconBook,
-  IconCaretDownFilled,
-  IconLogout,
-  IconUser,
-} from "@tabler/icons-react";
+import { IconCaretDownFilled, IconLogout, IconUser } from "@tabler/icons-react";
 import Cookies from "js-cookie";
 
 interface Props {
@@ -46,7 +42,7 @@ const DashboardNavbar: React.FC<Props> = ({ burgerComponent }) => {
               >
                 Profile
               </Menu.Item>
-              <Menu.Item leftSection={<IconBook size={14} />}>
+              <Menu.Item leftSection={<CourseTypeIcon size={14} />}>
                 My courses
               </Menu.Item>
 

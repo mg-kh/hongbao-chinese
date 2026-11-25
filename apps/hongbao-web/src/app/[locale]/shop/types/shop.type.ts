@@ -28,12 +28,18 @@ export type TShopProductRes =
   | (TShopProductResBase & {
       type: "mock-test";
       testCount: number;
+    })
+  | (TShopProductResBase & {
+      type: "flashcard";
+      /** Number of cards in the deck. */
+      cardCount: number;
     });
 
 export type TShopOverviewRes = {
   productCount: number;
   courseCount: number;
   mockTestCount: number;
+  flashcardCount: number;
 };
 
 export type TShopProduct = {
@@ -51,6 +57,13 @@ export type TShopProduct = {
   includedAssets?: string[];
   /** Number of tests bundled in a mock-test product. */
   testCount?: number;
+  /** Number of cards in a flashcard deck. */
+  cardCount?: number;
+  /**
+   * One-off purchase with lifetime access (flashcard decks): `price` is the
+   * full price and the cart keeps it at a single unit instead of months.
+   */
+  lifetime?: boolean;
   /** Detail page link - courses point at `/course-detail/:id`. */
   detailHref?: string;
 };
@@ -85,4 +98,5 @@ export const SHOP_TYPE_META: Record<
 > = {
   course: { label: "Course", plural: "Courses" },
   "mock-test": { label: "Mock Test", plural: "Mock Tests" },
+  flashcard: { label: "Flashcard", plural: "Flashcards" },
 };

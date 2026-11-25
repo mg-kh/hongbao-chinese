@@ -27,7 +27,9 @@ import { ClientLearningProgressModule } from './client/client-learning-progress/
 import { CouponModule } from './coupon/coupon.module';
 import { ClientCouponModule } from './client/client-coupon/client-coupon.module';
 import { CategoryModule } from './category/category.module';
+import { CardModule } from './card/card.module';
 import { FlashcardModule } from './flashcard/flashcard.module';
+import { ClientCardModule } from './client/client-card/client-card.module';
 import { ClientFlashcardModule } from './client/client-flashcard/client-flashcard.module';
 import { ClientCategoryModule } from './client/client-category/client-category.module';
 import { MockTestsModule } from './mock-tests/mock-tests.module';
@@ -85,6 +87,8 @@ import { TelegramModule } from './telegram/telegram.module';
     CouponModule,
     ClientCouponModule,
     CategoryModule,
+    CardModule,
+    ClientCardModule,
     FlashcardModule,
     ClientFlashcardModule,
     ClientCategoryModule,

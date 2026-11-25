@@ -1,5 +1,6 @@
 "use client";
 
+import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 import { pluralize } from "@/utils/pluralize";
 import MobileBottomNav from "@/components/Navbar/MobileBottomNav/MobileBottomNav";
 import { publicBottomNavItems } from "@/components/Navbar/MobileBottomNav/publicNavItems";
@@ -15,11 +16,7 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import {
-  ArrowLeftIcon,
-  ShoppingBagIcon,
-  StorefrontIcon,
-} from "@phosphor-icons/react";
+import { ShoppingBagIcon, StorefrontIcon } from "@phosphor-icons/react";
 import { IconArrowRight, IconTrash } from "@tabler/icons-react";
 import CartLine from "../CartLine/CartLine";
 import CartSummary from "../CartSummary/CartSummary";
@@ -48,23 +45,17 @@ const CartPage = () => {
     <ClientLayout size={"100%"} p={0} hideFooterOnMobile>
       <Container size={"xl"} px={{ base: 16, sm: 24 }}>
         <Stack gap={16} py={{ base: 16, md: 28 }}>
-          <Link
-            href="/shop"
-            className="flex! items-center! gap-1.5! w-fit! no-underline! text-gray-500! hover:text-hongbao-red-600! transition-colors! duration-200!"
-          >
-            <ArrowLeftIcon size={14} weight="bold" />
-            <Text size="xs" fw={600}>
-              Continue shopping
-            </Text>
-          </Link>
-
-          <Group justify="space-between" align="center" wrap="nowrap">
-            <Group gap={10} align="center" wrap="nowrap">
-              <Text fw={800} className="text-[1.4rem]! sm:text-[1.7rem]!">
-                Shopping Cart
-              </Text>
+          <Group justify="space-between" align="flex-end" wrap="nowrap">
+            <Group gap={10} align="flex-end" wrap="nowrap" miw={0}>
+              <CustomBreadCrumb
+                title="Shopping Cart"
+                links={[
+                  { label: "Shop", href: "/shop", isActive: true },
+                  { label: "Cart", href: "", isActive: false },
+                ]}
+              />
               {isReady && count > 0 && (
-                <span className="rounded-full! bg-hongbao-red-50! px-2.5! py-0.5! text-xs! font-bold! text-hongbao-red-700!">
+                <span className="mb-1! shrink-0! rounded-full! bg-hongbao-red-50! px-2.5! py-0.5! text-xs! font-bold! text-hongbao-red-700!">
                   {pluralize(count, "item")}
                 </span>
               )}

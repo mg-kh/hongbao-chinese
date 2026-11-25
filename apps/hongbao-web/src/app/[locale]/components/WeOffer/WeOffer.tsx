@@ -1,5 +1,7 @@
-import CourseIcon from "@/components/icons/CourseIcon";
-import HSK_MockTest_Icon from "@/components/icons/HSK_MockTest_Icon";
+import {
+  CourseTypeIcon,
+  MockTestTypeIcon,
+} from "@/components/icons/productTypeIcons";
 import LessonIcon from "@/components/icons/LessonIcon";
 import QuizIcon from "@/components/icons/QuizIcon";
 import SpaceRepeatIcon from "@/components/icons/SpaceRepeatIcon";
@@ -22,7 +24,11 @@ const WeOffer = () => {
           />
           <Space h={48} />
           <div className="grid! grid-cols-2! lg:grid-cols-3! gap-3! sm:gap-6! lg:gap-8! max-w-[980px]! mx-auto!">
-            <StatusCard title="Free Courses" icon={CourseIcon} color="red" />
+            <StatusCard
+              title="Free Courses"
+              icon={CourseTypeIcon}
+              color="red"
+            />
             <StatusCard
               title="Free Lessons"
               count={10}
@@ -43,7 +49,7 @@ const WeOffer = () => {
             />
             <StatusCard
               title="Mock Test"
-              icon={HSK_MockTest_Icon}
+              icon={MockTestTypeIcon}
               color="brown"
             />
             <StatusCard

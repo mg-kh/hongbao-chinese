@@ -6,7 +6,6 @@ import {
   TShopProduct,
   TShopProductRes,
 } from "../types/shop.type";
-import { is } from "zod/v4/locales";
 
 type Filters = {
   type: "all" | ShopProductType;
@@ -15,7 +14,7 @@ type Filters = {
 };
 
 /**
- * The storefront catalogue: courses and mock tests from the `shop/all-products`
+ * The storefront catalogue: courses, mock tests and flashcard decks from the `shop/all-products`
  * API, normalised to `TShopProduct` so the listing, cart, and checkout only deal
  * with one shape. Type and category are filtered server-side.
  */
@@ -52,10 +51,16 @@ const useShopProducts = ({ type, categoryId }: Filters) => {
               includedAssets: p.includedAssets ?? [],
               detailHref: `/course-detail/${p.id}`,
             }
-          : {
-              isFree: p.price === 0,
-              testCount: p.testCount,
-            }),
+          : p.type === "mock-test"
+            ? {
+                isFree: p.price === 0,
+                testCount: p.testCount,
+              }
+            : {
+                isFree: p.price === 0,
+                cardCount: p.cardCount,
+                lifetime: true,
+              }),
       })),
     [productRes],
   );

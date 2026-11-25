@@ -1,5 +1,6 @@
 "use client";
 
+import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 import { pluralize } from "@/utils/pluralize";
 import LoaderComponent from "@/components/LoaderComponent/LoaderComponent";
 import MobileBottomNav from "@/components/Navbar/MobileBottomNav/MobileBottomNav";
@@ -7,11 +8,13 @@ import { publicBottomNavItems } from "@/components/Navbar/MobileBottomNav/public
 import ClientLayout from "@/layouts/ClientLayout/ClientLayout";
 import { Box, Button, Container, Drawer, Stack, Text } from "@mantine/core";
 import { StorefrontIcon } from "@phosphor-icons/react";
-import FlashDeals from "./components/FlashDeals/FlashDeals";
-import ProductCard from "./components/ProductCard/ProductCard";
-import ShopFilters from "./components/ShopFilters/ShopFilters";
-import SortTabs from "./components/SortTabs/SortTabs";
-import useContainer, { ShopTypeFilter } from "./useContainer";
+import FlashDeals from "@/app/[locale]/shop/components/ShopPage/components/FlashDeals/FlashDeals";
+import ProductCard from "@/app/[locale]/shop/components/ShopPage/components/ProductCard/ProductCard";
+import ResultsToolbar from "@/app/[locale]/shop/components/ShopPage/components/ResultsToolbar/ResultsToolbar";
+import ShopFilters from "@/app/[locale]/shop/components/ShopPage/components/ShopFilters/ShopFilters";
+import useContainer, {
+  ShopTypeFilter,
+} from "@/app/[locale]/shop/components/ShopPage/useContainer";
 
 interface Props {
   initialType: ShopTypeFilter;
@@ -31,8 +34,8 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
     sort,
     setSort,
     clearFilters,
-    typeCounts,
     categoryOptions,
+    appliedFilters,
     flashDeals,
     results,
     total,
@@ -43,6 +46,8 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
   } = useContainer(initialType);
 
   const filterProps = {
+    search,
+    setSearch,
     type,
     setType,
     categoryId,
@@ -51,7 +56,6 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
     setOnSaleOnly,
     activeFilterCount,
     clearFilters,
-    typeCounts,
     categoryOptions,
   };
 
@@ -59,21 +63,30 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
     <ClientLayout size={"100%"} p={0} hideFooterOnMobile>
       <Container size={"xl"} px={{ base: 12, sm: 24 }}>
         <Stack gap={16} pt={{ base: 14, md: 20 }} pb={{ base: 32, md: 44 }}>
+          <CustomBreadCrumb
+            title="Shop"
+            links={[
+              { label: "Home", href: "/", isActive: true },
+              { label: "Shop", href: "", isActive: false },
+            ]}
+          />
+
           <FlashDeals deals={flashDeals} />
 
-          <div className="grid! grid-cols-1! items-start! gap-6! lg:grid-cols-[236px_1fr]! lg:gap-8!">
+          <div className="grid! grid-cols-1! items-start! gap-6! lg:grid-cols-[260px_1fr]! lg:gap-8!">
             {/* desktop filter sidebar */}
-            <Box className="hidden! self-start! rounded-2xl! bg-white! p-4! ring-1! ring-gray-200! lg:sticky! lg:top-36! lg:block!">
+            <Box className="hidden! self-start! rounded-2xl! bg-white! px-4! pt-4! pb-1! ring-1! ring-gray-200! lg:sticky! lg:top-36! lg:block! lg:max-h-[calc(100vh-10rem)]! lg:overflow-y-auto!">
               <ShopFilters {...filterProps} />
             </Box>
 
             <div>
-              <SortTabs
+              <ResultsToolbar
+                total={total}
                 sort={sort}
                 setSort={setSort}
-                total={total}
-                activeFilterCount={activeFilterCount}
-                onOpenFilters={openDrawer}
+                appliedFilters={appliedFilters}
+                clearFilters={clearFilters}
+                openDrawer={openDrawer}
               />
 
               {isFetching && results.length === 0 ? (

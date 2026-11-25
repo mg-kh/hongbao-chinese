@@ -1,6 +1,6 @@
 "use client";
 
-import type { TFlashcard } from "@/hooks/global-data-fetching/useAllFlashcardList";
+import type { TCard } from "@/hooks/global-data-fetching/useAllCardList";
 import { Modal, Progress } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import {
@@ -16,10 +16,10 @@ import {
   XIcon,
 } from "@phosphor-icons/react";
 import { useRef } from "react";
-import FlashcardFlipCard from "../FlashcardFlipCard/FlashcardFlipCard";
+import CardFlipCard from "../CardFlipCard/CardFlipCard";
 
 interface Props {
-  card: TFlashcard | null;
+  card: TCard | null;
   index: number | null;
   total: number;
   flipped: boolean;
@@ -63,7 +63,7 @@ const RATINGS = [
   },
 ];
 
-const FlashcardDialog: React.FC<Props> = ({
+const CardDialog: React.FC<Props> = ({
   card,
   index,
   total,
@@ -167,7 +167,7 @@ const FlashcardDialog: React.FC<Props> = ({
             onTouchEnd={handleTouchEnd}
             className="flex! min-h-0! flex-1! items-start! justify-center! overflow-x-hidden! overflow-y-auto! p-4! sm:p-6!"
           >
-            <FlashcardFlipCard
+            <CardFlipCard
               key={index}
               card={card}
               flipped={flipped}
@@ -232,4 +232,4 @@ const FlashcardDialog: React.FC<Props> = ({
   );
 };
 
-export default FlashcardDialog;
+export default CardDialog;

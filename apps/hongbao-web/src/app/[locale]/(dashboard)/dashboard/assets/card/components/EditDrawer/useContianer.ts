@@ -8,8 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
-import useCategories from "../../../../hooks/data-fetching/useCategories";
-import { TFlashcardRes } from "../../types/flashcard.type";
+import useFlashcards from "../../../../hooks/data-fetching/useFlashcards";
+import { TCardRes } from "../../types/card.type";
 
 const schema = z.object({
   cnWord: z.string().min(1),
@@ -27,7 +27,7 @@ const schema = z.object({
       }),
     )
     .min(1),
-  categoryId: z.string().min(1),
+  flashcardId: z.string().nullable(),
 });
 type FormField = z.infer<typeof schema>;
 
@@ -50,7 +50,7 @@ const useContainer = () => {
           meaningMm: "",
         },
       ],
-      categoryId: "",
+      flashcardId: null,
     },
   });
   const { control, handleSubmit, reset } = form;
@@ -59,29 +59,27 @@ const useContainer = () => {
     name: "exampleUsage",
   });
 
-  const { categoryDropdownData, isLoading: categoryDropdownDataLoading } =
-    useCategories();
+  const { flashcardDropdownData, isLoading: flashcardDropdownDataLoading } =
+    useFlashcards();
 
-  const { data: flashcardDetail, isFetching } = useApiQuery<
-    { data: TFlashcardRes },
-    TFlashcardRes
+  const { data: cardDetail, isFetching } = useApiQuery<
+    { data: TCardRes },
+    TCardRes
   >({
-    url: `dashboard/flashcard/${currentId}`,
+    url: `dashboard/card/${currentId}`,
     enabled: !!currentId,
     select: (data) => data?.data,
-    key: "flashcard_detail",
+    key: "card_detail",
   });
   const { mutate: save, isPending } = useMutationQuery({
-    url: currentId
-      ? `dashboard/flashcard/${currentId}`
-      : `dashboard/flashcard`,
+    url: currentId ? `dashboard/card/${currentId}` : `dashboard/card`,
     method: currentId ? "patch" : "post",
-    invalidateKeys: ["flashcard"],
+    invalidateKeys: ["card", "flashcard"],
   });
   const { mutate: deleteItem, isPending: isDeletePending } = useMutationQuery({
-    url: `dashboard/flashcard/${currentId}`,
+    url: `dashboard/card/${currentId}`,
     method: "delete",
-    invalidateKeys: ["flashcard"],
+    invalidateKeys: ["card", "flashcard"],
   });
 
   const handleFormSubmit = handleSubmit((data) => {
@@ -114,23 +112,23 @@ const useContainer = () => {
   useEffect(() => {
     if (currentId) {
       reset({
-        cnWord: flashcardDetail?.cnWord || "",
-        pinyin: flashcardDetail?.pinyin || "",
-        type: flashcardDetail?.type || "",
-        meaningEn: flashcardDetail?.meaningEn || "",
-        meaningMm: flashcardDetail?.meaningMm || "",
-        exampleUsage: flashcardDetail?.exampleUsage?.length
-          ? flashcardDetail.exampleUsage.map((e) => ({
+        cnWord: cardDetail?.cnWord || "",
+        pinyin: cardDetail?.pinyin || "",
+        type: cardDetail?.type || "",
+        meaningEn: cardDetail?.meaningEn || "",
+        meaningMm: cardDetail?.meaningMm || "",
+        exampleUsage: cardDetail?.exampleUsage?.length
+          ? cardDetail.exampleUsage.map((e) => ({
               pinyin: e?.pinyin || "",
               chinese: e?.chinese || "",
               meaningEn: e?.meaningEn || "",
               meaningMm: e?.meaningMm || "",
             }))
           : [{ pinyin: "", chinese: "", meaningEn: "", meaningMm: "" }],
-        categoryId: flashcardDetail?.categoryId || "",
+        flashcardId: cardDetail?.flashcardId || null,
       });
     }
-  }, [flashcardDetail, reset, currentId]);
+  }, [cardDetail, reset, currentId]);
 
   const { isValid } = useCheckIsvalidSubmitButton({ form, isPending });
 
@@ -141,8 +139,8 @@ const useContainer = () => {
     fields,
     append,
     remove,
-    categoryDropdownData,
-    categoryDropdownDataLoading,
+    flashcardDropdownData,
+    flashcardDropdownDataLoading,
     isFetching,
     isPending,
     isDeletePending,

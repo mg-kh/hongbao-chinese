@@ -4,13 +4,36 @@ import useAllCategoryList from "@/hooks/global-data-fetching/useAllCategoryList"
 import calculateDiscountPrice from "@/utils/calculateDiscountPrice";
 import { useDisclosure } from "@mantine/hooks";
 import { useDeferredValue, useMemo, useState } from "react";
-import useShopOverview from "../../hooks/useShopOverview";
-import useShopProducts from "../../hooks/useShopProducts";
-import { ShopProductType, TShopProduct } from "../../types/shop.type";
-import { pickFlashDeals, productSold } from "../../utils/productSignals";
+import useShopProducts from "@/app/[locale]/shop/hooks/useShopProducts";
+import {
+  ShopProductType,
+  TShopProduct,
+} from "@/app/[locale]/shop/types/shop.type";
+import {
+  pickFlashDeals,
+  productSold,
+} from "@/app/[locale]/shop/utils/productSignals";
 
 export type ShopTypeFilter = "all" | ShopProductType;
 export type ShopSort = "relevance" | "top-sales" | "price-low" | "price-high";
+
+export const SHOP_SORT_OPTIONS: { value: ShopSort; label: string }[] = [
+  { value: "relevance", label: "Recommended" },
+  { value: "top-sales", label: "Best selling" },
+  { value: "price-low", label: "Price: low to high" },
+  { value: "price-high", label: "Price: high to low" },
+];
+
+const TYPE_LABELS: Record<ShopProductType, string> = {
+  course: "Courses",
+  "mock-test": "Mock Tests",
+  flashcard: "Flashcards",
+};
+
+/** A removable chip shown above the results for each active filter. */
+export type TAppliedFilter = { key: string; label: string; remove: () => void };
+
+const isOnSale = (p: TShopProduct) => !p.isFree && p.discount > 0;
 
 const priceOf = (p: TShopProduct) =>
   p.isFree ? 0 : calculateDiscountPrice(p.price, p.discount);
@@ -28,7 +51,6 @@ const useContainer = (initialType: ShopTypeFilter) => {
   // Type and category are filtered by the API; search, sale and sort stay client-side.
   const { products, isFetching } = useShopProducts({ type, categoryId });
   const { categoryOptions } = useAllCategoryList();
-  const { typeCounts } = useShopOverview();
 
   const toggleCategory = (id: string) =>
     setCategoryId((prev) => (prev === id ? null : id));
@@ -38,22 +60,22 @@ const useContainer = (initialType: ShopTypeFilter) => {
     setCategoryId(null);
     setOnSaleOnly(false);
     setSearch("");
-    setSort("relevance");
   };
 
   const flashDeals = useMemo(() => pickFlashDeals(products), [products]);
 
-  const results = useMemo(() => {
+  const searched = useMemo(() => {
     const q = deferredSearch.trim().toLowerCase();
-
-    const filtered = products.filter((p) => {
-      const matchesSale = !onSaleOnly || (!p.isFree && p.discount > 0);
-      const matchesSearch =
-        !q ||
+    if (!q) return products;
+    return products.filter(
+      (p) =>
         p.title.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q);
-      return matchesSale && matchesSearch;
-    });
+        p.description.toLowerCase().includes(q),
+    );
+  }, [products, deferredSearch]);
+
+  const results = useMemo(() => {
+    const filtered = searched.filter((p) => !onSaleOnly || isOnSale(p));
 
     const sorted = [...filtered];
     if (sort === "price-low") sorted.sort((a, b) => priceOf(a) - priceOf(b));
@@ -67,10 +89,37 @@ const useContainer = (initialType: ShopTypeFilter) => {
       );
 
     return sorted;
-  }, [products, deferredSearch, onSaleOnly, sort]);
+  }, [searched, onSaleOnly, sort]);
 
-  const activeFilterCount =
-    (type !== "all" ? 1 : 0) + (categoryId ? 1 : 0) + (onSaleOnly ? 1 : 0);
+  const appliedFilters: TAppliedFilter[] = [];
+  if (search.trim())
+    appliedFilters.push({
+      key: "search",
+      label: `"${search.trim()}"`,
+      remove: () => setSearch(""),
+    });
+  if (type !== "all")
+    appliedFilters.push({
+      key: "type",
+      label: TYPE_LABELS[type],
+      remove: () => setType("all"),
+    });
+  if (categoryId)
+    appliedFilters.push({
+      key: "category",
+      label:
+        categoryOptions.find((o) => o.value === categoryId)?.label ?? "Level",
+      remove: () => setCategoryId(null),
+    });
+  if (onSaleOnly)
+    appliedFilters.push({
+      key: "sale",
+      label: "On sale",
+      remove: () => setOnSaleOnly(false),
+    });
+
+  // Sort is not a filter, so it isn't counted or cleared with the chips.
+  const activeFilterCount = appliedFilters.length;
 
   return {
     isFetching,
@@ -85,8 +134,8 @@ const useContainer = (initialType: ShopTypeFilter) => {
     sort,
     setSort,
     clearFilters,
-    typeCounts,
     categoryOptions,
+    appliedFilters,
     flashDeals,
     results,
     total: results.length,

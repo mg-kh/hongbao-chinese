@@ -1,16 +1,18 @@
 "use client";
 
 import QuizIcon from "@/components/icons/QuizIcon";
-import useAllFlashcardList from "@/hooks/global-data-fetching/useAllFlashcardList";
+import useAllCardList from "@/hooks/global-data-fetching/useAllCardList";
 import { useCompletedQuizzes } from "@/hooks/global-data-fetching/useCompletedQuizzes";
 import { useCompletedVideos } from "@/hooks/global-data-fetching/useCompletedVideos";
 import useMyCourses from "@/hooks/global-data-fetching/useMyCourses";
 import { Group, Stack, Text } from "@mantine/core";
 import {
-  BookOpenIcon,
+  CourseTypeIcon,
+  FlashcardTypeIcon,
+} from "@/components/icons/productTypeIcons";
+import {
   BrainIcon,
   CalendarXIcon,
-  CardsIcon,
   CheckCircleIcon,
   ClockIcon,
   PlayCircleIcon,
@@ -44,7 +46,7 @@ const Profile = () => {
   const { completedCount } = useCompletedVideos();
   const { completedCount: answeredQuizCount } = useCompletedQuizzes();
   const { stats } = useMyCourses();
-  const { flashcards } = useAllFlashcardList();
+  const { cards } = useAllCardList();
 
   // Flashcards/Memo Space progress is tracked client-side (no backend
   // endpoint yet), so it's read from localStorage after mount - starts at 0
@@ -65,9 +67,9 @@ const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
-  const totalFlashcards = flashcards.length;
-  const learnedPct = totalFlashcards
-    ? Math.round((learnedCount / totalFlashcards) * 100)
+  const totalCards = cards.length;
+  const learnedPct = totalCards
+    ? Math.round((learnedCount / totalCards) * 100)
     : 0;
 
   return (
@@ -94,7 +96,7 @@ const Profile = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <StatTile
             layout="graphic"
-            icon={<BookOpenIcon size={18} weight="fill" />}
+            icon={<CourseTypeIcon size={18} weight="fill" />}
             value={stats.total}
             label="Enrolled"
             tone={stats.total > 0 ? "brand" : "neutral"}
@@ -150,8 +152,8 @@ const Profile = () => {
             tone={answeredQuizCount > 0 ? "success" : "neutral"}
           />
           <StatTile
-            icon={<CardsIcon size={18} weight="fill" />}
-            value={`${learnedCount}/${totalFlashcards}`}
+            icon={<FlashcardTypeIcon size={18} weight="fill" />}
+            value={`${learnedCount}/${totalCards}`}
             label="Flashcards learned"
             caption={`${learnedPct}% of the deck reviewed`}
             progress={learnedPct}

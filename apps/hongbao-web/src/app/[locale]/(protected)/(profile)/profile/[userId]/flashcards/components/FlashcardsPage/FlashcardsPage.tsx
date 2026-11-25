@@ -4,8 +4,8 @@ import { pluralize } from "@/utils/pluralize";
 import { Center, Loader, Paper, Select, Stack, Text } from "@mantine/core";
 import { ArrowLeftIcon } from "@phosphor-icons/react";
 import Link from "next/link";
-import FlashcardDialog from "../FlashcardDialog/FlashcardDialog";
-import FlashcardTile from "../FlashcardTile/FlashcardTile";
+import CardDialog from "../CardDialog/CardDialog";
+import CardTile from "../CardTile/CardTile";
 import useContainer from "./useContainer";
 
 const FlashcardsPage = () => {
@@ -82,12 +82,12 @@ const FlashcardsPage = () => {
       ) : (
         <div className="grid! grid-cols-2! sm:grid-cols-3! lg:grid-cols-4! gap-3! sm:gap-4!">
           {cards.map((c, i) => (
-            <FlashcardTile key={c.id} card={c} onClick={() => openAt(i)} />
+            <CardTile key={c.id} card={c} onClick={() => openAt(i)} />
           ))}
         </div>
       )}
 
-      <FlashcardDialog
+      <CardDialog
         card={activeCard}
         index={activeIndex}
         total={cards.length}

@@ -4,10 +4,13 @@ import useContainer from "@/app/[locale]/(dashboard)/dashboard/users/purchases/c
 import { TPurchaseActionTarget } from "@/app/[locale]/(dashboard)/dashboard/users/purchases/hooks/usePurchaseActions";
 import { Button, Text } from "@mantine/core";
 import {
-  BookOpenIcon,
+  CourseTypeIcon,
+  FlashcardTypeIcon,
+  MockTestTypeIcon,
+} from "@/components/icons/productTypeIcons";
+import {
   CheckCircleIcon,
   CreditCardIcon,
-  ExamIcon,
   InfoIcon,
   WarningIcon,
 } from "@phosphor-icons/react";
@@ -62,13 +65,17 @@ const ApproveModal: React.FC<Props> = ({ purchase, onConfirm, onCancel }) => {
                   className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
                     item.type === "mock-test"
                       ? "bg-hongbao-orange-50 text-hongbao-orange-600"
-                      : "bg-hongbao-red-50 text-hongbao-red-600"
+                      : item.type === "flashcard"
+                        ? "bg-hongbao-gold-50 text-hongbao-gold-700"
+                        : "bg-hongbao-red-50 text-hongbao-red-600"
                   }`}
                 >
                   {item.type === "mock-test" ? (
-                    <ExamIcon size={14} weight="fill" />
+                    <MockTestTypeIcon size={14} weight="fill" />
+                  ) : item.type === "flashcard" ? (
+                    <FlashcardTypeIcon size={14} weight="fill" />
                   ) : (
-                    <BookOpenIcon size={14} weight="fill" />
+                    <CourseTypeIcon size={14} weight="fill" />
                   )}
                 </div>
                 <div className="min-w-0">

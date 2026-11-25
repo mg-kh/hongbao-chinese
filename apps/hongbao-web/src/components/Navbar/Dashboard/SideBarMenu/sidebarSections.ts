@@ -1,5 +1,6 @@
 import {
   ATTACH_QUIZ,
+  CARD_LIST,
   CATEGORY_LIST,
   COURSE_LIST,
   CREATE_HANZI_GRID,
@@ -76,7 +77,10 @@ export const getSidebarSections = (
       },
       {
         group: "Flashcards",
-        links: [{ label: "Flashcard", href: FLASHCARD_LIST }],
+        links: [
+          { label: "Flashcard", href: FLASHCARD_LIST },
+          { label: "Cards", href: CARD_LIST },
+        ],
       },
       {
         group: "Mock Tests",

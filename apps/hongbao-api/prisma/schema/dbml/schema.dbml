@@ -2,6 +2,20 @@
 //// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 //// ------------------------------------------------------
 
+Table Card {
+  id String [pk]
+  cnWord String [not null]
+  pinyin String [not null]
+  type String [not null]
+  meaningEn String [not null]
+  meaningMm String [not null]
+  flashcardId String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  exampleUsage Json [not null, default: '[]']
+  flashcard Flashcard
+}
+
 Table Category {
   id String [pk]
   name String [unique, not null]
@@ -96,16 +110,16 @@ Table Feedback {
 
 Table Flashcard {
   id String [pk]
-  cnWord String [not null]
-  pinyin String [not null]
-  type String [not null]
-  meaningEn String [not null]
-  meaningMm String [not null]
+  name String [not null]
+  price Int [not null, default: 0]
+  published Boolean [not null, default: false]
   categoryId String [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  exampleUsage Json [not null, default: '[]']
   category Category [not null]
+  cards Card [not null]
+  enrollments Enrollment [not null]
+  purchaseItems PurchaseItem [not null]
 }
 
 Table Lesson {
@@ -185,6 +199,7 @@ Table PurchaseItem {
   purchaseId String [not null]
   courseId String
   mockTestId String
+  flashcardId String
   productName String [not null]
   price Int [not null]
   durationDays Int
@@ -193,6 +208,7 @@ Table PurchaseItem {
   purchase Purchase [not null]
   course Course
   mockTest MockTest
+  flashcard Flashcard
 }
 
 Table Enrollment {
@@ -200,6 +216,7 @@ Table Enrollment {
   userId String [not null]
   courseId String
   mockTestId String
+  flashcardId String
   orderNo String [not null]
   status EnrollmentStatus [not null, default: 'PENDING']
   startedAt DateTime
@@ -209,10 +226,12 @@ Table Enrollment {
   user User [not null]
   course Course
   mockTest MockTest
+  flashcard Flashcard
 
   indexes {
     (userId, courseId) [unique]
     (userId, mockTestId) [unique]
+    (userId, flashcardId) [unique]
   }
 }
 
@@ -387,6 +406,8 @@ Enum Role {
   STAFF
 }
 
+Ref: Card.flashcardId > Flashcard.id [delete: Set Null]
+
 Ref: CouponCourse.couponId > Coupon.id [delete: Cascade]
 
 Ref: CouponCourse.courseId > Course.id [delete: Cascade]
@@ -421,11 +442,15 @@ Ref: PurchaseItem.courseId > Course.id [delete: Set Null]
 
 Ref: PurchaseItem.mockTestId > MockTest.id [delete: Set Null]
 
+Ref: PurchaseItem.flashcardId > Flashcard.id [delete: Set Null]
+
 Ref: Enrollment.userId > User.id [delete: Cascade]
 
 Ref: Enrollment.courseId > Course.id [delete: Cascade]
 
 Ref: Enrollment.mockTestId > MockTest.id [delete: Cascade]
+
+Ref: Enrollment.flashcardId > Flashcard.id [delete: Cascade]
 
 Ref: Question.quizId > Quiz.id
 

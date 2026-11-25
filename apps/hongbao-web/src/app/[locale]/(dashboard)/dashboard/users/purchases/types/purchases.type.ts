@@ -5,6 +5,7 @@ export type TPurchaseItem = {
   purchaseId: string;
   courseId: string | null;
   mockTestId: string | null;
+  flashcardId: string | null;
   /** Snapshot of the product name at checkout. */
   productName: string;
   price: number;
@@ -14,6 +15,7 @@ export type TPurchaseItem = {
   createdAt: string;
   course: { id?: string; title: string } | null;
   mockTest: { id?: string; title: string } | null;
+  flashcard: { id?: string; name: string } | null;
 };
 
 export type TPurchase = {

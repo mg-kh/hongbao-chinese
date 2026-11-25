@@ -22,7 +22,6 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import {
   IconArticle,
-  IconBook,
   IconBuildingStore,
   IconCaretDownFilled,
   IconChevronRight,
@@ -32,8 +31,11 @@ import {
   IconShieldCheck,
   IconSparkles,
   IconUser,
-  IconWriting,
 } from "@tabler/icons-react";
+import {
+  CourseTypeIcon,
+  MockTestTypeIcon,
+} from "@/components/icons/productTypeIcons";
 import Image from "next/image";
 import CartButton from "./components/CartButton/CartButton";
 
@@ -291,7 +293,7 @@ const ClientNavbar = () => {
                     component={Link}
                     leftSection={
                       <Box className="flex! items-center! justify-center! w-8! h-8! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600!">
-                        <IconBook size={15} />
+                        <CourseTypeIcon size={15} />
                       </Box>
                     }
                   >
@@ -462,7 +464,7 @@ const ClientNavbar = () => {
                 onClick={closeMenu}
               />
               <DrawerRow
-                icon={<IconBook size={18} />}
+                icon={<CourseTypeIcon size={18} />}
                 label="My courses"
                 href={`/profile/${user?.id}/my-courses`}
                 onClick={closeMenu}
@@ -549,7 +551,7 @@ const ClientNavbar = () => {
             />
             <CartButton variant="row" onNavigate={closeMenu} />
             <DrawerRow
-              icon={<IconWriting size={18} />}
+              icon={<MockTestTypeIcon size={18} />}
               label="Mock Test"
               href="/mock-test"
               onClick={closeMenu}
