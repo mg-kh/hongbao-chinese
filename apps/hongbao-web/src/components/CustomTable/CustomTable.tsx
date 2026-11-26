@@ -46,7 +46,7 @@ const CustomTable = <T,>({
   const colCount = (columns?.length ?? 1) + (withNo ? 1 : 0);
 
   return (
-    <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-lg border border-gray-200 bg-surface shadow-sm">
       {header && (
         <div className="border-b border-gray-200 bg-gray-50 px-4 py-3">
           {header}

@@ -44,7 +44,7 @@ const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
         centered
       >
         <Stack justify="center" align="center" gap={20} py={10}>
-          <Box className="flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600!">
+          <Box className="flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
             <WarningCircleIcon size={34} weight="fill" />
           </Box>
           <Stack gap={8}>
@@ -87,7 +87,7 @@ const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
       </Modal>
 
       <Stack gap={20}>
-        <Box className="rounded-2xl! bg-white! p-4! ring-1! ring-gray-200! sm:p-5!">
+        <Box className="rounded-2xl! bg-surface! p-4! ring-1! ring-gray-200! sm:p-5!">
           <CheckoutProgress
             steps={STEP_LABELS}
             current={step}
@@ -97,7 +97,7 @@ const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
 
         <CheckoutSummary />
 
-        <Box className="rounded-2xl! bg-white! p-4! ring-1! ring-gray-200! sm:p-6!">
+        <Box className="rounded-2xl! bg-surface! p-4! ring-1! ring-gray-200! sm:p-6!">
           {step === 0 && <ContactDetails />}
           {step === 1 && <PaymentMethod />}
           {step === 2 && <UploadProof />}
@@ -108,7 +108,7 @@ const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
         mt="xl"
         p={{ base: 12, sm: 15 }}
         bdrs={15}
-        bg={"white"}
+        bg="var(--hb-surface)"
         gap={12}
         wrap="nowrap"
         justify="space-between"

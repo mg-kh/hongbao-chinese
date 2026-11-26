@@ -63,7 +63,7 @@ const PageComponent = () => {
     return (
       <Paper withBorder bdrs={20} p={{ base: 28, sm: 40 }}>
         <Stack align="center" gap={10}>
-          <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600!">
+          <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
             <SealQuestionIcon size={26} weight="fill" />
           </Box>
           <Text fw={700}>No questions yet</Text>
@@ -154,7 +154,7 @@ const PageComponent = () => {
                         isCurrent
                           ? "bg-hongbao-red-600! text-white! shadow-sm!"
                           : done
-                            ? "bg-hongbao-red-50! text-hongbao-red-600!"
+                            ? "bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!"
                             : "bg-gray-100! text-gray-500! hover:bg-gray-200!"
                       }`}
                     >

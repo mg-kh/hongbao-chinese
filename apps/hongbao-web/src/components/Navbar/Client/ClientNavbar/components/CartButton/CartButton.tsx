@@ -33,7 +33,7 @@ const CartButton: React.FC<Props> = ({ variant = "icon", onNavigate }) => {
       >
         <span
           key={bumpKey}
-          className="flex! items-center! justify-center! w-9! h-9! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600! shrink-0! motion-safe:[animation:cart-bump_0.5s_ease-in-out]"
+          className="flex! items-center! justify-center! w-9! h-9! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red! shrink-0! motion-safe:[animation:cart-bump_0.5s_ease-in-out]"
         >
           <IconShoppingBag size={18} />
         </span>
@@ -54,7 +54,7 @@ const CartButton: React.FC<Props> = ({ variant = "icon", onNavigate }) => {
       href="/shop/cart"
       onClick={onNavigate}
       aria-label={`Cart${badge > 0 ? `, ${pluralize(badge, "item")}` : ""}`}
-      className="no-underline! flex! items-center! justify-center! w-10! h-10! rounded-full! border! border-gray-200! bg-white! text-gray-700! transition-colors! duration-200! ease-out! hover:border-hongbao-red-200! hover:bg-hongbao-cream-50! hover:text-hongbao-red-600!"
+      className="no-underline! flex! items-center! justify-center! w-10! h-10! rounded-full! border! border-gray-200! bg-surface! text-gray-700! transition-colors! duration-200! ease-out! hover:border-hongbao-red-200! hover:bg-hongbao-cream-50! hover:text-hongbao-red-600! dark:hover:text-night-red!"
     >
       <Indicator
         disabled={badge === 0}

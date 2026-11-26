@@ -83,7 +83,7 @@ const PageComponent = () => {
                   className={`flex! items-center! gap-2! shrink-0! rounded-full! border! px-3.5! py-1.5! text-xs! font-semibold! cursor-pointer! transition-colors! duration-200! ease-out! ${
                     active
                       ? "border-hongbao-red-500! bg-hongbao-red-500! text-white!"
-                      : "border-gray-200! bg-white! text-gray-600! hover:border-hongbao-red-200! hover:text-hongbao-red-600!"
+                      : "border-gray-200! bg-surface! text-gray-600! hover:border-hongbao-red-200! hover:text-hongbao-red-600! dark:hover:text-night-red!"
                   }`}
                 >
                   {f.label}
@@ -118,7 +118,7 @@ const PageComponent = () => {
           className="border-dashed! border-gray-300! bg-gray-50/60!"
         >
           <Stack align="center" gap={14}>
-            <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600!">
+            <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
               <ShoppingCartIcon size={26} />
             </Box>
             <Text ta={"center"} c="gray.7">

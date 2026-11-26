@@ -26,7 +26,7 @@ const ClientLayout: React.FC<Props> = ({
 }) => {
   return (
     <AppShell header={{ height: 80 }}>
-      <AppShell.Header className="bg-white/85! backdrop-blur-md! border-b! border-gray-200/80! shadow-[0_1px_12px_-6px_rgba(0,0,0,0.15)]!">
+      <AppShell.Header className="bg-surface/85! backdrop-blur-md! border-b! border-gray-200/80! shadow-[0_1px_12px_-6px_rgba(0,0,0,0.15)]!">
         <ClientNavbar />
       </AppShell.Header>
       <AppShell.Main bg="gray.0">

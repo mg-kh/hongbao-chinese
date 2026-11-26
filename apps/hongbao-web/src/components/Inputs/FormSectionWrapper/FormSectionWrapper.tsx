@@ -13,7 +13,7 @@ const FormSectionWrapper: React.FC<Props> = ({
   actions,
 }) => {
   return (
-    <Stack p={20} gap={5} bg="white" bdrs={10}>
+    <Stack p={20} gap={5} bg="var(--hb-surface)" bdrs={10}>
       <Flex justify="space-between" align="center">
         <Text c={"gray"}>{sectionTitle}</Text>
         {actions}

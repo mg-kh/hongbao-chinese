@@ -55,7 +55,7 @@ const CartPage = () => {
                 ]}
               />
               {isReady && count > 0 && (
-                <span className="mb-1! shrink-0! rounded-full! bg-hongbao-red-50! px-2.5! py-0.5! text-xs! font-bold! text-hongbao-red-700!">
+                <span className="mb-1! shrink-0! rounded-full! bg-hongbao-red-50! px-2.5! py-0.5! text-xs! font-bold! text-hongbao-red-700! dark:text-night-red!">
                   {pluralize(count, "item")}
                 </span>
               )}
@@ -64,7 +64,7 @@ const CartPage = () => {
               <button
                 type="button"
                 onClick={clearCart}
-                className="flex! items-center! gap-1! text-xs! font-semibold! text-gray-500! transition-colors! duration-200! hover:text-hongbao-red-600! cursor-pointer!"
+                className="flex! items-center! gap-1! text-xs! font-semibold! text-gray-500! transition-colors! duration-200! hover:text-hongbao-red-600! dark:hover:text-night-red! cursor-pointer!"
               >
                 <IconTrash size={13} />
                 Clear cart
@@ -73,8 +73,8 @@ const CartPage = () => {
           </Group>
 
           {!isReady ? null : isEmpty ? (
-            <Box className="rounded-2xl! bg-white! ring-1! ring-gray-200! py-16! px-6! text-center!">
-              <Box className="mx-auto! mb-4! flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600!">
+            <Box className="rounded-2xl! bg-surface! ring-1! ring-gray-200! py-16! px-6! text-center!">
+              <Box className="mx-auto! mb-4! flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
                 <ShoppingBagIcon size={28} weight="fill" />
               </Box>
               <Text fw={700} className="text-gray-900!">
@@ -96,7 +96,7 @@ const CartPage = () => {
             </Box>
           ) : (
             <div className="grid! grid-cols-1! lg:grid-cols-[1fr_360px]! gap-6! lg:gap-8! items-start!">
-              <Box className="overflow-hidden! rounded-2xl! bg-white! ring-1! ring-gray-200!">
+              <Box className="overflow-hidden! rounded-2xl! bg-surface! ring-1! ring-gray-200!">
                 {/* seller row */}
                 <Group
                   gap={8}
@@ -149,7 +149,7 @@ const CartPage = () => {
 
       {/* mobile sticky checkout bar - thumb zone */}
       {isReady && !isEmpty && (
-        <Box className="lg:hidden! fixed! bottom-16! left-0! right-0! z-40! border-t! border-gray-200! bg-white/95! backdrop-blur-md! px-4! py-2.5! shadow-[0_-4px_16px_-8px_rgba(0,0,0,0.2)]!">
+        <Box className="lg:hidden! fixed! bottom-16! left-0! right-0! z-40! border-t! border-gray-200! bg-surface/95! backdrop-blur-md! px-4! py-2.5! shadow-[0_-4px_16px_-8px_rgba(0,0,0,0.2)]!">
           <Stack gap={8}>
             <Checkbox
               checked={agreedToTerms}

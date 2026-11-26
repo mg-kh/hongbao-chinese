@@ -1,5 +1,6 @@
 "use client";
 
+import ColorSchemeToggle from "@/components/ColorSchemeToggle/ColorSchemeToggle";
 import { CourseTypeIcon } from "@/components/icons/productTypeIcons";
 import { TUser } from "@/types/user";
 import { Avatar, Badge, Container, Group, Menu } from "@mantine/core";
@@ -21,7 +22,9 @@ const DashboardNavbar: React.FC<Props> = ({ burgerComponent }) => {
             <Image src={"/assets/logo.svg"} width={40} height={40} alt="logo" />
           </Link> */}
         </Group>
-        <Group className="hidden! md:flex!">
+        <Group gap={10} wrap="nowrap">
+          <ColorSchemeToggle />
+          <Group className="hidden! md:flex!">
           {/* <Menu shadow="md" width={200} offset={5}>
             <Menu.Target>
               <Group gap={5}>
@@ -54,6 +57,7 @@ const DashboardNavbar: React.FC<Props> = ({ burgerComponent }) => {
               </Menu.Item>
             </Menu.Dropdown>
           </Menu> */}
+          </Group>
         </Group>
       </Group>
     </Container>

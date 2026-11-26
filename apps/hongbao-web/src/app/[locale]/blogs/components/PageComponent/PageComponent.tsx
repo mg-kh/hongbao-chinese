@@ -45,7 +45,7 @@ const PageComponent = () => {
               leftSection={<MagnifyingGlassIcon size={16} />}
               classNames={{
                 input:
-                  "border-0! bg-gray-100! focus:bg-white! focus:ring-1! focus:ring-hongbao-red-200!",
+                  "border-0! bg-gray-100! focus:bg-surface! focus:ring-1! focus:ring-hongbao-red-200!",
               }}
             />
             <div className="mt-2.5! flex! gap-2! overflow-x-auto! [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -73,7 +73,7 @@ const PageComponent = () => {
           {/* list */}
           {total === 0 ? (
             <Stack align="center" gap={10} className="py-20!">
-              <Box className="flex! h-14! w-14! items-center! justify-center! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600!">
+              <Box className="flex! h-14! w-14! items-center! justify-center! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
                 <ArticleIcon size={26} />
               </Box>
               <Text fw={700}>No articles found</Text>

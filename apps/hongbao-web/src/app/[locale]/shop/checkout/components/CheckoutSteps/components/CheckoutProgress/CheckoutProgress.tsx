@@ -59,7 +59,7 @@ const CheckoutProgress: React.FC<Props> = ({ steps, current, onStepClick }) => (
           <span
             className={`mt-2! text-center! text-[11px]! font-semibold! sm:text-xs! ${
               active
-                ? "text-hongbao-red-700!"
+                ? "text-hongbao-red-700! dark:text-night-red!"
                 : done
                   ? "text-gray-700!"
                   : "text-gray-400!"

@@ -22,17 +22,17 @@ const typeMeta: Record<
 > = {
   course: {
     label: "Course",
-    tile: "bg-hongbao-red-50! text-hongbao-red-600!",
+    tile: "bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!",
     icon: <CourseTypeIcon size={14} weight="fill" />,
   },
   "mock-test": {
     label: "Mock Test",
-    tile: "bg-hongbao-orange-50! text-hongbao-orange-600!",
+    tile: "bg-hongbao-orange-50! text-hongbao-orange-600! dark:text-night-orange!",
     icon: <MockTestTypeIcon size={14} weight="fill" />,
   },
   flashcard: {
     label: "Flashcard",
-    tile: "bg-hongbao-gold-50! text-hongbao-gold-700!",
+    tile: "bg-hongbao-gold-50! text-hongbao-gold-700! dark:text-night-gold!",
     icon: <FlashcardTypeIcon size={14} weight="fill" />,
   },
 };
@@ -70,7 +70,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
   subtitle,
   action,
   children,
-  surfaceClassName = "border-gray-200! bg-white!",
+  surfaceClassName = "border-gray-200! bg-surface!",
 }) => {
   const { expanded, toggle, payment, hasDiscount } = useContainer(order);
 
@@ -142,7 +142,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
 
         {/* why it was declined - shown up front so it's seen without expanding */}
         {order.rejectReason && (
-          <div className="mt-2.5 flex items-start gap-1.5 rounded-lg bg-black/[0.04] px-2.5 py-1.5">
+          <div className="mt-2.5 flex items-start gap-1.5 rounded-lg bg-black/[0.04] dark:bg-white/[0.05] px-2.5 py-1.5">
             <InfoIcon
               size={14}
               weight="fill"
@@ -168,7 +168,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
           <Text size="11px" fw={600} c="gray.5" tt="uppercase">
             Total
           </Text>
-          <Text size="sm" fw={800} c="hongbao-red.7">
+          <Text size="sm" fw={800} c="var(--hb-accent-strong)">
             {money(order.total, order.currency)}
           </Text>
         </div>
@@ -216,7 +216,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
                 <Text size="xs" c="gray.6">
                   Discount
                 </Text>
-                <Text size="xs" fw={600} c="hongbao-red.6">
+                <Text size="xs" fw={600} c="var(--hb-accent-text)">
                   -{money(order.subtotal - order.total, order.currency)}
                 </Text>
               </div>

@@ -17,7 +17,7 @@ const BlogCard: React.FC<Props> = ({ blog }) => {
       href={`/blogs/${blog.slug}`}
       withBorder
       bdrs={20}
-      className="group! flex! flex-col! h-full! overflow-hidden! border-gray-200! bg-white! no-underline! shadow-sm! transition-all! duration-200! ease-out! hover:-translate-y-0.5! hover:border-hongbao-red-200! hover:shadow-lg!"
+      className="group! flex! flex-col! h-full! overflow-hidden! border-gray-200! bg-surface! no-underline! shadow-sm! transition-all! duration-200! ease-out! hover:-translate-y-0.5! hover:border-hongbao-red-200! hover:shadow-lg!"
     >
       {/* cover */}
       <Box
@@ -40,7 +40,7 @@ const BlogCard: React.FC<Props> = ({ blog }) => {
       <Stack gap={10} p={18} className="flex-1!">
         <Text
           fw={700}
-          className="text-base! leading-snug! text-gray-900! transition-colors! duration-200! group-hover:text-hongbao-red-600!"
+          className="text-base! leading-snug! text-gray-900! transition-colors! duration-200! group-hover:text-hongbao-red-600! dark:group-hover:text-night-red!"
           lineClamp={2}
         >
           {blog.title}

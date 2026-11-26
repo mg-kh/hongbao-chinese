@@ -14,7 +14,7 @@ const DetailSection: React.FC<Props> = ({ title, icon, extra, children }) => (
     withBorder
     bdrs={12}
     p={0}
-    className="overflow-hidden! border-gray-200! bg-white!"
+    className="overflow-hidden! border-gray-200! bg-surface!"
   >
     <div className="flex items-center justify-between gap-2 border-b border-gray-100 px-4 py-2.5">
       <div className="flex items-center gap-2 text-gray-500">

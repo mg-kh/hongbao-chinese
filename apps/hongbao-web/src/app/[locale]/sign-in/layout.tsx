@@ -22,6 +22,7 @@ export default function AuthLayout({
                   component={Link}
                   href={HOME}
                   color="dark"
+                  c="var(--hb-text)"
                 >
                   <IconArrowLeft />
                 </ActionIcon>

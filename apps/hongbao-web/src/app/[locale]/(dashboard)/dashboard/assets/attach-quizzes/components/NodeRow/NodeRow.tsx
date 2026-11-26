@@ -26,7 +26,7 @@ const DEPTH_PADDING: Record<Props["depth"], string> = {
 const NodeRow: React.FC<Props> = ({
   depth,
   icon,
-  accentClass = "text-blue-600",
+  accentClass = "text-blue-600 dark:text-night-blue",
   title,
   quizzesCount,
   expanded,
@@ -37,7 +37,7 @@ const NodeRow: React.FC<Props> = ({
   return (
     <div
       className={cn(
-        "flex items-center gap-2 rounded-lg border border-gray-200 bg-white pr-2 transition-colors hover:border-blue-300 hover:bg-blue-50/40",
+        "flex items-center gap-2 rounded-lg border border-gray-200 bg-surface pr-2 transition-colors hover:border-blue-300 hover:bg-blue-50/40",
         expanded && "border-blue-300 bg-blue-50/40",
         DEPTH_PADDING[depth],
       )}

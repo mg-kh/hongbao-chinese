@@ -28,7 +28,7 @@ const CourseNode: React.FC<Props> = ({ course }) => {
       <NodeRow
         depth={0}
         icon={<IconSchool size={17} />}
-        accentClass="text-blue-600"
+        accentClass="text-blue-600 dark:text-night-blue"
         title={course.title}
         quizzesCount={course.quizzesCount}
         expanded={expanded}

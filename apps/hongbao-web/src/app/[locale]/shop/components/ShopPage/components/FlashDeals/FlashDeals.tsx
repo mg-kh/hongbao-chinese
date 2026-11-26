@@ -28,7 +28,7 @@ const FlashDeals: React.FC<Props> = ({ deals }) => {
           <span className="flex! items-center! justify-center! w-8! h-8! rounded-lg! bg-hongbao-red-500! text-white!">
             <LightningIcon size={18} weight="fill" />
           </span>
-          <Text fw={800} className="text-[17px]!" c="hongbao-red.7">
+          <Text fw={800} className="text-[17px]!" c="var(--hb-accent-strong)">
             Flash Deals
           </Text>
         </div>
@@ -40,13 +40,13 @@ const FlashDeals: React.FC<Props> = ({ deals }) => {
           {parts ? (
             <div className="flex! items-center! gap-1!">
               <TimeBox value={parts.hours} />
-              <span className="text-xs! font-extrabold! text-hongbao-maroon-900!">:</span>
+              <span className="text-xs! font-extrabold! text-hongbao-maroon-900! dark:text-night-maroon!">:</span>
               <TimeBox value={parts.minutes} />
-              <span className="text-xs! font-extrabold! text-hongbao-maroon-900!">:</span>
+              <span className="text-xs! font-extrabold! text-hongbao-maroon-900! dark:text-night-maroon!">:</span>
               <TimeBox value={parts.seconds} />
             </div>
           ) : (
-            <div className="h-[22px]! w-[104px]! rounded-md! bg-hongbao-maroon-900/10!" />
+            <div className="h-[22px]! w-[104px]! rounded-md! bg-hongbao-maroon-900/10! dark:bg-white/8!" />
           )}
         </div>
       </div>

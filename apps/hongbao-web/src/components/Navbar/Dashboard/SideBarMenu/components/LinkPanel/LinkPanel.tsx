@@ -17,7 +17,7 @@ const LinkPanel: React.FC<Props> = ({
 }) => {
   return (
     <div className="flex min-w-0 flex-1 flex-col bg-gray-50">
-      <div className="flex h-15 shrink-0 grow-0 items-center border-b border-gray-200 bg-white px-4 text-lg font-semibold text-hongbao-brown-800">
+      <div className="flex h-15 shrink-0 grow-0 items-center border-b border-gray-200 bg-surface px-4 text-lg font-semibold text-hongbao-brown-800 dark:text-night-brown">
         {title}
       </div>
 

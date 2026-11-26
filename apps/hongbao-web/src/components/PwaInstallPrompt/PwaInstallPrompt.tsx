@@ -55,7 +55,7 @@ const PwaInstallPrompt: React.FC = () => {
         />
 
         <Stack align="center" gap={12} className="relative!">
-          <Box className="flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-white! shadow-lg!">
+          <Box className="flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-surface! shadow-lg!">
             <Image src={"/assets/logo.svg"} width={44} height={44} alt="" />
           </Box>
           <Text
@@ -78,7 +78,7 @@ const PwaInstallPrompt: React.FC = () => {
         <Stack gap={9}>
           {perks.map((p) => (
             <Group key={p.label} gap={10} wrap="nowrap">
-              <Box className="flex! items-center! justify-center! shrink-0! w-7! h-7! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600!">
+              <Box className="flex! items-center! justify-center! shrink-0! w-7! h-7! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
                 {p.icon}
               </Box>
               <Text size="sm" fw={600} c="gray.7">

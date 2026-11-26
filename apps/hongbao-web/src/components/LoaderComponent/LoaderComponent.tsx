@@ -14,7 +14,7 @@ const LoaderComponent: React.FC<Props> = ({
 }) => {
   return (
     <Center className={cn(wrapperClass)} h={h}>
-      <Paper bg={"white"} py={20} px={30} bdrs={15}>
+      <Paper bg="var(--hb-surface)" py={20} px={30} bdrs={15}>
         <Loader color="blue" {...props} />
       </Paper>
     </Center>

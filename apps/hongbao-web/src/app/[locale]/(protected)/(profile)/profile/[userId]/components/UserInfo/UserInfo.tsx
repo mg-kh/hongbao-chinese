@@ -51,9 +51,9 @@ const UserInfo = () => {
     useContainer();
 
   return (
-    <article className="group overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+    <article className="group overflow-hidden rounded-3xl border border-gray-200 bg-surface shadow-sm">
       {/* ---------- identity panel ---------- */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-hongbao-red-50 via-white to-hongbao-gold-50 px-5 py-5 sm:px-7 sm:py-6">
+      <div className="relative overflow-hidden bg-gradient-to-br from-hongbao-red-50 via-surface to-hongbao-gold-50 px-5 py-5 sm:px-7 sm:py-6">
         {/* decorative texture + watermark, hidden from screen readers */}
         <div
           aria-hidden
@@ -76,11 +76,11 @@ const UserInfo = () => {
               radius="xl"
               p={user?.imageUrl ? 0 : 14}
               bg="hongbao-gold.3"
-              className="ring-4! ring-white! shadow-md!"
+              className="ring-4! ring-surface! shadow-md!"
             />
             {daysSinceJoin !== null && daysSinceJoin >= 30 && (
               <Tooltip label={`Learning for ${daysSinceJoin} days`} withArrow>
-                <div className="absolute -bottom-1 -right-1 flex items-center justify-center w-7 h-7 rounded-full bg-hongbao-gold-500 text-white ring-2 ring-white shadow-sm">
+                <div className="absolute -bottom-1 -right-1 flex items-center justify-center w-7 h-7 rounded-full bg-hongbao-gold-500 text-white ring-2 ring-surface shadow-sm">
                   <SparkleIcon size={14} weight="fill" />
                 </div>
               </Tooltip>

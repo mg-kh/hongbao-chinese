@@ -114,7 +114,7 @@ const SideBarNavigation = () => {
                   className={`flex! items-center! justify-center! shrink-0! w-8! h-8! rounded-lg! transition-colors! duration-200! ease-out! ${
                     active
                       ? "bg-gradient-to-br! from-hongbao-red-500! to-hongbao-maroon-600! text-white! shadow-sm!"
-                      : "bg-gray-100! text-gray-500! group-hover:bg-hongbao-red-50! group-hover:text-hongbao-red-600!"
+                      : "bg-gray-100! text-gray-500! group-hover:bg-hongbao-red-50! group-hover:text-hongbao-red-600! dark:group-hover:text-night-red!"
                   }`}
                 >
                   {item.icon}

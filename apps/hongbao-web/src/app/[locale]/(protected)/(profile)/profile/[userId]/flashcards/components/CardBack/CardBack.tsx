@@ -20,7 +20,7 @@ import React from "react";
 
 /** White surface with a hairline border - the same frame as the course card. */
 const sectionCard =
-  "rounded-xl! border! border-gray-100! bg-white! p-4! sm:p-5!";
+  "rounded-xl! border! border-gray-100! bg-surface! p-4! sm:p-5!";
 
 interface Props {
   card: TCard;
@@ -107,7 +107,7 @@ const CardBack: React.FC<Props> = ({ card }) => {
             keepMounted={false}
             classNames={{
               list: "flex! w-full! flex-nowrap! gap-1! rounded-lg! bg-gray-50! p-1! ring-1! ring-gray-100!",
-              tab: "h-9! min-w-0! flex-1! px-2! sm:px-4! text-[13px]! font-semibold! text-gray-500! transition-colors! duration-150! data-active:bg-white! data-active:text-hongbao-red-600! data-active:shadow-sm! data-active:ring-1! data-active:ring-gray-100! not-data-active:hover:text-gray-900!",
+              tab: "h-9! min-w-0! flex-1! px-2! sm:px-4! text-[13px]! font-semibold! text-gray-500! transition-colors! duration-150! data-active:bg-surface! data-active:text-hongbao-red-600! dark:data-active:text-night-red! data-active:shadow-sm! data-active:ring-1! data-active:ring-gray-100! not-data-active:hover:text-gray-900!",
               tabLabel: "min-w-0! flex-none! truncate!",
               tabSection: "me-1.5!",
               panel: "pt-4! pb-1!",

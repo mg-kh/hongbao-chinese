@@ -46,18 +46,18 @@ interface Props {
 const toneStyles = {
   success: {
     ring: "green",
-    text: "text-green-700!",
-    tile: "bg-green-50! text-green-600!",
+    text: "text-green-700! dark:text-night-green!",
+    tile: "bg-green-50! text-green-600! dark:text-night-green!",
   },
   attention: {
     ring: "hongbao-gold",
-    text: "text-hongbao-gold-800!",
-    tile: "bg-hongbao-gold-50! text-hongbao-gold-700!",
+    text: "text-hongbao-gold-800! dark:text-night-gold!",
+    tile: "bg-hongbao-gold-50! text-hongbao-gold-700! dark:text-night-gold!",
   },
   danger: {
     ring: "hongbao-red",
-    text: "text-hongbao-red-700!",
-    tile: "bg-hongbao-red-50! text-hongbao-red-600!",
+    text: "text-hongbao-red-700! dark:text-night-red!",
+    tile: "bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!",
   },
 };
 
@@ -93,7 +93,7 @@ const QuizResult: React.FC<Props> = ({
         withBorder
         bdrs={20}
         p={{ base: 20, sm: 28 }}
-        className="border-gray-200! bg-white! shadow-sm!"
+        className="border-gray-200! bg-surface! shadow-sm!"
       >
         <Group
           gap={24}
@@ -223,7 +223,7 @@ const QuizResult: React.FC<Props> = ({
             onClick={onMarkComplete}
             className={`w-full! sm:w-auto! ${
               isCompleted
-                ? "disabled:bg-green-50! disabled:text-green-700! disabled:cursor-default!"
+                ? "disabled:bg-green-50! disabled:text-green-700! dark:disabled:text-night-green! disabled:cursor-default!"
                 : ""
             }`}
           >
@@ -259,7 +259,7 @@ const QuizResult: React.FC<Props> = ({
             withBorder
             bdrs={16}
             p={{ base: 14, sm: 18 }}
-            className={`bg-white! ${
+            className={`bg-surface! ${
               g.isCorrect
                 ? "border-green-200!"
                 : g.isAnswered
@@ -271,9 +271,9 @@ const QuizResult: React.FC<Props> = ({
               <Box
                 className={`flex! items-center! justify-center! shrink-0! w-8! h-8! rounded-lg! ${
                   g.isCorrect
-                    ? "bg-green-50! text-green-600!"
+                    ? "bg-green-50! text-green-600! dark:text-night-green!"
                     : g.isAnswered
-                      ? "bg-red-50! text-red-600!"
+                      ? "bg-red-50! text-red-600! dark:text-night-red!"
                       : "bg-gray-100! text-gray-400!"
                 }`}
               >
@@ -367,7 +367,7 @@ const QuizResult: React.FC<Props> = ({
                         component="div"
                         size="xs"
                         fw={700}
-                        c="green.7"
+                        c="var(--hb-success-text)"
                         className="flex-1! leading-snug! [&_p]:m-0!"
                         dangerouslySetInnerHTML={{
                           __html: decodeEscapedHtml(g.correct),
@@ -391,7 +391,7 @@ const QuizResult: React.FC<Props> = ({
                     size={14}
                     weight="fill"
                     className={`shrink-0! mt-0.5! ${
-                      g.isCorrect ? "text-green-600!" : "text-hongbao-gold-600!"
+                      g.isCorrect ? "text-green-600! dark:text-night-green!" : "text-hongbao-gold-600! dark:text-night-gold!"
                     }`}
                   />
                   <Text

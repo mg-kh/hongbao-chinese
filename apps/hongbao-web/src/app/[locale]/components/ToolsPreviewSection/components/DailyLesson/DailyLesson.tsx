@@ -47,7 +47,7 @@ const DailyLesson = () => {
           {showErrorOverlay && (
             <Overlay
               zIndex={0}
-              bg={"hongbao-cream.0"}
+              bg="var(--hb-tint-cream)"
               backgroundOpacity={1}
               bdrs={15}
             >
@@ -77,7 +77,7 @@ const DailyLesson = () => {
           {showSuccessOverlay && (
             <Overlay
               zIndex={0}
-              bg={"hongbao-cream.0"}
+              bg="var(--hb-tint-cream)"
               backgroundOpacity={1}
               bdrs={15}
             >
@@ -105,7 +105,7 @@ const DailyLesson = () => {
             </Overlay>
           )}
           <Flex
-            bg={"hongbao-cream.0"}
+            bg="var(--hb-tint-cream)"
             mih={150}
             bdrs={15}
             align={"center"}
