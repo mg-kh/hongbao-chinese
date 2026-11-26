@@ -55,6 +55,8 @@ interface Props {
   action?: React.ReactNode;
   /** View-specific content inside the expandable details panel. */
   children?: React.ReactNode;
+  /** Background + border classes for the card surface (e.g. a status tint). */
+  surfaceClassName?: string;
 }
 
 /**
@@ -68,6 +70,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
   subtitle,
   action,
   children,
+  surfaceClassName = "border-gray-200! bg-white!",
 }) => {
   const { expanded, toggle, payment, hasDiscount } = useContainer(order);
 
@@ -76,7 +79,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
       withBorder
       bdrs={12}
       p={0}
-      className="overflow-hidden! border-gray-200! bg-white!"
+      className={`overflow-hidden! ${surfaceClassName}`}
     >
       {/* ---------- always-visible summary ---------- */}
       <Box className="px-3! pt-3! pb-2.5! sm:px-4!">
@@ -139,7 +142,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
 
         {/* why it was declined - shown up front so it's seen without expanding */}
         {order.rejectReason && (
-          <div className="mt-2.5 flex items-start gap-1.5 rounded-lg bg-gray-50 px-2.5 py-1.5">
+          <div className="mt-2.5 flex items-start gap-1.5 rounded-lg bg-black/[0.04] px-2.5 py-1.5">
             <InfoIcon
               size={14}
               weight="fill"

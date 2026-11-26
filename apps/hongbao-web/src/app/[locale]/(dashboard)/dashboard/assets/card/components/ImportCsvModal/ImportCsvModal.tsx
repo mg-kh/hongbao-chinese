@@ -59,7 +59,8 @@ const ImportCsvModal: React.FC<Props> = ({ opened, onClose }) => {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <Select
             label="Add cards to flashcard"
-            placeholder="No flashcard"
+            placeholder="Select a flashcard"
+            withAsterisk
             data={flashcardDropdownData}
             value={flashcardId}
             onChange={setFlashcardId}
@@ -198,7 +199,7 @@ const ImportCsvModal: React.FC<Props> = ({ opened, onClose }) => {
               <Button
                 onClick={handleImport}
                 loading={isImporting}
-                disabled={!pendingCount}
+                disabled={!pendingCount || !flashcardId}
               >
                 {counts.failed
                   ? `Retry ${pendingCount} row(s)`

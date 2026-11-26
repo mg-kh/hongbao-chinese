@@ -11,6 +11,8 @@ const useContainer = () => {
     stats,
     page,
     setPage,
+    pageSize,
+    setPageSize,
     totalPages,
     filter,
     setFilter,
@@ -28,18 +30,28 @@ const useContainer = () => {
     { value: "CANCELLED", label: "Declined", count: stats.cancelled },
   ];
 
+  /** Item count for the selected status tab. */
+  const activeCount = filters.find((f) => f.value === filter)?.count ?? 0;
+
+  /** Scroll back to the top so the new page starts at its first order. */
+  const changePage = (value: number) => {
+    setPage(value);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return {
     isLoading,
     isFetching,
     stats,
     page,
-    setPage,
+    changePage,
+    pageSize,
+    setPageSize,
     totalPages,
     filter,
     setFilter,
     filters,
-    /** Item count for the selected status tab. */
-    activeCount: filters.find((f) => f.value === filter)?.count ?? 0,
+    activeCount,
     // Already filtered by status on the server.
     filteredOrders: orders,
     dateRange,

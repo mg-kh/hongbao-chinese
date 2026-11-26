@@ -1,16 +1,7 @@
 "use client";
 
 import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
-import { pluralize } from "@/utils/pluralize";
-import {
-  Badge,
-  Button,
-  Center,
-  Loader,
-  Paper,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { Button, Center, Loader, Paper, Stack, Text } from "@mantine/core";
 import Link from "next/link";
 import CardDialog from "@/app/[locale]/(protected)/(profile)/profile/[userId]/flashcards/components/CardDialog/CardDialog";
 import CardTile from "@/app/[locale]/(protected)/(profile)/profile/[userId]/flashcards/components/CardTile/CardTile";
@@ -71,47 +62,22 @@ const FlashcardDetailPage = () => {
             </Button>
           </Stack>
         </Paper>
+      ) : cards.length === 0 ? (
+        <Paper
+          withBorder
+          bdrs={20}
+          p={{ base: 28, sm: 40 }}
+          className={emptyClass}
+        >
+          <Text c="gray.6">No cards in this flashcard yet.</Text>
+        </Paper>
       ) : (
-        <>
-          <Stack gap={6}>
-            {flashcard.category?.name && (
-              <Badge
-                variant="light"
-                color="hongbao-red"
-                radius="sm"
-                className="w-fit!"
-              >
-                {flashcard.category.name}
-              </Badge>
-            )}
-            <Text size="sm" c="gray.6">
-              Tap a card to open it · {pluralize(cards.length, "card")}
-            </Text>
-          </Stack>
-
-          {cards.length === 0 ? (
-            <Paper
-              withBorder
-              bdrs={20}
-              p={{ base: 28, sm: 40 }}
-              className={emptyClass}
-            >
-              <Text c="gray.6">No cards in this flashcard yet.</Text>
-            </Paper>
-          ) : (
-            <div className="grid! grid-cols-[repeat(auto-fill,minmax(104px,1fr))]! gap-2! sm:grid-cols-[repeat(auto-fill,minmax(128px,1fr))]! sm:gap-3!">
-              {cards.map((c, i) => (
-                <CardTile
-                  key={c.id}
-                  card={c}
-                  onClick={() => setActiveIndex(i)}
-                />
-              ))}
-            </div>
-          )}
-        </>
+        <div className="grid! grid-cols-[repeat(auto-fill,minmax(104px,1fr))]! gap-2! sm:grid-cols-[repeat(auto-fill,minmax(128px,1fr))]! sm:gap-3!">
+          {cards.map((c, i) => (
+            <CardTile key={c.id} card={c} onClick={() => setActiveIndex(i)} />
+          ))}
+        </div>
       )}
-
 
       <CardDialog
         cards={cards}

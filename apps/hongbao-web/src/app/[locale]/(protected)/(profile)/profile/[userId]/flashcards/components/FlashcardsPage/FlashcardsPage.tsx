@@ -1,7 +1,6 @@
 "use client";
 
 import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
-import { pluralize } from "@/utils/pluralize";
 import { Button, Center, Loader, Paper, Stack, Text } from "@mantine/core";
 import Link from "next/link";
 import FlashcardTile from "../FlashcardTile/FlashcardTile";
@@ -23,10 +22,6 @@ const FlashcardsPage = () => {
           },
         ]}
       />
-
-      <Text size="sm" c="gray.6">
-        Your enrolled flashcards. Pick one to start drilling.
-      </Text>
 
       {isLoading ? (
         <Center py={60}>
@@ -54,20 +49,15 @@ const FlashcardsPage = () => {
           </Stack>
         </Paper>
       ) : (
-        <>
-          <Text size="xs" c="gray.5">
-            {pluralize(flashcards.length, "flashcard")}
-          </Text>
-          <div className="grid! grid-cols-1! sm:grid-cols-2! lg:grid-cols-3! gap-3! sm:gap-4!">
-            {flashcards.map((f) => (
-              <FlashcardTile
-                key={f.id}
-                flashcard={f}
-                href={`/profile/${userId}/flashcards/${f.id}`}
-              />
-            ))}
-          </div>
-        </>
+        <div className="grid! grid-cols-1! sm:grid-cols-2! md:grid-cols-3! gap-3!">
+          {flashcards.map((f) => (
+            <FlashcardTile
+              key={f.id}
+              flashcard={f}
+              href={`/profile/${userId}/flashcards/${f.id}`}
+            />
+          ))}
+        </div>
       )}
     </Stack>
   );

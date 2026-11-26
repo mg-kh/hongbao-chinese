@@ -88,7 +88,7 @@ const useContainer = ({ onClose }: { onClose: () => void }) => {
    */
   const handleImport = async () => {
     const queue = pendingRows;
-    if (!queue.length) return;
+    if (!queue.length || !flashcardId) return;
     setIsImporting(true);
     let created = 0;
 

@@ -3,6 +3,7 @@
 import useApiQuery from "@/hooks/fetching/useApiQuery";
 import { toPurchaseCardOrder } from "@/utils/purchaseOrder";
 import { DatesRangeValue } from "@mantine/dates";
+import { DEFAULT_PAGE_SIZE } from "@/constants/pagination";
 import { keepPreviousData } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import {
@@ -12,7 +13,6 @@ import {
   TPurchaseOrder,
 } from "../../types/purchase-history.type";
 
-const PAGE_LIMIT = 10;
 
 const toOrder = (p: TMyPurchase): TPurchaseOrder => ({
   ...toPurchaseCardOrder(p),
@@ -28,6 +28,13 @@ const toOrder = (p: TMyPurchase): TPurchaseOrder => ({
  */
 const usePurchaseOrders = () => {
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSizeState] = useState<number>(Number(DEFAULT_PAGE_SIZE));
+
+  /** A new page size re-slices the list, so start over from the first page. */
+  const setPageSize = (value: number) => {
+    setPageSizeState(value);
+    setPage(1);
+  };
   const [filter, setFilterState] = useState<OrderFilter>("ALL");
 
   /** Switching tabs starts over from the first page. */
@@ -55,7 +62,7 @@ const usePurchaseOrders = () => {
     key: "my-purchases",
     params: {
       page,
-      limit: PAGE_LIMIT,
+      limit: pageSize,
       ...(filter !== "ALL" && { status: filter }),
       start_date: (startDate as string) || "",
       end_date: (endDate as string) || "",
@@ -84,6 +91,8 @@ const usePurchaseOrders = () => {
     stats,
     page,
     setPage,
+    pageSize,
+    setPageSize,
     totalPages: data?.totalPage || 1,
     filter,
     setFilter,

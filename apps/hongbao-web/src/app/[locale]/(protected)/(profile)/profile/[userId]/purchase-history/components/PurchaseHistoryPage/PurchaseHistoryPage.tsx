@@ -10,6 +10,7 @@ import {
   Group,
   Pagination,
   Paper,
+  Select,
   Stack,
   Text,
 } from "@mantine/core";
@@ -20,6 +21,7 @@ import {
 } from "@phosphor-icons/react";
 import { isEmpty } from "lodash";
 import { useParams } from "next/navigation";
+import { PAGE_SIZE_OPTIONS } from "@/constants/pagination";
 import OrderCard from "../OrderCard/OrderCard";
 import useContainer from "./useContainer";
 
@@ -37,7 +39,9 @@ const PurchaseHistoryPage = () => {
     isLoading,
     isFetching,
     page,
-    setPage,
+    changePage,
+    pageSize,
+    setPageSize,
     totalPages,
     filter,
     setFilter,
@@ -112,12 +116,7 @@ const PurchaseHistoryPage = () => {
 
       {/* item count for the active filter */}
       {hasAnyOrders && !isLoading && (
-        <Group
-          gap={8}
-          align="center"
-          wrap="wrap"
-          className="border-b! border-gray-100! pb-3!"
-        >
+        <Group gap={8} align="center" wrap="wrap">
           <Text size="sm" c="gray.6">
             Showing{" "}
             <Text span fw={700} c="gray.9">
@@ -198,21 +197,43 @@ const PurchaseHistoryPage = () => {
         </Stack>
       )}
 
-      {totalPages > 1 && (
-        <Group justify="center">
-          <Pagination
-            total={totalPages}
-            value={page}
-            onChange={(value) => {
-              setPage(value);
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            color="hongbao-red"
-            radius="md"
-            siblings={1}
-            boundaries={1}
-          />
-        </Group>
+      {/* sticky pagination - floats above the mobile bottom nav */}
+      {!isLoading && !isEmpty(filteredOrders) && (
+        // Full-width sticky track, but clicks pass through everywhere except the
+        // compact bar pinned to its right edge.
+        <Box className="pointer-events-none! sticky! bottom-[calc(72px+env(safe-area-inset-bottom))]! lg:bottom-4! z-30! mt-auto! flex! justify-end!">
+          <Group
+            align="center"
+            wrap="nowrap"
+            gap={10}
+            className="pointer-events-auto! w-fit! max-w-full! rounded-xl! border! border-gray-200! bg-white/95! backdrop-blur-md! px-2.5! py-1.5! shadow-[0_4px_20px_-6px_rgba(0,0,0,0.18)]!"
+          >
+            {/* same per-page choices as the dashboard tables */}
+            <Select
+              placeholder="Per page"
+              aria-label="Orders per page"
+              data={PAGE_SIZE_OPTIONS}
+              value={String(pageSize)}
+              onChange={(value) => value && setPageSize(Number(value))}
+              allowDeselect={false}
+              size="xs"
+              radius="md"
+              w={80}
+              className="shrink-0!"
+              comboboxProps={{ position: "top", shadow: "md" }}
+            />
+            <Pagination
+              total={totalPages}
+              value={page}
+              onChange={changePage}
+              color="hongbao-red"
+              radius="md"
+              size="sm"
+              siblings={1}
+              boundaries={1}
+            />
+          </Group>
+        </Box>
       )}
     </Stack>
   );
