@@ -11,7 +11,7 @@ const ToolsPreviewSection = () => {
       p={20}
       bdrs={24}
       withBorder
-      className="border-white/60! bg-white/90! backdrop-blur-sm!"
+      className="border-white/60! bg-surface/90! backdrop-blur-sm!"
     >
       <Stack>
         <Tabs variant="pills" defaultValue="stroke-style">

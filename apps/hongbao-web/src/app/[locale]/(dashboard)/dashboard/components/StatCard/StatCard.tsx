@@ -54,7 +54,7 @@ const StatCard: React.FC<Props> = ({
               <Group
                 gap={2}
                 className={
-                  isUp ? "text-emerald-600" : "text-hongbao-red-600"
+                  isUp ? "text-emerald-600 dark:text-night-green" : "text-hongbao-red-600 dark:text-night-red"
                 }
               >
                 {isUp ? (

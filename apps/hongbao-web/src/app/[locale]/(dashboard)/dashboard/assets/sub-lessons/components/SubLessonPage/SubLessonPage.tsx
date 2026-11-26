@@ -55,7 +55,7 @@ const SubLessonPage = () => {
             isLoading={isLoading}
             header={
               <Paper className="overflow-hidden!">
-                <Flex justify="end" gap={10} align="center" bg={"white"}>
+                <Flex justify="end" gap={10} align="center" bg="var(--hb-surface)">
                   <Group gap={10}>
                     <DropDownInput
                       control={filterForm.control}

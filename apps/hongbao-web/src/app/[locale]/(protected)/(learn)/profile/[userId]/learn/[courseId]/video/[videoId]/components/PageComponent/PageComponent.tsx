@@ -68,7 +68,7 @@ const PageComponent = () => {
       ) : !video ? (
         <Paper withBorder bdrs={20} p={{ base: 32, sm: 48 }}>
           <Stack align="center" gap={10}>
-            <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600!">
+            <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
               <VideoIcon size={26} weight="fill" />
             </Box>
             <Text fw={700}>Video not found</Text>
@@ -113,7 +113,7 @@ const PageComponent = () => {
                     size="sm"
                     className="absolute! top-1.5! right-1.5! sm:top-3! sm:right-3!"
                   />
-                  <Box className="mx-auto! flex! items-center! justify-center! w-9! h-9! sm:w-14! sm:h-14! rounded-full! bg-green-100! text-green-600!">
+                  <Box className="mx-auto! flex! items-center! justify-center! w-9! h-9! sm:w-14! sm:h-14! rounded-full! bg-green-100! text-green-600! dark:text-night-green!">
                     <CheckCircleIcon
                       size={18}
                       weight="fill"
@@ -171,7 +171,7 @@ const PageComponent = () => {
           {/* lesson info */}
           <Stack gap={10}>
             <Group gap={10} wrap="wrap">
-              <Box className="flex! items-center! justify-center! shrink-0! w-9! h-9! rounded-xl! bg-hongbao-red-50! text-hongbao-red-600!">
+              <Box className="flex! items-center! justify-center! shrink-0! w-9! h-9! rounded-xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
                 <VideoIcon size={18} weight="fill" />
               </Box>
               {duration && (
@@ -202,7 +202,7 @@ const PageComponent = () => {
                 onClick={handleMarkComplete}
                 className={
                   isCompleted
-                    ? "disabled:bg-green-50! disabled:text-green-700! disabled:cursor-default!"
+                    ? "disabled:bg-green-50! disabled:text-green-700! dark:disabled:text-night-green! disabled:cursor-default!"
                     : undefined
                 }
               >
@@ -247,7 +247,7 @@ const PageComponent = () => {
                     <Text
                       size="10px"
                       fw={700}
-                      c="hongbao-red.6"
+                      c="var(--hb-accent-text)"
                       className="uppercase! tracking-[0.1em]!"
                     >
                       Up next

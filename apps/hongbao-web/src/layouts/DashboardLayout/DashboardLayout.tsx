@@ -36,7 +36,7 @@ const DashboardLayout: React.FC<Props> = ({ children, size = "xl" }) => {
         collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
       }}
     >
-      <AppShell.Header bg="white">
+      <AppShell.Header bg="var(--hb-surface)">
         <DashboardNavbar
           burgerComponent={
             <Group>

@@ -8,7 +8,7 @@ const ProfileCard = () => {
         <Flex justify={"center"}>
           <Avatar
             src={"/assets/logo-head.svg"}
-            bg={"hongbao-red.0"}
+            bg="var(--hb-tint-red)"
             p={10}
             size={"lg"}
           />

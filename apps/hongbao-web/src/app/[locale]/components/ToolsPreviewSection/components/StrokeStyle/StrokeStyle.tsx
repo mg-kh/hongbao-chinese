@@ -61,7 +61,7 @@ const StrokeStyle = () => {
       <Stack gap="md">
         <Flex gap={10}>
           <Flex
-            bg="hongbao-cream.0"
+            bg="var(--hb-tint-cream)"
             w="100%"
             bdrs={15}
             align={"center"}
@@ -70,7 +70,7 @@ const StrokeStyle = () => {
             <Box id="preview" w={200} h={200} />
           </Flex>
           <Paper
-            bg="hongbao-cream.0"
+            bg="var(--hb-tint-cream)"
             bdrs={15}
             p={10}
             className="flex-1!"

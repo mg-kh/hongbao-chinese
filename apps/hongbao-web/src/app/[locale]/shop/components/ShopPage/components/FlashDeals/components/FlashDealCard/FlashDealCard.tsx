@@ -48,7 +48,7 @@ const FlashDealCard: React.FC<Props> = ({ product }) => {
   );
 
   return (
-    <div className="flex! w-[158px]! shrink-0! flex-col! overflow-hidden! rounded-xl! bg-white! ring-1! ring-gray-200! transition-shadow! duration-200! hover:shadow-lg!">
+    <div className="flex! w-[158px]! shrink-0! flex-col! overflow-hidden! rounded-xl! bg-surface! ring-1! ring-gray-200! transition-shadow! duration-200! hover:shadow-lg!">
       {product.detailHref ? (
         <Link href={product.detailHref} className="block! no-underline!">
           {media}
@@ -94,7 +94,7 @@ const FlashDealCard: React.FC<Props> = ({ product }) => {
           }
           className={`mt-auto! flex! items-center! justify-center! gap-1! rounded-lg! py-1.5! text-[11px]! font-bold! cursor-pointer! transition-colors! duration-200! ${
             inCart
-              ? "bg-hongbao-red-50! text-hongbao-red-700!"
+              ? "bg-hongbao-red-50! text-hongbao-red-700! dark:text-night-red!"
               : "bg-hongbao-red-500! text-white! hover:bg-hongbao-red-600!"
           }`}
         >

@@ -100,7 +100,7 @@ const Footer = () => {
               <div>
                 <Box>
                   <Stack gap={10}>
-                    <Text c={"gray.3"} size="lg">
+                    <Text c={"#dee2e6"} size="lg">
                       Courses
                     </Text>
                     {courses?.map((c) => {
@@ -122,7 +122,7 @@ const Footer = () => {
               </div>
               <div>
                 <Stack gap={10}>
-                  <Text c={"gray.3"} size="lg">
+                  <Text c={"#dee2e6"} size="lg">
                     Support
                   </Text>
                   <Link href="/privacy-policy">

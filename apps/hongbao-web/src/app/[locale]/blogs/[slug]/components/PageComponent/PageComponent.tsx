@@ -35,7 +35,7 @@ const PageComponent = () => {
     return (
       <ClientLayout>
         <Stack align="center" gap={14} className="py-24!">
-          <Box className="flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600!">
+          <Box className="flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
             <ArticleIcon size={30} />
           </Box>
           <Text fw={700} size="lg">

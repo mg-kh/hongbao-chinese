@@ -23,7 +23,7 @@ const SpeakButton: React.FC<Props> = ({ text, light }) => {
       className={`flex! items-center! justify-center! w-8! h-8! rounded-full! shrink-0! cursor-pointer! transition-colors! duration-150! ease-out! ${
         light
           ? "bg-white/15! text-white! hover:bg-white/25!"
-          : "bg-gray-100! text-gray-600! hover:bg-hongbao-red-50! hover:text-hongbao-red-600!"
+          : "bg-gray-100! text-gray-600! hover:bg-hongbao-red-50! hover:text-hongbao-red-600! dark:hover:text-night-red!"
       }`}
     >
       <SpeakerHighIcon size={16} weight="fill" />

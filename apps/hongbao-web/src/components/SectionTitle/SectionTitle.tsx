@@ -25,7 +25,7 @@ const SectionTitle: React.FC<Props> = ({
         <Text
           fw={700}
           size="xs"
-          c="hongbao-red.6"
+          c="var(--hb-accent-text)"
           className="uppercase! tracking-[0.18em]!"
         >
           {eyebrow}
@@ -34,7 +34,7 @@ const SectionTitle: React.FC<Props> = ({
       <Box className="h-[3px]! w-12! rounded-full! bg-gradient-to-r! from-hongbao-red-500! to-hongbao-gold-500!" />
       <Title
         order={1}
-        c="hongbao-red.7"
+        c="var(--hb-accent-strong)"
         className="text-[1.85rem]! sm:text-[2.25rem]! font-extrabold! tracking-tight! leading-[1.15]!"
       >
         {title}

@@ -24,7 +24,7 @@ const FlashcardTile: React.FC<Props> = ({ flashcard, href }) => (
   >
     <div className="flex flex-col h-full gap-3">
       {/* media - type icon tile, same 16:9 shape as course covers */}
-      <Box className="flex! items-center! justify-center! w-full! aspect-video! shrink-0! rounded-xl! bg-hongbao-orange-50! text-hongbao-orange-600!">
+      <Box className="flex! items-center! justify-center! w-full! aspect-video! shrink-0! rounded-xl! bg-hongbao-orange-50! text-hongbao-orange-600! dark:text-night-orange!">
         <FlashcardTypeIcon size={40} weight="duotone" />
       </Box>
 
@@ -51,7 +51,7 @@ const FlashcardTile: React.FC<Props> = ({ flashcard, href }) => (
           size="sm"
           fw={700}
           lineClamp={2}
-          c="dark.7"
+          c="var(--hb-text)"
           className="leading-snug!"
         >
           {flashcard.name}

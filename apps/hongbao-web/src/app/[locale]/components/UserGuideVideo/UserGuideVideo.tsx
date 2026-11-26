@@ -24,10 +24,10 @@ const UserGuideVideo = () => {
           <Box className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.15)_1px,transparent_0)] bg-[length:22px_22px]" />
 
           <Box className="absolute! inset-0! flex! items-center! justify-center!">
-            <Box className="flex! items-center! justify-center! w-20! h-20! sm:w-24! sm:h-24! rounded-full! bg-white! shadow-2xl!">
+            <Box className="flex! items-center! justify-center! w-20! h-20! sm:w-24! sm:h-24! rounded-full! bg-surface! shadow-2xl!">
               <IconPlayerPlayFilled
                 size={34}
-                className="text-hongbao-red-600! translate-x-[2px]!"
+                className="text-hongbao-red-600! dark:text-night-red! translate-x-[2px]!"
               />
             </Box>
           </Box>
@@ -36,7 +36,7 @@ const UserGuideVideo = () => {
             <Text fw={700} c="white" size="lg">
               Product Walkthrough
             </Text>
-            <Text size="sm" c="gray.3">
+            <Text size="sm" c="#dee2e6">
               Video coming soon
             </Text>
           </Box>

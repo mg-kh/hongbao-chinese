@@ -82,7 +82,7 @@ const CustomBreadCrumb = ({
               ) : (
                 <Text
                   key={index}
-                  c="dark.4"
+                  c="var(--hb-text-soft)"
                   fw={500}
                   fz="xs"
                   truncate

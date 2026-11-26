@@ -75,7 +75,7 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
 
           <div className="grid! grid-cols-1! items-start! gap-6! lg:grid-cols-[260px_1fr]! lg:gap-8!">
             {/* desktop filter sidebar */}
-            <Box className="hidden! self-start! rounded-2xl! bg-white! px-4! pt-4! pb-1! ring-1! ring-gray-200! lg:sticky! lg:top-36! lg:block! lg:max-h-[calc(100vh-10rem)]! lg:overflow-y-auto!">
+            <Box className="hidden! self-start! rounded-2xl! bg-surface! px-4! pt-4! pb-1! ring-1! ring-gray-200! lg:sticky! lg:top-36! lg:block! lg:max-h-[calc(100vh-10rem)]! lg:overflow-y-auto!">
               <ShopFilters {...filterProps} />
             </Box>
 
@@ -92,8 +92,8 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
               {isFetching && results.length === 0 ? (
                 <LoaderComponent />
               ) : results.length === 0 ? (
-                <Box className="rounded-2xl! bg-white! px-6! py-16! text-center! ring-1! ring-gray-200!">
-                  <Box className="mx-auto! mb-4! flex! h-14! w-14! items-center! justify-center! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600!">
+                <Box className="rounded-2xl! bg-surface! px-6! py-16! text-center! ring-1! ring-gray-200!">
+                  <Box className="mx-auto! mb-4! flex! h-14! w-14! items-center! justify-center! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
                     <StorefrontIcon size={26} weight="fill" />
                   </Box>
                   <Text fw={700} className="text-gray-900!">

@@ -35,7 +35,7 @@ const CardFront: React.FC<Props> = ({ card, onReveal }) => {
             onReveal();
           }
         }}
-        className="group! flex! min-h-0! flex-1! cursor-pointer! flex-col! rounded-xl! border! border-gray-100! bg-white! transition-[border-color,box-shadow]! duration-200! hover:border-hongbao-red-200! hover:shadow-sm! focus-visible:outline-2! focus-visible:outline-offset-2! focus-visible:outline-hongbao-red-500!"
+        className="group! flex! min-h-0! flex-1! cursor-pointer! flex-col! rounded-xl! border! border-gray-100! bg-surface! transition-[border-color,box-shadow]! duration-200! hover:border-hongbao-red-200! hover:shadow-sm! focus-visible:outline-2! focus-visible:outline-offset-2! focus-visible:outline-hongbao-red-500!"
       >
         {/* top row: word type · audio */}
         <div className="flex! items-center! justify-between! gap-2! p-4! sm:p-5!">
@@ -81,7 +81,7 @@ const CardFront: React.FC<Props> = ({ card, onReveal }) => {
         </div>
 
         {/* hint */}
-        <div className="flex! items-center! justify-center! gap-1.5! p-5! text-gray-400! transition-colors! duration-200! group-hover:text-hongbao-red-500!">
+        <div className="flex! items-center! justify-center! gap-1.5! p-5! text-gray-400! transition-colors! duration-200! group-hover:text-hongbao-red-500! dark:group-hover:text-night-red!">
           <HandTapIcon size={14} weight="fill" />
           <span className="text-[11px]! font-bold! uppercase! tracking-[0.12em]!">
             Tap to reveal

@@ -59,7 +59,7 @@ const ResultsToolbar: React.FC<Props> = ({
             onRemove={f.remove}
             removeButtonProps={{ "aria-label": `Remove ${f.label}` }}
             size="md"
-            className="bg-hongbao-red-50! font-semibold! text-hongbao-red-700!"
+            className="bg-hongbao-red-50! font-semibold! text-hongbao-red-700! dark:text-night-red!"
           >
             {f.label}
           </Pill>
@@ -67,7 +67,7 @@ const ResultsToolbar: React.FC<Props> = ({
         <button
           type="button"
           onClick={clearFilters}
-          className="text-xs! font-semibold! text-gray-500! underline-offset-2! hover:text-hongbao-red-600! hover:underline! cursor-pointer!"
+          className="text-xs! font-semibold! text-gray-500! underline-offset-2! hover:text-hongbao-red-600! dark:hover:text-night-red! hover:underline! cursor-pointer!"
         >
           Clear all
         </button>

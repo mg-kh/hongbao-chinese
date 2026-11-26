@@ -31,7 +31,7 @@ const AttachedQuizList: React.FC<Props> = ({
           Attached quizzes
         </Text>
         {count > 0 && (
-          <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-blue-100 px-1.5 text-[11px] font-bold text-blue-700">
+          <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-blue-100 px-1.5 text-[11px] font-bold text-blue-700 dark:text-night-blue">
             {count}
           </span>
         )}
@@ -51,7 +51,7 @@ const AttachedQuizList: React.FC<Props> = ({
               key={q.id}
               withBorder
               radius="lg"
-              className="group bg-white! p-3 transition-all duration-150 hover:border-blue-200 hover:shadow-sm"
+              className="group bg-surface! p-3 transition-all duration-150 hover:border-blue-200 hover:shadow-sm"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-2">

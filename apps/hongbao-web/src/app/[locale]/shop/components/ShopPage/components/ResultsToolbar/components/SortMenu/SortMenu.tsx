@@ -32,7 +32,7 @@ const SortMenu: React.FC<Props> = ({ sort, setSort }) => {
       <Menu.Target>
         <UnstyledButton
           aria-label={`Sort products, currently ${current?.label}`}
-          className="flex! items-center! gap-1.5! rounded-full! bg-white! px-3! py-1.5! text-xs! ring-1! ring-gray-200! transition-colors! duration-150! hover:ring-hongbao-red-200! data-expanded:ring-hongbao-red-300!"
+          className="flex! items-center! gap-1.5! rounded-full! bg-surface! px-3! py-1.5! text-xs! ring-1! ring-gray-200! transition-colors! duration-150! hover:ring-hongbao-red-200! data-expanded:ring-hongbao-red-300!"
         >
           <ArrowsDownUpIcon size={14} className="text-gray-400!" />
           <span className="hidden! text-gray-500! sm:inline!">Sort by:</span>
@@ -57,13 +57,13 @@ const SortMenu: React.FC<Props> = ({ sort, setSort }) => {
                   <CheckIcon
                     size={14}
                     weight="bold"
-                    className="text-hongbao-red-600!"
+                    className="text-hongbao-red-600! dark:text-night-red!"
                   />
                 ) : null
               }
               className={
                 active
-                  ? "bg-hongbao-red-50! font-semibold! text-hongbao-red-700!"
+                  ? "bg-hongbao-red-50! font-semibold! text-hongbao-red-700! dark:text-night-red!"
                   : "text-gray-700!"
               }
             >

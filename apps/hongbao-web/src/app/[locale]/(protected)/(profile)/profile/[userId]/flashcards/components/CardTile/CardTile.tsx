@@ -20,7 +20,7 @@ const CardTile: React.FC<Props> = ({ card, onClick }) => (
     onClick={onClick}
     withBorder
     radius="lg"
-    className="group! relative! flex! min-w-0! flex-col! items-center! justify-center! gap-1! overflow-hidden! px-2! py-4! text-center! border-hongbao-cream-300! bg-white! cursor-pointer! transition-[border-color,box-shadow,transform]! duration-150! ease-out! hover:-translate-y-0.5! hover:border-hongbao-red-200! hover:shadow-sm! focus-visible:outline-2! focus-visible:outline-offset-2! focus-visible:outline-hongbao-red-500!"
+    className="group! relative! flex! min-w-0! flex-col! items-center! justify-center! gap-1! overflow-hidden! px-2! py-4! text-center! border-hongbao-cream-300! bg-surface! cursor-pointer! transition-[border-color,box-shadow,transform]! duration-150! ease-out! hover:-translate-y-0.5! hover:border-hongbao-red-200! hover:shadow-sm! focus-visible:outline-2! focus-visible:outline-offset-2! focus-visible:outline-hongbao-red-500!"
   >
     {/* decorative background - hidden from screen readers */}
     <Box

@@ -98,7 +98,7 @@ const PaymentMethod = () => {
                       className={`shrink-0! rounded-full! border! px-4! py-1.5! text-xs! font-bold! cursor-pointer! transition-colors! duration-200! ${
                         active
                           ? "border-hongbao-red-500! bg-hongbao-red-500! text-white!"
-                          : "border-gray-200! bg-white! text-gray-600! hover:border-hongbao-red-200! hover:text-hongbao-red-600!"
+                          : "border-gray-200! bg-surface! text-gray-600! hover:border-hongbao-red-200! hover:text-hongbao-red-600! dark:hover:text-night-red!"
                       }`}
                     >
                       {a.label}
@@ -151,8 +151,8 @@ const PaymentMethod = () => {
                               aria-label={`Copy ${selected.accountLabel.toLowerCase()}`}
                               className={`flex! h-7! w-7! shrink-0! items-center! justify-center! rounded-md! transition-colors! duration-150! cursor-pointer! ${
                                 copied
-                                  ? "text-green-600!"
-                                  : "text-gray-400! hover:bg-gray-100! hover:text-hongbao-red-600!"
+                                  ? "text-green-600! dark:text-night-green!"
+                                  : "text-gray-400! hover:bg-gray-100! hover:text-hongbao-red-600! dark:hover:text-night-red!"
                               }`}
                             >
                               {copied ? (

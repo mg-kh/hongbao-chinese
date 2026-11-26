@@ -28,7 +28,7 @@ const CheckoutSummary = () => {
   const [open, { toggle }] = useDisclosure(false);
 
   return (
-    <Box className="rounded-2xl! bg-white! ring-1! ring-gray-200! overflow-hidden!">
+    <Box className="rounded-2xl! bg-surface! ring-1! ring-gray-200! overflow-hidden!">
       <UnstyledButton
         onClick={toggle}
         className="w-full! flex! items-center! justify-between! gap-3! bg-hongbao-red-50/60! p-4!"
@@ -37,7 +37,7 @@ const CheckoutSummary = () => {
           <Text
             size="10px"
             fw={700}
-            c="hongbao-red-600"
+            c="var(--hb-accent-text)"
             className="uppercase! tracking-[0.08em]!"
           >
             Order
@@ -47,13 +47,13 @@ const CheckoutSummary = () => {
           </Text>
         </Group>
         <Group gap={10} wrap="nowrap" className="shrink-0!">
-          <Text fw={800} size="sm" c="hongbao-red-600">
+          <Text fw={800} size="sm" c="var(--hb-accent-text)">
             {money(total)}
           </Text>
           <CaretDownIcon
             size={14}
             weight="bold"
-            className={`text-hongbao-red-600! transition-transform! duration-200! ${open ? "rotate-180!" : ""}`}
+            className={`text-hongbao-red-600! dark:text-night-red! transition-transform! duration-200! ${open ? "rotate-180!" : ""}`}
           />
         </Group>
       </UnstyledButton>
@@ -86,7 +86,7 @@ const CheckoutSummary = () => {
                         ` · ${product.lifetime ? "Lifetime" : pluralize(m, "month")}`}
                     </Text>
                     {itemPromo && (
-                      <Text size="xs" c="hongbao-red-600" fw={600}>
+                      <Text size="xs" c="var(--hb-accent-text)" fw={600}>
                         Promo {itemPromo.promo.code} · -
                         {money(itemPromo.discount)}
                       </Text>
@@ -126,14 +126,14 @@ const CheckoutSummary = () => {
               <Text size="sm" fw={700}>
                 Total
               </Text>
-              <Text size="sm" fw={800} c="hongbao-red-600">
+              <Text size="sm" fw={800} c="var(--hb-accent-text)">
                 {money(total)}
               </Text>
             </Group>
 
             <Link
               href="/shop/cart"
-              className="flex! items-center! gap-1.5! w-fit! no-underline! text-hongbao-red-600! hover:underline!"
+              className="flex! items-center! gap-1.5! w-fit! no-underline! text-hongbao-red-600! dark:text-night-red! hover:underline!"
             >
               <PencilSimpleIcon size={13} weight="bold" />
               <Text size="xs" fw={700}>

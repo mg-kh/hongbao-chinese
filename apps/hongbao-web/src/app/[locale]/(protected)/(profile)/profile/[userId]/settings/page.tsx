@@ -1,11 +1,12 @@
 "use client";
 
 import { Box, Paper, Stack, Text } from "@mantine/core";
+import AppearanceSelector from "@/components/AppearanceSelector/AppearanceSelector";
 import { GearIcon } from "@phosphor-icons/react";
 
 /**
- * Placeholder so the Settings entry in MobileBottomNav resolves to a real
- * route - replace the body with the actual settings form when it is built.
+ * Profile settings. Appearance (light / dark / system) is live; the rest
+ * is a placeholder until the real settings form is built.
  */
 const SettingsPage = () => {
   return (
@@ -17,11 +18,20 @@ const SettingsPage = () => {
       <Paper
         withBorder
         bdrs={20}
+        p={{ base: 20, sm: 28 }}
+        className="border-gray-200! bg-surface!"
+      >
+        <AppearanceSelector />
+      </Paper>
+
+      <Paper
+        withBorder
+        bdrs={20}
         p={{ base: 28, sm: 40 }}
         className="border-dashed! border-gray-300! bg-gray-50/60!"
       >
         <Stack align="center" gap={12}>
-          <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600!">
+          <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
             <GearIcon size={26} />
           </Box>
           <Text fw={600} ta="center">

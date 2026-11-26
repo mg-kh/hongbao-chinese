@@ -43,7 +43,7 @@ const ratings = [
     label: "Still learning",
     shortcut: "1",
     icon: ArrowsClockwiseIcon,
-    idle: "border-hongbao-orange-100! bg-hongbao-orange-50! text-hongbao-orange-700! hover:border-hongbao-orange-200!",
+    idle: "border-hongbao-orange-100! bg-hongbao-orange-50! text-hongbao-orange-700! dark:text-night-orange! hover:border-hongbao-orange-200!",
     active: "border-hongbao-orange-500! bg-hongbao-orange-500! text-white!",
     badge: { label: "Still learning", color: "hongbao-orange" },
   },
@@ -52,7 +52,7 @@ const ratings = [
     label: "Got it",
     shortcut: "2",
     icon: CheckIcon,
-    idle: "border-green-100! bg-green-50! text-green-700! hover:border-green-300!",
+    idle: "border-green-100! bg-green-50! text-green-700! dark:text-night-green! hover:border-green-300!",
     active: "border-green-600! bg-green-600! text-white!",
     badge: { label: "Known", color: "green" },
   },
@@ -123,8 +123,8 @@ const CardDialog: React.FC<Props> = (props) => {
       <Modal.Overlay />
       <Modal.Content>
         {/* header - mirrors the course card row: type tile · chips + title */}
-        <Modal.Header className="flex! min-h-0! items-center! gap-3! border-b! border-gray-100! bg-white! px-4! py-3! sm:px-5!">
-          <span className="flex! h-10! w-10! shrink-0! items-center! justify-center! rounded-xl! bg-hongbao-orange-50! text-hongbao-orange-600!">
+        <Modal.Header className="flex! min-h-0! items-center! gap-3! border-b! border-gray-100! bg-surface! px-4! py-3! sm:px-5!">
+          <span className="flex! h-10! w-10! shrink-0! items-center! justify-center! rounded-xl! bg-hongbao-orange-50! text-hongbao-orange-600! dark:text-night-orange!">
             <FlashcardTypeIcon size={20} weight="duotone" />
           </span>
 
@@ -153,7 +153,7 @@ const CardDialog: React.FC<Props> = (props) => {
             <Text
               size="sm"
               fw={700}
-              c="dark.7"
+              c="var(--hb-text)"
               lineClamp={1}
               className="leading-snug!"
             >
@@ -199,7 +199,7 @@ const CardDialog: React.FC<Props> = (props) => {
           {/* bottom bar: prev · (show answer | rating) · next */}
           <nav
             aria-label="Card navigation"
-            className="flex! shrink-0! items-center! gap-2! border-t! border-gray-100! bg-white! px-4! pt-3! pb-[calc(0.75rem+env(safe-area-inset-bottom))]! sm:gap-3! sm:px-5! sm:pb-3!"
+            className="flex! shrink-0! items-center! gap-2! border-t! border-gray-100! bg-surface! px-4! pt-3! pb-[calc(0.75rem+env(safe-area-inset-bottom))]! sm:gap-3! sm:px-5! sm:pb-3!"
           >
             <Tooltip
               label={prevCard ? `Previous: ${prevCard.cnWord}` : "First card"}

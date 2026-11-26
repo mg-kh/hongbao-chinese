@@ -17,11 +17,11 @@ const CheckoutPage = () => {
       <Container size={"md"} px={{ base: 16, sm: 24 }}>
         <Stack gap={20} py={{ base: 20, md: 32 }} className="flex-1!">
           {submitted ? (
-            <Box className="rounded-2xl! bg-white! ring-1! ring-gray-200! py-16! px-6! text-center!">
-              <Box className="mx-auto! mb-4! flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-green-50! text-green-600!">
+            <Box className="rounded-2xl! bg-surface! ring-1! ring-gray-200! py-16! px-6! text-center!">
+              <Box className="mx-auto! mb-4! flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-green-50! text-green-600! dark:text-night-green!">
                 <CheckCircleIcon size={30} weight="fill" />
               </Box>
-              <Text fw={800} className="text-xl!" c="hongbao-red.7">
+              <Text fw={800} className="text-xl!" c="var(--hb-accent-strong)">
                 Order received
               </Text>
               <Text size="sm" c="gray.6" className="mt-2! max-w-[420px]! mx-auto! leading-relaxed!">
@@ -54,7 +54,7 @@ const CheckoutPage = () => {
             <>
               <Link
                 href="/shop/cart"
-                className="flex! items-center! gap-1.5! w-fit! no-underline! text-gray-500! hover:text-hongbao-red-600! transition-colors! duration-200!"
+                className="flex! items-center! gap-1.5! w-fit! no-underline! text-gray-500! hover:text-hongbao-red-600! dark:hover:text-night-red! transition-colors! duration-200!"
               >
                 <ArrowLeftIcon size={14} weight="bold" />
                 <Text size="xs" fw={600}>

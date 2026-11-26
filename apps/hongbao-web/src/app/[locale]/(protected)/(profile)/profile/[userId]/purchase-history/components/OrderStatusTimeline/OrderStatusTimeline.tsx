@@ -11,10 +11,10 @@ const fmt = (iso: string | null) =>
   iso ? format(new Date(iso), "d MMM yyyy") : "";
 
 const dot: Record<StepState, string> = {
-  done: "bg-gray-900! text-white!",
-  current: "bg-white! ring-2! ring-hongbao-red-500!",
+  done: "bg-gray-900! text-gray-50!",
+  current: "bg-surface! ring-2! ring-hongbao-red-500!",
   failed: "bg-gray-200! text-gray-500!",
-  upcoming: "bg-white! ring-1! ring-gray-300!",
+  upcoming: "bg-surface! ring-1! ring-gray-300!",
 };
 
 const DotMark: React.FC<{ state: StepState }> = ({ state }) => {

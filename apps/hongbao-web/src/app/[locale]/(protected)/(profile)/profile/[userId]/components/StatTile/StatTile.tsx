@@ -21,8 +21,8 @@ const statTones: Record<
   }
 > = {
   brand: {
-    tile: "bg-hongbao-red-50! text-hongbao-red-600!",
-    value: "text-hongbao-red-700!",
+    tile: "bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!",
+    value: "text-hongbao-red-700! dark:text-night-red!",
     progress: "hongbao-red",
     blob: "bg-hongbao-red-50!",
     mark: "text-hongbao-red-200!",
@@ -35,15 +35,15 @@ const statTones: Record<
     mark: "text-gray-200!",
   },
   attention: {
-    tile: "bg-hongbao-gold-50! text-hongbao-gold-700!",
-    value: "text-hongbao-gold-800!",
+    tile: "bg-hongbao-gold-50! text-hongbao-gold-700! dark:text-night-gold!",
+    value: "text-hongbao-gold-800! dark:text-night-gold!",
     progress: "hongbao-gold",
     blob: "bg-hongbao-gold-50!",
     mark: "text-hongbao-gold-200!",
   },
   success: {
-    tile: "bg-green-50! text-green-600!",
-    value: "text-green-700!",
+    tile: "bg-green-50! text-green-600! dark:text-night-green!",
+    value: "text-green-700! dark:text-night-green!",
     progress: "green",
     blob: "bg-green-50!",
     mark: "text-green-200!",
@@ -84,7 +84,7 @@ const StatTile: React.FC<Props> = ({
         withBorder
         bdrs={16}
         p={{ base: 14, sm: 16 }}
-        className={`relative! overflow-hidden! bg-white! border-gray-200! transition-all! duration-200! ease-out! hover:-translate-y-0.5! hover:shadow-md! group ${className}`}
+        className={`relative! overflow-hidden! bg-surface! border-gray-200! transition-all! duration-200! ease-out! hover:-translate-y-0.5! hover:shadow-md! group ${className}`}
       >
         {/* decorative background - hidden from screen readers */}
         <Box
@@ -136,7 +136,7 @@ const StatTile: React.FC<Props> = ({
       withBorder
       bdrs={16}
       p={{ base: 14, sm: 16 }}
-      className={`bg-white! border-gray-200! transition-all! duration-200! ease-out! hover:-translate-y-0.5! hover:shadow-md! ${className}`}
+      className={`bg-surface! border-gray-200! transition-all! duration-200! ease-out! hover:-translate-y-0.5! hover:shadow-md! ${className}`}
     >
       <Box
         className={`flex! items-center! justify-center! w-8! h-8! rounded-lg! mb-3! ${t.tile}`}

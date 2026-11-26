@@ -19,7 +19,7 @@ const SubLessonNode: React.FC<Props> = ({ subLesson }) => {
       <NodeRow
         depth={2}
         icon={<IconFileText size={16} />}
-        accentClass="text-teal-600"
+        accentClass="text-teal-600 dark:text-night-teal"
         title={subLesson.title}
         quizzesCount={subLesson.quizzesCount}
         expanded={expanded}

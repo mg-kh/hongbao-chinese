@@ -81,7 +81,7 @@ const GridsSection = () => {
                   </ActionIcon>
                 </Group>
               </Accordion.Control>
-              <Accordion.Panel bg="white">
+              <Accordion.Panel bg="var(--hb-surface)">
                 <RowsFields i={i} />
               </Accordion.Panel>
             </Accordion.Item>

@@ -82,7 +82,7 @@ const EditDrawerFrame: React.FC<Props> = ({
             <Group
               className="sticky! top-0 z-50! border-b border-gray-200"
               justify="space-between"
-              bg="white"
+              bg="var(--hb-surface)"
               px={10}
               py={20}
             >
@@ -102,7 +102,7 @@ const EditDrawerFrame: React.FC<Props> = ({
             <Group
               className="sticky! bottom-0! border-t border-gray-200 z-50!"
               justify="flex-end"
-              bg="white"
+              bg="var(--hb-surface)"
               px={10}
               py={20}
             >

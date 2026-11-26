@@ -40,7 +40,7 @@ const Page = () => {
               <Badge
                 size="lg"
                 radius="md"
-                className="w-fit! bg-white/95! text-hongbao-red-700!"
+                className="w-fit! bg-surface/95! text-hongbao-red-700! dark:text-night-red!"
               >
                 {courseDetail.level}
               </Badge>

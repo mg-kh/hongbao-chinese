@@ -32,7 +32,7 @@ const LinkGroupBlock: React.FC<Props> = ({
       )}
     >
       {isLabeled && (
-        <div className="mb-1 flex items-center gap-1.5 px-4 text-[11px] font-bold uppercase tracking-[0.06em] text-hongbao-red-600 before:h-3 before:w-[3px] before:rounded-[2px] before:bg-hongbao-red-600 before:content-['']">
+        <div className="mb-1 flex items-center gap-1.5 px-4 text-[11px] font-bold uppercase tracking-[0.06em] text-hongbao-red-600 dark:text-night-red before:h-3 before:w-[3px] before:rounded-[2px] before:bg-hongbao-red-600 before:content-['']">
           {group.group}
         </div>
       )}
@@ -40,7 +40,7 @@ const LinkGroupBlock: React.FC<Props> = ({
         <Link
           key={link.label}
           href={link.href}
-          className="mr-4 flex h-10.5 items-center gap-2.5 rounded-r-lg px-4 text-sm font-medium text-gray-600 no-underline transition-colors duration-[120ms] hover:bg-gray-100 hover:text-hongbao-brown-800 data-[active]:bg-hongbao-red-600 data-[active]:text-white data-[active]:hover:bg-hongbao-red-600"
+          className="mr-4 flex h-10.5 items-center gap-2.5 rounded-r-lg px-4 text-sm font-medium text-gray-600 no-underline transition-colors duration-[120ms] hover:bg-gray-100 hover:text-hongbao-brown-800 dark:hover:text-night-brown data-[active]:bg-hongbao-red-600 data-[active]:text-white data-[active]:hover:bg-hongbao-red-600"
           data-active={isLinkActive(link) || undefined}
           onClick={onNavigate}
         >

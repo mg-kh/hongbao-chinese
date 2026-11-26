@@ -96,7 +96,7 @@ const PurchaseHistoryPage = () => {
                     className={`flex! items-center! gap-2! shrink-0! rounded-full! border! px-3.5! py-1.5! text-xs! font-semibold! cursor-pointer! transition-colors! duration-200! ease-out! ${
                       active
                         ? "border-hongbao-red-500! bg-hongbao-red-500! text-white!"
-                        : "border-gray-200! bg-white! text-gray-600! hover:border-hongbao-red-200! hover:text-hongbao-red-600!"
+                        : "border-gray-200! bg-surface! text-gray-600! hover:border-hongbao-red-200! hover:text-hongbao-red-600! dark:hover:text-night-red!"
                     }`}
                   >
                     {f.label}
@@ -143,7 +143,7 @@ const PurchaseHistoryPage = () => {
           className="border-dashed! border-gray-300! bg-gray-50/60!"
         >
           <Stack align="center" gap={14}>
-            <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600!">
+            <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
               {filter === "ALL" ? (
                 <StorefrontIcon size={26} weight="fill" />
               ) : (
@@ -206,7 +206,7 @@ const PurchaseHistoryPage = () => {
             align="center"
             wrap="nowrap"
             gap={10}
-            className="pointer-events-auto! w-fit! max-w-full! rounded-xl! border! border-gray-200! bg-white/95! backdrop-blur-md! px-2.5! py-1.5! shadow-[0_4px_20px_-6px_rgba(0,0,0,0.18)]!"
+            className="pointer-events-auto! w-fit! max-w-full! rounded-xl! border! border-gray-200! bg-surface/95! backdrop-blur-md! px-2.5! py-1.5! shadow-[0_4px_20px_-6px_rgba(0,0,0,0.18)]!"
           >
             {/* same per-page choices as the dashboard tables */}
             <Select

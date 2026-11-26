@@ -69,13 +69,13 @@ const ProductCard: React.FC<Props> = ({ product }) => {
         <ImageIcon size={34} weight="light" className="text-white/50!" />
       </div>
 
-      <span className="absolute! left-2! top-2! inline-flex! items-center! gap-1! rounded-md! bg-white/95! px-1.5! py-0.5! text-[10px]! font-bold! text-gray-700!">
+      <span className="absolute! left-2! top-2! inline-flex! items-center! gap-1! rounded-md! bg-surface/95! px-1.5! py-0.5! text-[10px]! font-bold! text-gray-700!">
         {accent.icon}
         {SHOP_TYPE_META[product.type].label}
       </span>
 
       {product.isFree ? (
-        <span className="absolute! right-0! top-2! rounded-l-md! bg-gray-900! px-2! py-0.5! text-[11px]! font-extrabold! text-white!">
+        <span className="absolute! right-0! top-2! rounded-l-md! bg-gray-900! px-2! py-0.5! text-[11px]! font-extrabold! text-gray-50!">
           FREE
         </span>
       ) : (
@@ -100,7 +100,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
       </Text>
 
       {product.level && (
-        <span className="w-fit! rounded! bg-hongbao-red-50! px-1.5! py-0.5! text-[10px]! font-bold! text-hongbao-red-700!">
+        <span className="w-fit! rounded! bg-hongbao-red-50! px-1.5! py-0.5! text-[10px]! font-bold! text-hongbao-red-700! dark:text-night-red!">
           {product.level}
         </span>
       )}
@@ -131,7 +131,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
   );
 
   return (
-    <div className="group! flex! h-full! flex-col! overflow-hidden! rounded-xl! bg-white! ring-1! ring-gray-200! transition-all! duration-200! ease-out! hover:-translate-y-0.5! hover:shadow-lg! hover:ring-hongbao-red-200!">
+    <div className="group! flex! h-full! flex-col! overflow-hidden! rounded-xl! bg-surface! ring-1! ring-gray-200! transition-all! duration-200! ease-out! hover:-translate-y-0.5! hover:shadow-lg! hover:ring-hongbao-red-200!">
       {product.detailHref ? (
         <Link
           href={product.detailHref}
@@ -159,7 +159,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
           }
           className={`flex! w-full! items-center! justify-center! gap-1.5! rounded-lg! py-2! text-xs! font-bold! cursor-pointer! transition-colors! duration-200! ${
             inCart
-              ? "bg-hongbao-red-50! text-hongbao-red-700! hover:bg-hongbao-red-100!"
+              ? "bg-hongbao-red-50! text-hongbao-red-700! dark:text-night-red! hover:bg-hongbao-red-100!"
               : "bg-hongbao-red-500! text-white! hover:bg-hongbao-red-600!"
           }`}
         >
