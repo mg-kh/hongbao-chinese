@@ -32,7 +32,11 @@ export const CreateClientPurchaseSchema = z.object({
         productId: z.string().min(1),
         months: z.number().int().nonnegative(),
         promoCode: z.string().trim().optional(),
-        productType: z.enum([ProductType.COURSE, ProductType.MOCK_TEST]),
+        productType: z.enum([
+          ProductType.COURSE,
+          ProductType.MOCK_TEST,
+          ProductType.FLASHCARD,
+        ]),
       }),
     )
     .min(1),

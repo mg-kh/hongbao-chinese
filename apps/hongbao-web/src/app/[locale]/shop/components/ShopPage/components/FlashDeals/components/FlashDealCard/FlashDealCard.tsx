@@ -17,6 +17,7 @@ import { productClaimedPct } from "../../../../../../utils/productSignals";
 const gradientByType: Record<ShopProductType, string> = {
   course: "from-hongbao-red-500! to-hongbao-maroon-600!",
   "mock-test": "from-hongbao-gold-500! to-hongbao-orange-600!",
+  flashcard: "from-hongbao-orange-500! to-hongbao-red-600!",
 };
 
 const money = (value: number) =>

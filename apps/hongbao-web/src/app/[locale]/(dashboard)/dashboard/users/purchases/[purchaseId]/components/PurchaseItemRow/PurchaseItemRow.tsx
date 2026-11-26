@@ -1,7 +1,14 @@
-import { TPurchaseCardItem } from "@/types/purchase-order.type";
+import {
+  PURCHASE_ITEM_TYPE_LABEL,
+  TPurchaseCardItem,
+} from "@/types/purchase-order.type";
 import { durationLabel } from "@/utils/purchaseOrder";
 import { Text } from "@mantine/core";
-import { BookOpenIcon, ExamIcon } from "@phosphor-icons/react";
+import {
+  CourseTypeIcon,
+  FlashcardTypeIcon,
+  MockTestTypeIcon,
+} from "@/components/icons/productTypeIcons";
 
 interface Props {
   item: TPurchaseCardItem;
@@ -20,6 +27,7 @@ const PurchaseItemRow: React.FC<Props> = ({
   unitBreakdown,
 }) => {
   const isMock = item.type === "mock-test";
+  const isFlashcard = item.type === "flashcard";
 
   return (
     <div className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0">
@@ -28,13 +36,17 @@ const PurchaseItemRow: React.FC<Props> = ({
           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
             isMock
               ? "bg-hongbao-orange-50 text-hongbao-orange-600"
-              : "bg-hongbao-red-50 text-hongbao-red-600"
+              : isFlashcard
+                ? "bg-hongbao-gold-50 text-hongbao-gold-700"
+                : "bg-hongbao-red-50 text-hongbao-red-600"
           }`}
         >
           {isMock ? (
-            <ExamIcon size={16} weight="fill" />
+            <MockTestTypeIcon size={16} weight="fill" />
+          ) : isFlashcard ? (
+            <FlashcardTypeIcon size={16} weight="fill" />
           ) : (
-            <BookOpenIcon size={16} weight="fill" />
+            <CourseTypeIcon size={16} weight="fill" />
           )}
         </div>
         <div className="flex min-w-0 flex-col gap-1">
@@ -48,7 +60,7 @@ const PurchaseItemRow: React.FC<Props> = ({
           )}
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-600">
-              {isMock ? "Mock Test" : "Course"}
+              {PURCHASE_ITEM_TYPE_LABEL[item.type]}
             </span>
             <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-600">
               {durationLabel(item.durationDays)}

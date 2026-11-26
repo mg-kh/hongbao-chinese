@@ -34,9 +34,21 @@ const mockTestSelect = {
   },
 } satisfies Prisma.MockTestSelect;
 
+const flashcardSelect = {
+  id: true,
+  name: true,
+  price: true,
+  createdAt: true,
+  category: categorySelect,
+  _count: { select: { cards: true } },
+} satisfies Prisma.FlashcardSelect;
+
 type ShopCourse = Prisma.CourseGetPayload<{ select: typeof courseSelect }>;
 type ShopMockTest = Prisma.MockTestGetPayload<{
   select: typeof mockTestSelect;
+}>;
+type ShopFlashcard = Prisma.FlashcardGetPayload<{
+  select: typeof flashcardSelect;
 }>;
 
 @Injectable()
@@ -49,16 +61,19 @@ export class ShopService {
         published: true,
         ...(categoryId ? { categoryId } : {}),
       };
-      const includeCourses = type !== ProductType.MOCK_TEST;
-      const includeMockTests = type !== ProductType.COURSE;
+      const includes = (t: ProductType) =>
+        type === ProductType.ALL || type === t;
 
-      const [courses, mockTests] = await Promise.all([
-        includeCourses
+      const [courses, mockTests, flashcards] = await Promise.all([
+        includes(ProductType.COURSE)
           ? this.prisma.course.findMany({ where, select: courseSelect })
           : Promise.resolve<ShopCourse[]>([]),
-        includeMockTests
+        includes(ProductType.MOCK_TEST)
           ? this.prisma.mockTest.findMany({ where, select: mockTestSelect })
           : Promise.resolve<ShopMockTest[]>([]),
+        includes(ProductType.FLASHCARD)
+          ? this.prisma.flashcard.findMany({ where, select: flashcardSelect })
+          : Promise.resolve<ShopFlashcard[]>([]),
       ]);
 
       const data = [
@@ -71,6 +86,15 @@ export class ShopService {
           type: ProductType.MOCK_TEST,
           testCount: quiz?.quiz._count.questions ?? 0,
         })),
+        // Decks have no description or access period: sold for lifetime access.
+        ...flashcards.map(({ name, _count, ...flashcard }) => ({
+          ...flashcard,
+          title: name,
+          description: null,
+          perTime: 0,
+          type: ProductType.FLASHCARD,
+          cardCount: _count.cards,
+        })),
       ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
       return successResponse({ data });
@@ -81,16 +105,18 @@ export class ShopService {
     return withErrorHandling(async () => {
       const where = { published: true };
 
-      const [courseCount, mockTestCount] = await Promise.all([
+      const [courseCount, mockTestCount, flashcardCount] = await Promise.all([
         this.prisma.course.count({ where }),
         this.prisma.mockTest.count({ where }),
+        this.prisma.flashcard.count({ where }),
       ]);
 
       return successResponse({
         data: {
-          productCount: courseCount + mockTestCount,
+          productCount: courseCount + mockTestCount + flashcardCount,
           courseCount,
           mockTestCount,
+          flashcardCount,
         },
       });
     });

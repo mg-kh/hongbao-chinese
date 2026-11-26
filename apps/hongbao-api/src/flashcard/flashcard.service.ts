@@ -3,10 +3,12 @@ import { PrismaService } from '../prisma/prisma.service';
 import { successResponse } from '../utils/response';
 import { withErrorHandling } from '../utils/withErrorHandling';
 import { CreateFlashcardDto } from './dto/create-flashcard.dto';
+import { FilterFlashcardDto } from './dto/filter-flashcard.dto';
 import { UpdateFlashcardDto } from './dto/update-flashcard.dto';
 
-const categoryInclude = {
+const flashcardInclude = {
   category: { select: { id: true, name: true } },
+  _count: { select: { cards: true } },
 } as const;
 
 @Injectable()
@@ -17,18 +19,18 @@ export class FlashcardService {
     return withErrorHandling(async () => {
       const res = await this.prisma.flashcard.create({
         data,
-        include: categoryInclude,
+        include: flashcardInclude,
       });
       return successResponse({ data: res });
     });
   }
 
-  async findAll(categoryId?: string) {
+  async findAll({ categoryId }: FilterFlashcardDto = {}) {
     return withErrorHandling(async () => {
       const res = await this.prisma.flashcard.findMany({
         where: categoryId ? { categoryId } : undefined,
         orderBy: { createdAt: 'desc' },
-        include: categoryInclude,
+        include: flashcardInclude,
       });
       return successResponse({ data: res });
     });
@@ -38,7 +40,10 @@ export class FlashcardService {
     return withErrorHandling(async () => {
       const flashcard = await this.prisma.flashcard.findUnique({
         where: { id },
-        include: categoryInclude,
+        include: {
+          ...flashcardInclude,
+          cards: { orderBy: { createdAt: 'desc' } },
+        },
       });
       if (!flashcard) throw new NotFoundException('Flashcard not found');
       return successResponse({ data: flashcard });
@@ -50,12 +55,13 @@ export class FlashcardService {
       const res = await this.prisma.flashcard.update({
         where: { id },
         data,
-        include: categoryInclude,
+        include: flashcardInclude,
       });
       return successResponse({ data: res });
     });
   }
 
+  // Cards are detached (flashcardId -> NULL), not deleted.
   async remove(id: string) {
     return withErrorHandling(async () => {
       const res = await this.prisma.flashcard.delete({ where: { id } });

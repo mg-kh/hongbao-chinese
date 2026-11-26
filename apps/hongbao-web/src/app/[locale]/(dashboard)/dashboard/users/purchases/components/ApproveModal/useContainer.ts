@@ -5,6 +5,7 @@ import {
   paymentLabel,
   toPurchaseCardOrder,
 } from "@/utils/purchaseOrder";
+import { PURCHASE_ITEM_TYPE_LABEL } from "@/types/purchase-order.type";
 import { useMemo } from "react";
 
 const useContainer = (purchase: TPurchaseActionTarget) => {
@@ -17,7 +18,7 @@ const useContainer = (purchase: TPurchaseActionTarget) => {
       title: item.title,
       type: item.type,
       meta: [
-        item.type === "mock-test" ? "Mock Test" : "Course",
+        PURCHASE_ITEM_TYPE_LABEL[item.type],
         durationLabel(item.durationDays),
         item.quantity > 1 ? `×${item.quantity}` : null,
       ]

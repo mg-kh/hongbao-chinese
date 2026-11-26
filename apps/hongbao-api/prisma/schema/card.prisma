@@ -1,0 +1,17 @@
+model Card {
+  id           String     @id @default(uuid())
+  cnWord       String
+  pinyin       String
+  type         String
+  meaningEn    String
+  meaningMm    String
+  // Owning flashcard deck; the card's category comes from it. Nullable so
+  // existing cards survive the migration; deleting a deck detaches its cards.
+  flashcardId  String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  exampleUsage Json       @default("[]")
+  flashcard    Flashcard? @relation(fields: [flashcardId], references: [id], onDelete: SetNull)
+
+  @@index([flashcardId])
+}

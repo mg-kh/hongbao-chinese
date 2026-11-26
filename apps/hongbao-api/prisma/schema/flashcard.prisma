@@ -1,15 +1,16 @@
+// A flashcard deck: a sellable group of cards (Flashcard 1 -> N Card).
 model Flashcard {
-  id           String   @id @default(uuid())
-  cnWord       String
-  pinyin       String
-  type         String
-  meaningEn    String
-  meaningMm    String
-  categoryId   String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  exampleUsage Json     @default("[]")
-  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  id            String         @id @default(uuid())
+  name          String
+  price         Int            @default(0)
+  published     Boolean        @default(false)
+  categoryId    String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  category      Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  cards         Card[]
+  enrollments   Enrollment[]
+  purchaseItems PurchaseItem[]
 
   @@index([categoryId])
 }

@@ -1,35 +1,70 @@
-import type { TFlashcard } from "@/hooks/global-data-fetching/useAllFlashcardList";
-import { Paper, Text } from "@mantine/core";
+import { FlashcardTypeIcon } from "@/components/icons/productTypeIcons";
+import type { TMyFlashcard } from "@/hooks/global-data-fetching/useMyFlashcards";
+import { pluralize } from "@/utils/pluralize";
+import { Badge, Box, Paper, Text } from "@mantine/core";
+import { CardsIcon } from "@phosphor-icons/react";
+import Link from "next/link";
 
 interface Props {
-  card: TFlashcard;
-  onClick: () => void;
+  flashcard: TMyFlashcard;
+  href: string;
 }
 
-/** Small static preview shown in the grid - tap to open the full card in the dialog. */
-const FlashcardTile: React.FC<Props> = ({ card, onClick }) => (
+/**
+ * One enrolled flashcard in the list - links to its detail page. Mirrors the
+ * vertical layout of the my-courses CourseCard.
+ */
+const FlashcardTile: React.FC<Props> = ({ flashcard, href }) => (
   <Paper
-    withBorder
-    bdrs={20}
-    onClick={onClick}
-    className="relative! aspect-[4/5]! flex! flex-col! items-center! justify-center! gap-2! p-4! text-center! border-hongbao-cream-300! bg-hongbao-cream-50! shadow-sm! cursor-pointer! transition-all! duration-200! ease-out! hover:-translate-y-1! hover:border-hongbao-red-200! hover:shadow-md!"
+    component={Link}
+    href={href}
+    p={10}
+    bdrs={12}
+    className="group! block! h-full! no-underline! border! border-gray-100! transition-all! duration-200! hover:border-hongbao-red-200! hover:shadow-sm!"
   >
-    {card.category?.name && (
-      <Text
-        size="10px"
-        fw={700}
-        c="hongbao-red.6"
-        className="absolute! top-3! uppercase! tracking-[0.12em]!"
-      >
-        {card.category.name}
-      </Text>
-    )}
-    <Text className="text-3xl! sm:text-4xl! font-bold! text-gray-900!">
-      {card.cnWord}
-    </Text>
-    <Text size="sm" c="gray.5">
-      {card.pinyin}
-    </Text>
+    <div className="flex flex-col h-full gap-3">
+      {/* media - type icon tile, same 16:9 shape as course covers */}
+      <Box className="flex! items-center! justify-center! w-full! aspect-video! shrink-0! rounded-xl! bg-hongbao-orange-50! text-hongbao-orange-600!">
+        <FlashcardTypeIcon size={40} weight="duotone" />
+      </Box>
+
+      <div className="min-w-0 flex-1 space-y-1.5">
+        {/* type + category chips */}
+        <div className="flex flex-wrap items-center gap-1">
+          <Badge
+            size="xs"
+            radius="sm"
+            variant="light"
+            color="hongbao-orange"
+            leftSection={<FlashcardTypeIcon size={10} weight="bold" />}
+          >
+            Flashcard
+          </Badge>
+          {flashcard.category?.name && (
+            <Badge size="xs" radius="sm" variant="dot" color="hongbao-red">
+              {flashcard.category.name}
+            </Badge>
+          )}
+        </div>
+
+        <Text
+          size="sm"
+          fw={700}
+          lineClamp={2}
+          c="dark.7"
+          className="leading-snug!"
+        >
+          {flashcard.name}
+        </Text>
+
+        <div className="flex items-center gap-1 text-gray-500">
+          <CardsIcon size={13} />
+          <Text size="xs" c="gray.6" lineClamp={1}>
+            {pluralize(flashcard.cardCount, "card")}
+          </Text>
+        </div>
+      </div>
+    </div>
   </Paper>
 );
 

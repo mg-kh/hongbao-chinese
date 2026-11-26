@@ -2,17 +2,12 @@ import { Box, Paper, Stack, Text } from "@mantine/core";
 import React from "react";
 
 export type StatusCardColor =
-  | "red"
-  | "gold"
-  | "orange"
-  | "maroon"
-  | "brown"
-  | "cream";
+  "red" | "gold" | "orange" | "maroon" | "brown" | "cream";
 
 interface Props {
   count?: number;
   title: string;
-  icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  icon: React.ElementType<{ className?: string }>;
   color?: StatusCardColor;
 }
 

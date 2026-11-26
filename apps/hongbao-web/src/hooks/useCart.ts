@@ -24,6 +24,10 @@ import { AxiosError } from "axios";
 import { useAtom, useAtomValue } from "jotai";
 import { useCallback, useMemo } from "react";
 
+/** Lifetime products (flashcard decks) are a single unit, never months. */
+const monthsFor = (product: TShopProduct, months: number) =>
+  product.lifetime ? 1 : clampMonths(months);
+
 export type TItemPromo = { promo: TAppliedCoupon; discount: number };
 
 type TApplyCouponPayload = { code: string; courseId: string };
@@ -45,11 +49,13 @@ const useCart = () => {
       url: "coupon/apply",
     });
 
-  const { mutate: removeCoupon, isPending: isRemovingPromo } =
-    useMutationQuery<unknown, TApplyCouponPayload>({
-      url: "coupon/apply",
-      method: "delete",
-    });
+  const { mutate: removeCoupon, isPending: isRemovingPromo } = useMutationQuery<
+    unknown,
+    TApplyCouponPayload
+  >({
+    url: "coupon/apply",
+    method: "delete",
+  });
 
   const bumpCart = useCallback(() => setBump((n) => n + 1), [setBump]);
 
@@ -87,7 +93,9 @@ const useCart = () => {
     (product: TShopProduct, months: number = SHOP_DEFAULT_MONTHS) => {
       const exists = items.some((i) => i.product.id === product.id);
       setItems((prev) =>
-        exists ? prev : [...prev, { product, months: clampMonths(months) }],
+        exists
+          ? prev
+          : [...prev, { product, months: monthsFor(product, months) }],
       );
       if (!exists) bumpCart();
     },
@@ -113,7 +121,7 @@ const useCart = () => {
       setItems((prev) =>
         exists
           ? prev.filter((i) => i.product.id !== product.id)
-          : [...prev, { product, months: clampMonths(months) }],
+          : [...prev, { product, months: monthsFor(product, months) }],
       );
       if (!exists) bumpCart();
     },
@@ -125,7 +133,9 @@ const useCart = () => {
     (id: string, months: number) => {
       setItems((prev) =>
         prev.map((i) =>
-          i.product.id === id ? { ...i, months: clampMonths(months) } : i,
+          i.product.id === id
+            ? { ...i, months: monthsFor(i.product, months) }
+            : i,
         ),
       );
     },
@@ -151,8 +161,7 @@ const useCart = () => {
         const apiError = e as AxiosError<TErrorOptions>;
         return {
           ok: false as const,
-          error:
-            apiError.response?.data?.message || "That code isn't valid.",
+          error: apiError.response?.data?.message || "That code isn't valid.",
         };
       }
     },

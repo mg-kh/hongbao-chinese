@@ -8,6 +8,7 @@ export const CREATE_HANZI_GRID = "/dashboard/create-hanzi-grid";
 // Assets
 export const CATEGORY_LIST = "/dashboard/assets/category";
 export const COURSE_LIST = "/dashboard/assets/courses";
+export const CARD_LIST = "/dashboard/assets/card";
 export const FLASHCARD_LIST = "/dashboard/assets/flashcard";
 export const LESSON_LIST = "/dashboard/assets/lessons";
 export const SUB_LESSON_LIST = "/dashboard/assets/sub-lessons";

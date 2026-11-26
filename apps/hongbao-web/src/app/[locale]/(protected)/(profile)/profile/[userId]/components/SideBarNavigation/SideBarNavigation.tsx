@@ -4,9 +4,11 @@ import { useActiveRoute } from "@/hooks/useActiveRoute";
 import { Link } from "@/i18n/navigation";
 import { Box, Paper, Text } from "@mantine/core";
 import {
-  BookOpenIcon,
+  CourseTypeIcon,
+  FlashcardTypeIcon,
+} from "@/components/icons/productTypeIcons";
+import {
   BrainIcon,
-  CardsIcon,
   CaretRightIcon,
   GearIcon,
   HouseSimpleIcon,
@@ -37,7 +39,7 @@ const SideBarNavigation = () => {
       label: "ကျွန်ုပ်၏ သင်ခန်းစာများ",
       href: `/profile/${userId}/my-courses`,
       match: "my-courses",
-      icon: <BookOpenIcon size={17} weight="fill" />,
+      icon: <CourseTypeIcon size={17} weight="fill" />,
     },
     {
       label: "ဝယ်ယူမှု မှတ်တမ်း",
@@ -49,7 +51,7 @@ const SideBarNavigation = () => {
       label: "Flashcards",
       href: `/profile/${userId}/flashcards`,
       match: "flashcards",
-      icon: <CardsIcon size={17} weight="fill" />,
+      icon: <FlashcardTypeIcon size={17} weight="fill" />,
     },
     {
       label: "Memo Space",

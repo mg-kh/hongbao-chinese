@@ -82,7 +82,8 @@ const CheckoutSummary = () => {
                     <Text size="xs" c="gray.5">
                       {SHOP_TYPE_META[product.type].label}
                       {product.level ? ` · ${product.level}` : ""}
-                      {!product.isFree && ` · ${pluralize(m, "month")}`}
+                      {!product.isFree &&
+                        ` · ${product.lifetime ? "Lifetime" : pluralize(m, "month")}`}
                     </Text>
                     {itemPromo && (
                       <Text size="xs" c="hongbao-red-600" fw={600}>

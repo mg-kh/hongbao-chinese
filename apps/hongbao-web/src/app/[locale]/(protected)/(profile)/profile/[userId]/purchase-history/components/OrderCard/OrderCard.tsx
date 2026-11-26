@@ -1,6 +1,8 @@
 "use client";
 
-import OrderStatusBadge from "@/app/[locale]/(protected)/(profile)/profile/[userId]/purchase-history/components/OrderStatusBadge/OrderStatusBadge";
+import OrderStatusBadge, {
+  statusMeta,
+} from "@/app/[locale]/(protected)/(profile)/profile/[userId]/purchase-history/components/OrderStatusBadge/OrderStatusBadge";
 import OrderStatusTimeline from "@/app/[locale]/(protected)/(profile)/profile/[userId]/purchase-history/components/OrderStatusTimeline/OrderStatusTimeline";
 import { TPurchaseOrder } from "@/app/[locale]/(protected)/(profile)/profile/[userId]/types/purchase-history.type";
 import PurchaseOrderCard from "@/components/PurchaseOrderCard/PurchaseOrderCard";
@@ -20,6 +22,7 @@ const OrderCard: React.FC<Props> = ({ order }) => {
     <PurchaseOrderCard
       order={order}
       badge={<OrderStatusBadge status={order.status} size="sm" />}
+      surfaceClassName={(statusMeta[order.status] ?? statusMeta.PENDING).surface}
     >
       <Divider color="gray.2" />
 

@@ -4,12 +4,10 @@ import MobileBottomNav from "@/components/Navbar/MobileBottomNav/MobileBottomNav
 import ClientLayout from "@/layouts/ClientLayout/ClientLayout";
 import { Flex, Stack } from "@mantine/core";
 import {
-  BookOpenIcon,
-  BrainIcon,
-  CardsIcon,
-  GearIcon,
-  HouseSimpleIcon,
-} from "@phosphor-icons/react";
+  CourseTypeIcon,
+  FlashcardTypeIcon,
+} from "@/components/icons/productTypeIcons";
+import { BrainIcon, GearIcon, HouseSimpleIcon } from "@phosphor-icons/react";
 import { useParams } from "next/navigation";
 import React from "react";
 import SideBarNavigation from "./components/SideBarNavigation/SideBarNavigation";
@@ -48,13 +46,13 @@ const ProfileLayout: React.FC<Props> = ({ children }) => {
             label: "My courses",
             href: `/profile/${userId}/my-courses`,
             match: "my-courses",
-            icon: <BookOpenIcon size={20} weight="fill" />,
+            icon: <CourseTypeIcon size={20} weight="fill" />,
           },
           {
             label: "Flashcards",
             href: `/profile/${userId}/flashcards`,
             match: "flashcards",
-            icon: <CardsIcon size={20} weight="fill" />,
+            icon: <FlashcardTypeIcon size={20} weight="fill" />,
           },
           {
             label: "Memo Space",

@@ -8,6 +8,7 @@ import {
   Group,
   Pagination,
   Paper,
+  SimpleGrid,
   Stack,
   Text,
 } from "@mantine/core";
@@ -95,12 +96,7 @@ const PageComponent = () => {
 
       {/* item count for the active filter */}
       {stats.total > 0 && !isLoading && (
-        <Group
-          gap={8}
-          align="center"
-          wrap="wrap"
-          className="border-b! border-gray-100! pb-3!"
-        >
+        <Group gap={8} align="center" wrap="wrap">
           <Text size="sm" c="gray.6">
             Showing{" "}
             <Text span fw={700} c="gray.9">
@@ -151,14 +147,16 @@ const PageComponent = () => {
           </Stack>
         </Paper>
       ) : (
-        <Stack
-          gap={8}
+        <SimpleGrid
+          cols={{ base: 1, xs: 2, md: 3 }}
+          spacing={12}
+          verticalSpacing={12}
           className={`transition-opacity! duration-200! ${isFetching ? "opacity-60!" : ""}`}
         >
           {filteredCourses.map((c) => (
             <CourseCard key={c?.id} data={c} />
           ))}
-        </Stack>
+        </SimpleGrid>
       )}
 
       {totalPages > 1 && (

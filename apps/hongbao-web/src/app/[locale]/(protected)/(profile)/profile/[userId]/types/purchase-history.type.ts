@@ -25,6 +25,7 @@ export type TMyPurchaseItem = {
   purchaseId: string;
   courseId: string | null;
   mockTestId: string | null;
+  flashcardId: string | null;
   productName: string;
   /** Line price in the order's currency. */
   price: number;
@@ -33,6 +34,7 @@ export type TMyPurchaseItem = {
   createdAt: string;
   course: { id: string; title: string } | null;
   mockTest: { id: string; title: string } | null;
+  flashcard: { id: string; name: string } | null;
 };
 
 export type TMyPurchase = {

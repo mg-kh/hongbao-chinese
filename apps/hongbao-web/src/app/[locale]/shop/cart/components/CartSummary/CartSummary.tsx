@@ -79,9 +79,11 @@ const CartSummary: React.FC<Props> = ({
                 <Text size="xs" c="gray.5">
                   {product.isFree
                     ? "Free access"
-                    : `${money(product.price)} / mo`}
+                    : product.lifetime
+                      ? "Lifetime access"
+                      : `${money(product.price)} / mo`}
                 </Text>
-                {!product.isFree && (
+                {!product.isFree && !product.lifetime && (
                   <Text size="xs" c="gray.5">
                     × {pluralize(m, "month")}
                   </Text>
