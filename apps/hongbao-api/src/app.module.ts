@@ -16,6 +16,7 @@ import { LessonModule } from './lesson/lesson.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PurchasesModule } from './purchases/purchases.module';
+import { RevenueModule } from './revenue/revenue.module';
 import { QuestionModule } from './question/question.module';
 import { QuizSectionModule } from './quiz-section/quiz-section.module';
 import { QuizModule } from './quiz/quiz.module';
@@ -36,6 +37,7 @@ import { MockTestsModule } from './mock-tests/mock-tests.module';
 import { ClientMockTestModule } from './client/client-mock-test/client-mock-test.module';
 import { ShopModule } from './client/shop/shop.module';
 import { ClientPurchaseModule } from './client/client-purchase/client-purchase.module';
+import { ClientFeedbackModule } from './client/client-feedback/client-feedback.module';
 import { LoggerModule } from './logger/logger.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TelegramModule } from './telegram/telegram.module';
@@ -80,6 +82,7 @@ import { TelegramModule } from './telegram/telegram.module';
     VideoModule,
     ClientCourseModule,
     PurchasesModule,
+    RevenueModule,
     FeedbackModule,
     QuizSectionModule,
     R2Module,
@@ -96,6 +99,7 @@ import { TelegramModule } from './telegram/telegram.module';
     ClientMockTestModule,
     ShopModule,
     ClientPurchaseModule,
+    ClientFeedbackModule,
   ],
   controllers: [AppController],
   providers: [

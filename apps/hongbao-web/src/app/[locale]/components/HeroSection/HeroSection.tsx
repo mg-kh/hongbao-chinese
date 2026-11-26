@@ -1,18 +1,11 @@
-import {
-  Badge,
-  Box,
-  Button,
-  Container,
-  Flex,
-  Stack,
-  Text,
-} from "@mantine/core";
-import { IconArrowRight, IconSparkles } from "@tabler/icons-react";
+import { Badge, Box, Container, Flex, Stack, Text } from "@mantine/core";
+import { IconSparkles } from "@tabler/icons-react";
 import RubyButtonComponent from "@/components/Buttons/RubyButtonComponent/RubyButtonComponent";
-import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import ToolsPreviewSection from "../ToolsPreviewSection/ToolsPreviewSection";
 
 const HeroSection = () => {
+  const t = useTranslations("Home.HeroSection");
   return (
     <Box
       bg="var(--hb-hero-bg)"
@@ -37,7 +30,7 @@ const HeroSection = () => {
               className="w-fit! shadow-sm!"
               leftSection={<IconSparkles size={15} />}
             >
-              Trusted by 248,000+ learners worldwide
+              {t("trusted_badge")}
             </Badge>
             <Stack gap={10}>
               <Text
@@ -45,21 +38,19 @@ const HeroSection = () => {
                 c={"hongbao-red"}
                 className="text-4xl! sm:text-5xl! lg:text-[3.4rem]! leading-tight!"
               >
-                Master Chinese.
+                {t("headline_1")}
               </Text>
               <Text
                 fw={800}
                 className="text-4xl! sm:text-5xl! lg:text-[3.4rem]! leading-tight!"
               >
-                From HSK 1 to 5.
+                {t("headline_2")}
               </Text>
             </Stack>
             <Text size="lg" c={"gray.7"} className="max-w-[520px]!">
-              The world's most complete Mandarin platform — structured HSK
-              curriculum, AI-powered tone coaching, and adaptive lessons that
-              take you from your very first character to full native fluency.
+              {t("description")}
             </Text>
-            <div className="grid! grid-cols-2! sm:flex! gap-3! sm:gap-4! pt-2! w-full! sm:w-auto!">
+            <div className="flex! gap-3! sm:gap-4! pt-2! w-full! sm:w-auto!">
               <RubyButtonComponent
                 size="xl"
                 className="w-full! sm:w-auto! max-sm:h-auto! max-sm:px-3! max-sm:py-2! max-sm:text-sm!"
@@ -71,34 +62,8 @@ const HeroSection = () => {
                   },
                 }}
               >
-                သင်ခန်းစာများ
+                {t("lessons_button")}
               </RubyButtonComponent>
-              {/* Wrapped rather than `component={Link}` - this is a server
-                  component, and a component passed as a prop can't cross the
-                  server/client boundary. */}
-              <Link
-                href="/mock-test"
-                className="no-underline! w-full! sm:w-auto!"
-              >
-                <Button
-                  size="xl"
-                  variant="outline"
-                  color="hongbao-red"
-                  className="w-full! sm:w-auto! max-sm:h-auto! max-sm:px-3! max-sm:py-2! max-sm:text-sm! bg-surface/70! backdrop-blur-sm! transition-colors! duration-200!"
-                  styles={{
-                    label: {
-                      whiteSpace: "normal",
-                      textAlign: "center",
-                      lineHeight: 1.3,
-                    },
-                  }}
-                  rightSection={
-                    <IconArrowRight className="hidden! sm:inline-block!" />
-                  }
-                >
-                  Mock test စစ်ရန်
-                </Button>
-              </Link>
             </div>
           </Stack>
           <Box className="w-full lg:w-6/12 relative">

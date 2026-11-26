@@ -32,12 +32,11 @@ import {
   IconSparkles,
   IconUser,
 } from "@tabler/icons-react";
-import {
-  CourseTypeIcon,
-  MockTestTypeIcon,
-} from "@/components/icons/productTypeIcons";
+import { CourseTypeIcon } from "@/components/icons/productTypeIcons";
 import ColorSchemeToggle from "@/components/ColorSchemeToggle/ColorSchemeToggle";
+import LanguageSwitch from "@/components/LanguageSwitch/LanguageSwitch";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import CartButton from "./components/CartButton/CartButton";
 
 /** A single row in the mobile drawer menu. */
@@ -100,18 +99,17 @@ const DrawerRow: React.FC<{
 
 /** Primary nav - kept short deliberately; scannability drops past ~5-7 items. */
 const navItems = [
-  { label: "Home", href: "/", match: "/" },
-  { label: "Shop", href: "/shop", match: "shop" },
-  { label: "Mock Test", href: "/mock-test", match: "mock-test" },
-  { label: "Reading Blogs", href: "/blogs", match: "blogs" },
-  { label: "Privacy Policy", href: "/privacy-policy", match: "privacy-policy" },
-];
+  { labelKey: "home", href: "/", match: "/" },
+  { labelKey: "shop", href: "/shop", match: "shop" },
+  { labelKey: "reading_blogs", href: "/blogs", match: "blogs" },
+] as const;
 
 const ClientNavbar = () => {
   const [menuOpened, { open: openMenu, close: closeMenu }] =
     useDisclosure(false);
   const { data: user } = useProfile();
   const isActiveRoute = useActiveRoute();
+  const t = useTranslations("Navbar.ClientNavbar");
   return (
     <>
       <Container h="100%" size="xl">
@@ -144,7 +142,7 @@ const ClientNavbar = () => {
                     className="text-[10px]! sm:text-xs! uppercase! tracking-[0.12em]!"
                     lineClamp={1}
                   >
-                    Chinese Online Class
+                    {t("tagline")}
                   </Text>
                 </Stack>
               </Group>
@@ -153,7 +151,7 @@ const ClientNavbar = () => {
             {/* ---------- desktop nav ---------- */}
             <Group
               component="nav"
-              aria-label="Primary"
+              aria-label={t("primary_nav_aria")}
               className="hidden! md:flex!"
               gap={2}
               wrap="nowrap"
@@ -179,7 +177,7 @@ const ClientNavbar = () => {
                           : "text-gray-600! hover:bg-gray-50! hover:text-hongbao-red-600! dark:hover:text-night-red!"
                       }`}
                     >
-                      {item.label}
+                      {t(item.labelKey)}
                     </Text>
                   </Link>
                 );
@@ -189,6 +187,7 @@ const ClientNavbar = () => {
 
           {/* ---------- desktop actions ---------- */}
           <Group className="hidden! md:flex!" wrap="nowrap">
+            <LanguageSwitch />
             <ColorSchemeToggle />
             <CartButton />
             <Show when="signed-in">
@@ -276,7 +275,7 @@ const ClientNavbar = () => {
                     </Group>
                   </Box>
 
-                  <Menu.Label>Account</Menu.Label>
+                  <Menu.Label>{t("account")}</Menu.Label>
                   <Menu.Item
                     href={`/profile/${user?.id}`}
                     component={Link}
@@ -287,7 +286,7 @@ const ClientNavbar = () => {
                     }
                   >
                     <Text size="sm" fw={600} c="gray.8">
-                      Profile
+                      {t("profile")}
                     </Text>
                   </Menu.Item>
                   <Menu.Item
@@ -300,7 +299,7 @@ const ClientNavbar = () => {
                     }
                   >
                     <Text size="sm" fw={600} c="gray.8">
-                      My courses
+                      {t("my_courses")}
                     </Text>
                   </Menu.Item>
                   {user?.role !== "STUDENT" && (
@@ -314,14 +313,14 @@ const ClientNavbar = () => {
                       }
                     >
                       <Text size="sm" fw={600} c="gray.8">
-                        Dashboard
+                        {t("dashboard")}
                       </Text>
                     </Menu.Item>
                   )}
 
                   <Menu.Divider />
 
-                  <Menu.Label>Danger zone</Menu.Label>
+                  <Menu.Label>{t("danger_zone")}</Menu.Label>
                   <SignOutButton component="div">
                     <Menu.Item
                       className="hover:bg-red-50!"
@@ -332,7 +331,7 @@ const ClientNavbar = () => {
                       }
                     >
                       <Text size="sm" fw={600} c="var(--hb-danger-text)">
-                        Sign out
+                        {t("sign_out")}
                       </Text>
                     </Menu.Item>
                   </SignOutButton>
@@ -349,7 +348,7 @@ const ClientNavbar = () => {
                   className="px-6! shadow-[0_8px_20px_-8px_rgba(245,34,45,0.65)]! transition-transform! duration-200! ease-out! hover:-translate-y-0.5!"
                   styles={{ label: { fontWeight: 700 } }}
                 >
-                  Signin
+                  {t("sign_in")}
                 </Button>
               </SignInButton>
             </Show>
@@ -357,12 +356,13 @@ const ClientNavbar = () => {
 
           {/* ---------- mobile: theme switch + burger ---------- */}
           <Group gap={6} wrap="nowrap" className="md:hidden! shrink-0!">
+            <LanguageSwitch />
             <ColorSchemeToggle />
             <Burger
               opened={menuOpened}
               onClick={openMenu}
               size="md"
-              aria-label="Open menu"
+              aria-label={t("open_menu")}
             />
           </Group>
         </Group>
@@ -376,7 +376,7 @@ const ClientNavbar = () => {
         size="80%"
         title={
           <Text fw={700} c="hongbao-red">
-            Menu
+            {t("menu")}
           </Text>
         }
         className="md:hidden!"
@@ -444,7 +444,7 @@ const ClientNavbar = () => {
                   >
                     <IconLogout size={16} className="text-white!" />
                     <Text size="sm" fw={600} c="white">
-                      Sign out
+                      {t("sign_out")}
                     </Text>
                   </Group>
                 </UnstyledButton>
@@ -459,24 +459,24 @@ const ClientNavbar = () => {
                 c="gray.5"
                 className="uppercase! tracking-[0.16em]! px-3! pb-1!"
               >
-                Account
+                {t("account")}
               </Text>
               <DrawerRow
                 icon={<IconUser size={18} />}
-                label="Profile"
+                label={t("profile")}
                 href={`/profile/${user?.id}`}
                 onClick={closeMenu}
               />
               <DrawerRow
                 icon={<CourseTypeIcon size={18} />}
-                label="My courses"
+                label={t("my_courses")}
                 href={`/profile/${user?.id}/my-courses`}
                 onClick={closeMenu}
               />
               {user?.role !== "STUDENT" && (
                 <DrawerRow
                   icon={<IconDashboard size={18} />}
-                  label="Dashboard"
+                  label={t("dashboard")}
                   href="/dashboard"
                   onClick={closeMenu}
                 />
@@ -502,7 +502,7 @@ const ClientNavbar = () => {
 
                 <Stack gap={4} align="center">
                   <Text fw={700} c="white" ta="center">
-                    Welcome to Hong Bao
+                    {t("welcome_title")}
                   </Text>
                   <Text
                     size="xs"
@@ -510,8 +510,7 @@ const ClientNavbar = () => {
                     ta="center"
                     className="opacity-75! leading-relaxed!"
                   >
-                    Sign in to track your progress and pick up where you left
-                    off.
+                    {t("welcome_body")}
                   </Text>
                 </Stack>
 
@@ -523,16 +522,19 @@ const ClientNavbar = () => {
                     color="hongbao-red"
                     leftSection={<IconLogin2 size={18} />}
                   >
-                    Signin
+                    {t("sign_in")}
                   </Button>
                 </SignInButton>
               </Stack>
             </Box>
 
             <Group gap={8} justify="center">
-              <IconSparkles size={14} className="text-hongbao-red-500! dark:text-night-red!" />
+              <IconSparkles
+                size={14}
+                className="text-hongbao-red-500! dark:text-night-red!"
+              />
               <Text size="xs" fw={600} c="gray.6">
-                Trusted by 248,000+ learners worldwide
+                {t("trusted_by")}
               </Text>
             </Group>
           </Show>
@@ -545,30 +547,24 @@ const ClientNavbar = () => {
               c="gray.5"
               className="uppercase! tracking-[0.16em]! px-3! pb-1!"
             >
-              Browse
+              {t("browse")}
             </Text>
             <DrawerRow
               icon={<IconBuildingStore size={18} />}
-              label="Shop"
+              label={t("shop")}
               href="/shop"
               onClick={closeMenu}
             />
             <CartButton variant="row" onNavigate={closeMenu} />
             <DrawerRow
-              icon={<MockTestTypeIcon size={18} />}
-              label="Mock Test"
-              href="/mock-test"
-              onClick={closeMenu}
-            />
-            <DrawerRow
               icon={<IconArticle size={18} />}
-              label="Reading Blogs"
+              label={t("reading_blogs")}
               href="/blogs"
               onClick={closeMenu}
             />
             <DrawerRow
               icon={<IconShieldCheck size={18} />}
-              label="Privacy Policy"
+              label={t("privacy_policy")}
               href="/privacy-policy"
               onClick={closeMenu}
             />

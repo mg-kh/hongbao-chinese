@@ -19,30 +19,24 @@ import { useTranslations } from "next-intl";
 const benefits = [
   {
     icon: <LightningIcon size={20} weight="fill" />,
-    title: "Opens in one tap",
-    body: "Launch straight from your home screen — no browser, no waiting.",
+    key: "one_tap",
   },
   {
     icon: <BellRingingIcon size={20} weight="fill" />,
-    title: "Never miss a review",
-    body: "Gentle reminders keep your streak and due flashcards on track.",
+    key: "reminders",
   },
   {
     icon: <WifiSlashIcon size={20} weight="fill" />,
-    title: "Nothing to download",
-    body: "Installs in seconds. No app store, no storage worries.",
+    key: "no_download",
   },
-];
+] as const;
 
 /** Manual steps shown when the browser can't offer a native install prompt. */
-const manualSteps = [
-  "Open your browser menu",
-  'Choose "Add to Home Screen"',
-  "Confirm — that's it",
-];
+const manualSteps = ["open_menu", "add_to_home", "confirm"] as const;
 
 const InstallAppSection = () => {
-  const t = useTranslations();
+  const t = useTranslations("Home.InstallAppSection");
+  const tPwa = useTranslations("PwaInstall");
   const { canInstall, open } = usePwaInstall();
 
   return (
@@ -68,7 +62,7 @@ const InstallAppSection = () => {
           >
             <DeviceMobileIcon size={14} weight="fill" className="text-white!" />
             <Text size="xs" fw={700} c="white" className="tracking-wide!">
-              Progressive Web App
+              {t("pwa_badge")}
             </Text>
           </Group>
 
@@ -78,7 +72,7 @@ const InstallAppSection = () => {
             mt={20}
             className="text-[1.75rem]! sm:text-4xl! md:text-[2.75rem]! leading-[1.2]! max-w-[720px]! text-balance!"
           >
-            {t("PwaInstall.title")}
+            {tPwa("title")}
           </Text>
 
           <Text
@@ -86,7 +80,7 @@ const InstallAppSection = () => {
             mt={14}
             className="opacity-75! text-sm! sm:text-base! leading-relaxed! max-w-[560px]!"
           >
-            {t("PwaInstall.description")}
+            {tPwa("description")}
           </Text>
 
           {/* primary action - one per state, kept visually dominant */}
@@ -106,7 +100,7 @@ const InstallAppSection = () => {
                   label: { fontWeight: 700 },
                 }}
               >
-                {t("PwaInstall.install")}
+                {tPwa("install")}
               </Button>
             ) : (
               // No native prompt on this browser (iOS Safari, or already
@@ -126,7 +120,7 @@ const InstallAppSection = () => {
                       fw={600}
                       className="opacity-90! text-left!"
                     >
-                      {step}
+                      {t(`steps.${step}`)}
                     </Text>
                   </div>
                 ))}
@@ -147,7 +141,7 @@ const InstallAppSection = () => {
               ))}
             </Group>
             <Text size="xs" c="white" fw={600} className="opacity-75!">
-              Loved by 248,000+ learners worldwide
+              {t("loved_by")}
             </Text>
           </Group>
 
@@ -156,7 +150,7 @@ const InstallAppSection = () => {
           <div className="mt-9! sm:mt-12! grid grid-cols-1 sm:grid-cols-3 gap-2.5! sm:gap-4! w-full max-w-[900px]">
             {benefits.map((b) => (
               <div
-                key={b.title}
+                key={b.key}
                 className="flex! flex-row! sm:flex-col! items-center! gap-3! sm:gap-2.5! rounded-2xl! bg-white/[0.08]! ring-1! ring-white/15! backdrop-blur-sm! p-3.5! sm:p-6! transition-colors! duration-300! ease-out! hover:bg-white/[0.13]!"
               >
                 <Box className="flex! items-center! justify-center! shrink-0! w-9! h-9! sm:w-11! sm:h-11! rounded-xl! bg-white/15! text-hongbao-gold-300!">
@@ -164,7 +158,7 @@ const InstallAppSection = () => {
                 </Box>
                 <div className="min-w-0! text-left! sm:text-center!">
                   <Text fw={700} c="white" size="sm" className="leading-snug!">
-                    {b.title}
+                    {t(`benefits.${b.key}.title`)}
                   </Text>
                   <Text
                     size="xs"
@@ -172,7 +166,7 @@ const InstallAppSection = () => {
                     mt={2}
                     className="opacity-70! leading-snug! sm:leading-relaxed!"
                   >
-                    {b.body}
+                    {t(`benefits.${b.key}.body`)}
                   </Text>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateFeedbackDto } from './create-feedback.dto';
+import { UpdateFeedbackSchema } from '@repo/shared';
+import { createZodDto } from 'nestjs-zod';
 
-export class UpdateFeedbackDto extends PartialType(CreateFeedbackDto) {}
+export class UpdateFeedbackDto extends createZodDto(UpdateFeedbackSchema) {}

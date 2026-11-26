@@ -1,5 +1,6 @@
 import { Card, Stack, Text } from "@mantine/core";
 import { MegaphoneSimpleIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 
 /**
  * Rendered wherever a published `advertisement` node (from CustomRichTextEditor)
@@ -8,15 +9,16 @@ import { MegaphoneSimpleIcon } from "@phosphor-icons/react";
  * the editor or content-parsing code that reference this component.
  */
 const AdsenseBanner: React.FC = () => {
+  const t = useTranslations("Shared.AdsenseBanner");
   return (
     <Card withBorder radius="md" padding="lg" bg="var(--mantine-color-gray-0)">
       <Stack align="center" gap={4}>
         <MegaphoneSimpleIcon size={28} color="var(--mantine-color-dimmed)" />
         <Text fw={600} size="sm">
-          Advertisement
+          {t("title")}
         </Text>
         <Text size="xs" c="dimmed">
-          Google AdSense will appear here
+          {t("placeholder")}
         </Text>
       </Stack>
     </Card>

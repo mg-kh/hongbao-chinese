@@ -12,19 +12,21 @@ import {
   TagIcon,
   XIcon,
 } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import type { ShopTypeFilter } from "@/app/[locale]/shop/components/ShopPage/useContainer";
 import FilterOption from "@/app/[locale]/shop/components/ShopPage/components/ShopFilters/components/FilterOption/FilterOption";
 import FilterSection from "@/app/[locale]/shop/components/ShopPage/components/ShopFilters/components/FilterSection/FilterSection";
 
 const TYPE_OPTIONS: {
   value: ShopTypeFilter;
-  label: string;
+  /** Translation key under `Shop.Types`. */
+  labelKey: "all_products" | "courses" | "mock_tests" | "flashcards";
   icon: React.ElementType;
 }[] = [
-  { value: "all", label: "All products", icon: SquaresFourIcon },
-  { value: "course", label: "Courses", icon: CourseTypeIcon },
-  { value: "mock-test", label: "Mock Tests", icon: MockTestTypeIcon },
-  { value: "flashcard", label: "Flashcards", icon: FlashcardTypeIcon },
+  { value: "all", labelKey: "all_products", icon: SquaresFourIcon },
+  { value: "course", labelKey: "courses", icon: CourseTypeIcon },
+  { value: "mock-test", labelKey: "mock_tests", icon: MockTestTypeIcon },
+  { value: "flashcard", labelKey: "flashcards", icon: FlashcardTypeIcon },
 ];
 
 interface Props {
@@ -55,9 +57,13 @@ const ShopFilters: React.FC<Props> = ({
   clearFilters,
   categoryOptions,
 }) => {
-  const typeLabel = TYPE_OPTIONS.find((o) => o.value === type)?.label;
+  const t = useTranslations("Shop.Filters");
+  const tTypes = useTranslations("Shop.Types");
+  const typeKey = TYPE_OPTIONS.find((o) => o.value === type)?.labelKey;
+  const typeLabel = typeKey ? tTypes(typeKey) : undefined;
   const levelLabel =
-    categoryOptions.find((o) => o.value === categoryId)?.label ?? "All levels";
+    categoryOptions.find((o) => o.value === categoryId)?.label ??
+    t("all_levels");
 
   return (
     <div className="flex! flex-col!">
@@ -65,7 +71,7 @@ const ShopFilters: React.FC<Props> = ({
       <div className="flex! items-center! justify-between! pb-3!">
         <div className="flex! items-center! gap-2!">
           <Text fw={800} size="md" className="text-gray-900!">
-            Filters
+            {t("title")}
           </Text>
           {activeFilterCount > 0 && (
             <span className="flex! h-5! min-w-5! items-center! justify-center! rounded-full! bg-hongbao-red-500! px-1.5! text-[11px]! font-bold! text-white!">
@@ -79,7 +85,7 @@ const ShopFilters: React.FC<Props> = ({
             onClick={clearFilters}
             className="text-xs! font-semibold! text-hongbao-red-600! dark:text-night-red! underline-offset-2! hover:underline! cursor-pointer!"
           >
-            Clear all
+            {t("clear_all")}
           </button>
         )}
       </div>
@@ -89,8 +95,8 @@ const ShopFilters: React.FC<Props> = ({
         <TextInput
           value={search}
           onChange={(e) => setSearch(e.currentTarget.value)}
-          placeholder="Search products"
-          aria-label="Search products"
+          placeholder={t("search_placeholder")}
+          aria-label={t("search_placeholder")}
           radius="md"
           size="sm"
           leftSection={<MagnifyingGlassIcon size={15} />}
@@ -98,7 +104,7 @@ const ShopFilters: React.FC<Props> = ({
             search ? (
               <UnstyledButton
                 onClick={() => setSearch("")}
-                aria-label="Clear search"
+                aria-label={t("clear_search")}
                 className="flex! text-gray-400! hover:text-gray-700!"
               >
                 <XIcon size={14} weight="bold" />
@@ -108,7 +114,7 @@ const ShopFilters: React.FC<Props> = ({
         />
       </div>
 
-      <FilterSection title="Product type" summary={typeLabel}>
+      <FilterSection title={t("product_type")} summary={typeLabel}>
         <div role="radiogroup" className="flex! flex-col! gap-0.5!">
           {TYPE_OPTIONS.map((opt) => (
             <FilterOption
@@ -118,21 +124,21 @@ const ShopFilters: React.FC<Props> = ({
               active={type === opt.value}
               onClick={() => setType(opt.value)}
             >
-              {opt.label}
+              {tTypes(opt.labelKey)}
             </FilterOption>
           ))}
         </div>
       </FilterSection>
 
       {categoryOptions.length > 0 && (
-        <FilterSection title="HSK level" summary={levelLabel}>
+        <FilterSection title={t("hsk_level")} summary={levelLabel}>
           <div role="radiogroup" className="flex! flex-col! gap-0.5!">
             <FilterOption
               shape="radio"
               active={!categoryId}
               onClick={() => categoryId && toggleCategory(categoryId)}
             >
-              All levels
+              {t("all_levels")}
             </FilterOption>
             {categoryOptions.map((opt) => (
               <FilterOption
@@ -148,14 +154,17 @@ const ShopFilters: React.FC<Props> = ({
         </FilterSection>
       )}
 
-      <FilterSection title="Deals" summary={onSaleOnly ? "On sale" : undefined}>
+      <FilterSection
+        title={t("deals")}
+        summary={onSaleOnly ? t("on_sale") : undefined}
+      >
         <FilterOption
           shape="checkbox"
           icon={TagIcon}
           active={onSaleOnly}
           onClick={() => setOnSaleOnly(!onSaleOnly)}
         >
-          On sale
+          {t("on_sale")}
         </FilterOption>
       </FilterSection>
     </div>

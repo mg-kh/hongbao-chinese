@@ -7,6 +7,7 @@ import {
   PaperPlaneTiltIcon,
   WarningCircleIcon,
 } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import CheckoutSummary from "../CheckoutSummary/CheckoutSummary";
 import CheckoutProgress from "./components/CheckoutProgress/CheckoutProgress";
 import ContactDetails from "./components/ContactDetails/ContactDetails";
@@ -14,13 +15,14 @@ import PaymentMethod from "./components/PaymentMethod/PaymentMethod";
 import UploadProof from "./components/UploadProof/UploadProof";
 import useContainer from "./useContainer";
 
-const STEP_LABELS = ["Details", "Payment", "Confirm"];
+const STEP_KEYS = ["details", "payment", "confirm"] as const;
 
 interface Props {
   onSubmitted: () => void;
 }
 
 const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
+  const t = useTranslations("Checkout.CheckoutSteps");
   const {
     step,
     isStepValid,
@@ -49,12 +51,10 @@ const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
           </Box>
           <Stack gap={8}>
             <Text fw="bold" ta="center" size="lg">
-              Submit your order?
+              {t("confirm_title")}
             </Text>
             <Text c="gray.6" size="sm" ta="center" className="leading-relaxed!">
-              Double-check your 6-digit transaction number and payment
-              screenshot. We can&apos;t activate a purchase from an incorrect
-              reference.
+              {t("confirm_body")}
             </Text>
           </Stack>
           <Group
@@ -70,7 +70,7 @@ const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
               onClick={close}
               className="w-full! sm:w-auto!"
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               onClick={handleConfirm}
@@ -80,7 +80,7 @@ const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
               loading={isPending}
               className="w-full! sm:w-auto!"
             >
-              Confirm order
+              {t("confirm_order")}
             </Button>
           </Group>
         </Stack>
@@ -89,7 +89,7 @@ const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
       <Stack gap={20}>
         <Box className="rounded-2xl! bg-surface! p-4! ring-1! ring-gray-200! sm:p-5!">
           <CheckoutProgress
-            steps={STEP_LABELS}
+            steps={STEP_KEYS.map((k) => t(`steps.${k}`))}
             current={step}
             onStepClick={(i) => setValue("step", i)}
           />
@@ -123,7 +123,7 @@ const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
           leftSection={<ArrowLeftIcon size={16} />}
           className="flex-1! sm:flex-none!"
         >
-          Back
+          {t("back")}
         </Button>
 
         {step === 2 ? (
@@ -136,7 +136,7 @@ const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
             rightSection={<PaperPlaneTiltIcon size={16} weight="fill" />}
             className="flex-1! sm:flex-none!"
           >
-            Submit order
+            {t("submit_order")}
           </Button>
         ) : (
           <Button
@@ -148,7 +148,7 @@ const CheckoutSteps: React.FC<Props> = ({ onSubmitted }) => {
             disabled={!isStepValid}
             className="flex-1! sm:flex-none!"
           >
-            Continue
+            {t("continue")}
           </Button>
         )}
       </Group>

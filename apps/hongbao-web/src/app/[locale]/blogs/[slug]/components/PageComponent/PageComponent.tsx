@@ -24,12 +24,19 @@ import {
   UserCircleIcon,
 } from "@phosphor-icons/react";
 import React from "react";
-import { categoryBadge, categoryCover } from "../../../blogs.data";
+import { useTranslations } from "next-intl";
+import {
+  categoryBadge,
+  categoryCover,
+  categoryLabelKey,
+} from "../../../blogs.data";
 import BlogCard from "../../../components/PageComponent/components/BlogCard/BlogCard";
 import useContainer from "./useContainer";
 
 const PageComponent = () => {
   const { blog, related } = useContainer();
+  const t = useTranslations("Blogs.DetailPage");
+  const tCategory = useTranslations("Blogs.categories");
 
   if (!blog) {
     return (
@@ -39,10 +46,10 @@ const PageComponent = () => {
             <ArticleIcon size={30} />
           </Box>
           <Text fw={700} size="lg">
-            Article not found
+            {t("not_found_title")}
           </Text>
           <Text size="sm" c="gray.6" ta="center">
-            This article may have been moved or removed.
+            {t("not_found_body")}
           </Text>
           <Button
             component={Link}
@@ -51,7 +58,7 @@ const PageComponent = () => {
             radius="md"
             leftSection={<ArrowLeftIcon size={15} weight="bold" />}
           >
-            Back to blogs
+            {t("back_to_blogs")}
           </Button>
         </Stack>
       </ClientLayout>
@@ -77,7 +84,7 @@ const PageComponent = () => {
             >
               <ArrowLeftIcon size={14} weight="bold" />
               <Text size="xs" fw={600} c="white" className="opacity-90!">
-                All articles
+                {t("all_articles")}
               </Text>
             </Link>
 
@@ -88,7 +95,7 @@ const PageComponent = () => {
               c={categoryBadge[blog.category]}
               className="w-fit!"
             >
-              {blog.category}
+              {tCategory(categoryLabelKey[blog.category])}
             </Badge>
 
             <Text
@@ -119,7 +126,7 @@ const PageComponent = () => {
               <Group gap={5} wrap="nowrap">
                 <ClockIcon size={14} className="text-white/70!" />
                 <Text size="xs" c="white" className="opacity-80!">
-                  {blog.readMinutes} min read
+                  {t("min_read", { minutes: blog.readMinutes })}
                 </Text>
               </Group>
             </Group>
@@ -141,7 +148,7 @@ const PageComponent = () => {
 
               <Stack gap={16}>
                 <Text size="xl" fw={"bold"} c={"hongbao-red"}>
-                  Keep reading
+                  {t("keep_reading")}
                 </Text>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                   {related.map((b) => (
@@ -164,11 +171,10 @@ const PageComponent = () => {
         >
           <Stack align="center" gap={10}>
             <Text fw={800} className="text-lg! sm:text-xl!" ta="center">
-              Ready to put this into practice?
+              {t("cta_title")}
             </Text>
             <Text size="sm" c="gray.6" ta="center" className="max-w-[420px]!">
-              Structured HSK courses, flashcards, and spaced repetition — all in
-              one place.
+              {t("cta_body")}
             </Text>
             <Button
               component={Link}
@@ -178,7 +184,7 @@ const PageComponent = () => {
               size="md"
               className="mt-2!"
             >
-              Explore courses
+              {t("cta_button")}
             </Button>
           </Stack>
         </Paper>

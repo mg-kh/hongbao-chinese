@@ -1,4 +1,5 @@
 import { List, Stack, Text } from "@mantine/core";
+import { useTranslations } from "next-intl";
 import type { PolicySection as PolicySectionType } from "../../policy.data";
 
 interface Props {
@@ -6,6 +7,7 @@ interface Props {
 }
 
 const PolicySection: React.FC<Props> = ({ section }) => {
+  const t = useTranslations(`PrivacyPolicy.sections.${section.key}`);
   return (
     <Stack
       id={section.id}
@@ -18,12 +20,12 @@ const PolicySection: React.FC<Props> = ({ section }) => {
         fw={700}
         className="text-lg! sm:text-xl! text-gray-900! leading-snug!"
       >
-        {section.title}
+        {t("title")}
       </Text>
 
       {section.paragraphs?.map((p) => (
         <Text key={p} c="gray.7" size="sm" className="leading-relaxed!">
-          {p}
+          {t(p)}
         </Text>
       ))}
 
@@ -38,7 +40,7 @@ const PolicySection: React.FC<Props> = ({ section }) => {
           }}
         >
           {section.bullets.map((b) => (
-            <List.Item key={b}>{b}</List.Item>
+            <List.Item key={b}>{t(b)}</List.Item>
           ))}
         </List>
       )}

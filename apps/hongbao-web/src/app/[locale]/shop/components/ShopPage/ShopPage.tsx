@@ -1,13 +1,13 @@
 "use client";
 
 import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
-import { pluralize } from "@/utils/pluralize";
 import LoaderComponent from "@/components/LoaderComponent/LoaderComponent";
 import MobileBottomNav from "@/components/Navbar/MobileBottomNav/MobileBottomNav";
 import { publicBottomNavItems } from "@/components/Navbar/MobileBottomNav/publicNavItems";
 import ClientLayout from "@/layouts/ClientLayout/ClientLayout";
 import { Box, Button, Container, Drawer, Stack, Text } from "@mantine/core";
 import { StorefrontIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import FlashDeals from "@/app/[locale]/shop/components/ShopPage/components/FlashDeals/FlashDeals";
 import ProductCard from "@/app/[locale]/shop/components/ShopPage/components/ProductCard/ProductCard";
 import ResultsToolbar from "@/app/[locale]/shop/components/ShopPage/components/ResultsToolbar/ResultsToolbar";
@@ -21,6 +21,7 @@ interface Props {
 }
 
 const ShopPage: React.FC<Props> = ({ initialType }) => {
+  const t = useTranslations("Shop.ShopPage");
   const {
     isFetching,
     search,
@@ -64,10 +65,10 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
       <Container size={"xl"} px={{ base: 12, sm: 24 }}>
         <Stack gap={16} pt={{ base: 14, md: 20 }} pb={{ base: 32, md: 44 }}>
           <CustomBreadCrumb
-            title="Shop"
+            title={t("title")}
             links={[
-              { label: "Home", href: "/", isActive: true },
-              { label: "Shop", href: "", isActive: false },
+              { label: t("home"), href: "/", isActive: true },
+              { label: t("title"), href: "", isActive: false },
             ]}
           />
 
@@ -97,10 +98,10 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
                     <StorefrontIcon size={26} weight="fill" />
                   </Box>
                   <Text fw={700} className="text-gray-900!">
-                    No products match your filters
+                    {t("empty_title")}
                   </Text>
                   <Text size="sm" c="gray.6" className="mt-1!">
-                    Try removing a filter or clearing your search.
+                    {t("empty_body")}
                   </Text>
                   <Button
                     onClick={clearFilters}
@@ -109,7 +110,7 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
                     radius="xl"
                     className="mt-4!"
                   >
-                    Clear all filters
+                    {t("clear_all_filters")}
                   </Button>
                 </Box>
               ) : (
@@ -133,7 +134,7 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
         radius="20px 20px 0 0"
         title={
           <Text fw={700} c="hongbao-red">
-            Filters
+            {t("filters")}
           </Text>
         }
         classNames={{ body: "pb-6!" }}
@@ -147,7 +148,7 @@ const ShopPage: React.FC<Props> = ({ initialType }) => {
             color="hongbao-red"
             fullWidth
           >
-            Show {pluralize(total, "result")}
+            {t("show_results", { count: total })}
           </Button>
         </Stack>
       </Drawer>

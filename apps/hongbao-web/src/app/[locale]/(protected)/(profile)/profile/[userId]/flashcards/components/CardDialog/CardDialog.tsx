@@ -22,6 +22,7 @@ import {
   CheckIcon,
   EyeIcon,
 } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface Props {
@@ -40,21 +41,19 @@ const navButton =
 const ratings = [
   {
     value: "learning",
-    label: "Still learning",
     shortcut: "1",
     icon: ArrowsClockwiseIcon,
     idle: "border-hongbao-orange-100! bg-hongbao-orange-50! text-hongbao-orange-700! dark:text-night-orange! hover:border-hongbao-orange-200!",
     active: "border-hongbao-orange-500! bg-hongbao-orange-500! text-white!",
-    badge: { label: "Still learning", color: "hongbao-orange" },
+    badgeColor: "hongbao-orange",
   },
   {
     value: "known",
-    label: "Got it",
     shortcut: "2",
     icon: CheckIcon,
     idle: "border-green-100! bg-green-50! text-green-700! dark:text-night-green! hover:border-green-300!",
     active: "border-green-600! bg-green-600! text-white!",
-    badge: { label: "Known", color: "green" },
+    badgeColor: "green",
   },
 ] as const;
 
@@ -84,8 +83,13 @@ const CardDialog: React.FC<Props> = (props) => {
     goNext,
     rate,
   } = useContainer(props);
+  const t = useTranslations("Profile.Flashcards.CardDialog");
 
-  const ratingBadge = ratings.find((r) => r.value === rating)?.badge;
+  const ratingEntry = ratings.find((r) => r.value === rating);
+  const ratingBadge = ratingEntry && {
+    label: t(`rating_badge.${ratingEntry.value}`),
+    color: ratingEntry.badgeColor,
+  };
 
   return (
     <Modal.Root
@@ -137,7 +141,7 @@ const CardDialog: React.FC<Props> = (props) => {
                 color="hongbao-orange"
                 className="tabular-nums!"
               >
-                Card {position} / {total}
+                {t("card_position", { position, total })}
               </Badge>
               {ratingBadge && (
                 <Badge
@@ -157,14 +161,14 @@ const CardDialog: React.FC<Props> = (props) => {
               lineClamp={1}
               className="leading-snug!"
             >
-              {props.deckName ?? "Flashcards"}
+              {props.deckName ?? t("default_deck_name")}
             </Text>
           </Modal.Title>
 
           <Modal.CloseButton
             size={32}
             radius="xl"
-            aria-label="Close card"
+            aria-label={t("close_card")}
             className="ms-0! shrink-0! bg-gray-50! text-gray-500! hover:bg-gray-100! hover:text-gray-800!"
           />
         </Modal.Header>
@@ -175,7 +179,7 @@ const CardDialog: React.FC<Props> = (props) => {
           radius={0}
           color="hongbao-red"
           transitionDuration={250}
-          aria-label={`Card ${position} of ${total}`}
+          aria-label={t("card_of", { position, total })}
           className="shrink-0! bg-gray-100!"
         />
 
@@ -198,16 +202,20 @@ const CardDialog: React.FC<Props> = (props) => {
 
           {/* bottom bar: prev · (show answer | rating) · next */}
           <nav
-            aria-label="Card navigation"
+            aria-label={t("card_navigation")}
             className="flex! shrink-0! items-center! gap-2! border-t! border-gray-100! bg-surface! px-4! pt-3! pb-[calc(0.75rem+env(safe-area-inset-bottom))]! sm:gap-3! sm:px-5! sm:pb-3!"
           >
             <Tooltip
-              label={prevCard ? `Previous: ${prevCard.cnWord}` : "First card"}
+              label={
+                prevCard
+                  ? t("previous_word", { word: prevCard.cnWord })
+                  : t("first_card")
+              }
               withArrow
             >
               <ActionIcon
                 size={44}
-                aria-label="Previous card"
+                aria-label={t("previous_card")}
                 aria-keyshortcuts="ArrowLeft"
                 disabled={!prevCard}
                 onClick={goPrev}
@@ -227,7 +235,7 @@ const CardDialog: React.FC<Props> = (props) => {
                 leftSection={<EyeIcon size={16} weight="bold" />}
                 className="min-w-0! flex-1! text-sm! font-semibold! transition-transform! duration-150! active:scale-[0.98]!"
               >
-                Show answer
+                {t("show_answer")}
               </Button>
             ) : (
               <div className="grid min-w-0 flex-1 grid-cols-2 gap-2 [animation:fade-up_0.2s_ease-out_both]">
@@ -252,7 +260,7 @@ const CardDialog: React.FC<Props> = (props) => {
                         selected ? b.active : b.idle,
                       )}
                     >
-                      {b.label}
+                      {t(`rating.${b.value}`)}
                     </Button>
                   );
                 })}
@@ -260,12 +268,16 @@ const CardDialog: React.FC<Props> = (props) => {
             )}
 
             <Tooltip
-              label={nextCard ? `Next: ${nextCard.cnWord}` : "Last card"}
+              label={
+                nextCard
+                  ? t("next_word", { word: nextCard.cnWord })
+                  : t("last_card")
+              }
               withArrow
             >
               <ActionIcon
                 size={44}
-                aria-label="Next card"
+                aria-label={t("next_card")}
                 aria-keyshortcuts="ArrowRight"
                 disabled={!nextCard}
                 onClick={goNext}

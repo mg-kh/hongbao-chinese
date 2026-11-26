@@ -23,46 +23,19 @@ const dayRenderer: DatePickerInputProps<"range">["renderDay"] = (date) => {
   );
 };
 
-const getDefaultPresets = (today: Dayjs): DatePickerInputProps<"range">["presets"] => [
-  {
-    value: [today.format("YYYY-MM-DD"), today.format("YYYY-MM-DD")],
-    label: "Today",
-  },
-  {
-    value: [
-      today.subtract(2, "day").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ],
-    label: "Last two days",
-  },
-  {
-    value: [
-      today.subtract(7, "day").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ],
-    label: "Last 7 days",
-  },
-  {
-    value: [
-      today.startOf("month").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ],
-    label: "This month",
-  },
-  {
-    value: [
-      today.subtract(1, "month").startOf("month").format("YYYY-MM-DD"),
-      today.subtract(1, "month").endOf("month").format("YYYY-MM-DD"),
-    ],
-    label: "Last month",
-  },
-  {
-    value: [
-      today.subtract(1, "year").startOf("year").format("YYYY-MM-DD"),
-      today.subtract(1, "year").endOf("year").format("YYYY-MM-DD"),
-    ],
-    label: "Last year",
-  },
+const fmt = (d: Dayjs) => d.format("YYYY-MM-DD");
+
+// Shared presets for every date-range filter in the app. Built per render so
+// "today" stays correct if the page is left open past midnight.
+const getDefaultPresets = (
+  today: Dayjs,
+): DatePickerInputProps<"range">["presets"] => [
+  { label: "Today", value: [fmt(today), fmt(today)] },
+  { label: "This Week", value: [fmt(today.startOf("week")), fmt(today)] },
+  { label: "This Month", value: [fmt(today.startOf("month")), fmt(today)] },
+  { label: "3 Months", value: [fmt(today.subtract(3, "month")), fmt(today)] },
+  { label: "6 Months", value: [fmt(today.subtract(6, "month")), fmt(today)] },
+  { label: "1 Year", value: [fmt(today.subtract(1, "year")), fmt(today)] },
 ];
 
 const DateRangeInput: React.FC<Props> = ({ onChange, value, presets, ...props }) => {

@@ -1,7 +1,6 @@
 "use client";
 
 import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
-import { pluralize } from "@/utils/pluralize";
 import MobileBottomNav from "@/components/Navbar/MobileBottomNav/MobileBottomNav";
 import { publicBottomNavItems } from "@/components/Navbar/MobileBottomNav/publicNavItems";
 import { Link } from "@/i18n/navigation";
@@ -18,11 +17,13 @@ import {
 } from "@mantine/core";
 import { ShoppingBagIcon, StorefrontIcon } from "@phosphor-icons/react";
 import { IconArrowRight, IconTrash } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 import CartLine from "../CartLine/CartLine";
 import CartSummary from "../CartSummary/CartSummary";
 import useContainer from "./useContainer";
 
 const CartPage = () => {
+  const t = useTranslations("Cart.CartPage");
   const {
     items,
     count,
@@ -48,15 +49,15 @@ const CartPage = () => {
           <Group justify="space-between" align="flex-end" wrap="nowrap">
             <Group gap={10} align="flex-end" wrap="nowrap" miw={0}>
               <CustomBreadCrumb
-                title="Shopping Cart"
+                title={t("title")}
                 links={[
-                  { label: "Shop", href: "/shop", isActive: true },
-                  { label: "Cart", href: "", isActive: false },
+                  { label: t("shop"), href: "/shop", isActive: true },
+                  { label: t("cart"), href: "", isActive: false },
                 ]}
               />
               {isReady && count > 0 && (
                 <span className="mb-1! shrink-0! rounded-full! bg-hongbao-red-50! px-2.5! py-0.5! text-xs! font-bold! text-hongbao-red-700! dark:text-night-red!">
-                  {pluralize(count, "item")}
+                  {t("items", { count })}
                 </span>
               )}
             </Group>
@@ -67,7 +68,7 @@ const CartPage = () => {
                 className="flex! items-center! gap-1! text-xs! font-semibold! text-gray-500! transition-colors! duration-200! hover:text-hongbao-red-600! dark:hover:text-night-red! cursor-pointer!"
               >
                 <IconTrash size={13} />
-                Clear cart
+                {t("clear_cart")}
               </button>
             )}
           </Group>
@@ -78,10 +79,10 @@ const CartPage = () => {
                 <ShoppingBagIcon size={28} weight="fill" />
               </Box>
               <Text fw={700} className="text-gray-900!">
-                Your cart is empty
+                {t("empty_title")}
               </Text>
               <Text size="sm" c="gray.6" className="mt-1!">
-                Browse courses, flashcards, and mock tests to get started.
+                {t("empty_body")}
               </Text>
               <Button
                 component={Link}
@@ -91,7 +92,7 @@ const CartPage = () => {
                 radius="xl"
                 className="mt-4!"
               >
-                Browse the shop
+                {t("browse_shop")}
               </Button>
             </Box>
           ) : (
@@ -158,7 +159,7 @@ const CartPage = () => {
               color="hongbao-red"
               label={
                 <Text size="11px" c="gray.6">
-                  I agree to the Terms and Conditions and Privacy Policy
+                  {t("agree_terms")}
                 </Text>
               }
             />
@@ -170,7 +171,7 @@ const CartPage = () => {
                   c="gray.5"
                   className="uppercase! tracking-[0.1em]!"
                 >
-                  Total ({count})
+                  {t("total_count", { count })}
                 </Text>
                 <Text fw={800} c="hongbao-red">
                   {currencyFormatter({ value: total, currencySample: "MMK" })}
@@ -185,7 +186,7 @@ const CartPage = () => {
                 rightSection={<IconArrowRight size={16} />}
                 className="flex-1! max-w-[220px]!"
               >
-                Checkout
+                {t("checkout")}
               </Button>
             </Group>
           </Stack>

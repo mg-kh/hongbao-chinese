@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { OrderFilter } from "../../../types/purchase-history.type";
 import usePurchaseOrders from "../../hooks/usePurchaseOrders";
 
@@ -20,14 +21,19 @@ const useContainer = () => {
     setDateRange,
     isDateFiltered,
   } = usePurchaseOrders();
+  const t = useTranslations("Profile.PurchaseHistory");
 
   /** Tab config - counts stay in sync with `stats`. */
   const filters: { value: OrderFilter; label: string; count: number }[] = [
-    { value: "ALL", label: "All", count: stats.total },
-    { value: "PENDING", label: "Under review", count: stats.pending },
-    { value: "APPROVED", label: "Active", count: stats.approved },
-    { value: "EXPIRED", label: "Expired", count: stats.expired },
-    { value: "CANCELLED", label: "Declined", count: stats.cancelled },
+    { value: "ALL", label: t("filter_all"), count: stats.total },
+    { value: "PENDING", label: t("status.pending"), count: stats.pending },
+    { value: "APPROVED", label: t("status.approved"), count: stats.approved },
+    { value: "EXPIRED", label: t("status.expired"), count: stats.expired },
+    {
+      value: "CANCELLED",
+      label: t("status.cancelled"),
+      count: stats.cancelled,
+    },
   ];
 
   /** Item count for the selected status tab. */

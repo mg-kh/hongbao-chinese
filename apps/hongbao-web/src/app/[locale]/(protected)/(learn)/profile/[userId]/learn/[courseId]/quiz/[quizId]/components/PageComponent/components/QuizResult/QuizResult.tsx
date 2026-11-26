@@ -20,6 +20,7 @@ import {
   XCircleIcon,
 } from "@phosphor-icons/react";
 import { decodeEscapedHtml } from "@/utils/decodeEscapedHtml";
+import { useTranslations } from "next-intl";
 import { TGradedQuestion } from "../../types/quiz.type";
 
 interface Props {
@@ -61,11 +62,6 @@ const toneStyles = {
   },
 };
 
-const formatElapsed = (seconds: number) => {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return m > 0 ? `${m}m ${s}s` : `${s}s`;
-};
 
 const QuizResult: React.FC<Props> = ({
   graded,
@@ -82,7 +78,11 @@ const QuizResult: React.FC<Props> = ({
   courseHref,
   nextHref,
 }) => {
-  const t = toneStyles[band.tone];
+  const t = useTranslations("Learn.QuizResult");
+  const tc = useTranslations("Learn.Common");
+  const tone = toneStyles[band.tone];
+  const elapsedMinutes = Math.floor(elapsed / 60);
+  const elapsedSeconds = elapsed % 60;
   const wrongCount = graded.filter((g) => g.isAnswered && !g.isCorrect).length;
   const skippedCount = graded.filter((g) => !g.isAnswered).length;
 
@@ -104,10 +104,10 @@ const QuizResult: React.FC<Props> = ({
             size={132}
             thickness={12}
             roundCaps
-            sections={[{ value: percent, color: t.ring }]}
+            sections={[{ value: percent, color: tone.ring }]}
             label={
               <Stack gap={0} align="center">
-                <Text fw={800} className={`text-2xl! ${t.text}`}>
+                <Text fw={800} className={`text-2xl! ${tone.text}`}>
                   {percent}%
                 </Text>
                 <Text size="10px" c="gray.5" fw={600}>
@@ -140,7 +140,7 @@ const QuizResult: React.FC<Props> = ({
                 color="green"
                 leftSection={<CheckCircleIcon size={11} weight="fill" />}
               >
-                {score} correct
+                {t("correct_count", { count: score })}
               </Badge>
               {wrongCount > 0 && (
                 <Badge
@@ -150,7 +150,7 @@ const QuizResult: React.FC<Props> = ({
                   color="red"
                   leftSection={<XCircleIcon size={11} weight="fill" />}
                 >
-                  {wrongCount} wrong
+                  {t("wrong_count", { count: wrongCount })}
                 </Badge>
               )}
               {skippedCount > 0 && (
@@ -161,7 +161,7 @@ const QuizResult: React.FC<Props> = ({
                   color="gray"
                   leftSection={<MinusCircleIcon size={11} weight="fill" />}
                 >
-                  {skippedCount} skipped
+                  {t("skipped_count", { count: skippedCount })}
                 </Badge>
               )}
               <Badge
@@ -171,7 +171,12 @@ const QuizResult: React.FC<Props> = ({
                 color="gray"
                 leftSection={<ClockIcon size={11} weight="fill" />}
               >
-                {formatElapsed(elapsed)}
+                {elapsedMinutes > 0
+                  ? t("elapsed_minutes", {
+                      minutes: elapsedMinutes,
+                      seconds: elapsedSeconds,
+                    })
+                  : t("elapsed_seconds", { seconds: elapsedSeconds })}
               </Badge>
             </Group>
           </Stack>
@@ -192,7 +197,7 @@ const QuizResult: React.FC<Props> = ({
               rightSection={<ArrowRightIcon size={15} weight="bold" />}
               className="w-full! sm:w-auto!"
             >
-              Next
+              {tc("next")}
             </Button>
           ) : (
             <Button
@@ -204,7 +209,7 @@ const QuizResult: React.FC<Props> = ({
               leftSection={<ArrowLeftIcon size={15} weight="bold" />}
               className="w-full! sm:w-auto!"
             >
-              Back to course
+              {t("back_to_course")}
             </Button>
           )}
           <Button
@@ -227,7 +232,7 @@ const QuizResult: React.FC<Props> = ({
                 : ""
             }`}
           >
-            {isCompleted ? "Completed" : "Mark as complete"}
+            {isCompleted ? tc("completed") : tc("mark_as_complete")}
           </Button>
           <Button
             onClick={onRetake}
@@ -237,7 +242,7 @@ const QuizResult: React.FC<Props> = ({
             leftSection={<ArrowCounterClockwiseIcon size={15} weight="bold" />}
             className="w-full! sm:w-auto!"
           >
-            Retake quiz
+            {t("retake_quiz")}
           </Button>
         </Group>
       </Paper>
@@ -250,7 +255,7 @@ const QuizResult: React.FC<Props> = ({
           c="gray.5"
           className="uppercase! tracking-[0.12em]!"
         >
-          Review your answers
+          {t("review_your_answers")}
         </Text>
 
         {graded.map((g, i) => (
@@ -294,7 +299,7 @@ const QuizResult: React.FC<Props> = ({
                     c="gray.4"
                     className="uppercase! tracking-[0.1em]!"
                   >
-                    Question {i + 1}
+                    {t("question_number", { number: i + 1 })}
                   </Text>
                   {g.question.data.question ? (
                     <Text
@@ -328,7 +333,7 @@ const QuizResult: React.FC<Props> = ({
                       fw={600}
                       className="w-[92px]! shrink-0!"
                     >
-                      Your answer
+                      {t("your_answer")}
                     </Text>
                     {g.isAnswered ? (
                       <Text
@@ -348,7 +353,7 @@ const QuizResult: React.FC<Props> = ({
                         c="gray.5"
                         className="flex-1! leading-snug!"
                       >
-                        Not answered
+                        {t("not_answered")}
                       </Text>
                     )}
                   </Group>
@@ -361,7 +366,7 @@ const QuizResult: React.FC<Props> = ({
                         fw={600}
                         className="w-[92px]! shrink-0!"
                       >
-                        Correct answer
+                        {t("correct_answer")}
                       </Text>
                       <Text
                         component="div"

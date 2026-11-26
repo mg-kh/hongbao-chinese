@@ -16,6 +16,7 @@ import {
   StudentIcon,
   TranslateIcon,
 } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 /** White surface with a hairline border - the same frame as the course card. */
@@ -33,7 +34,9 @@ interface Props {
  */
 const CardBack: React.FC<Props> = ({ card }) => {
   const examples = card.exampleUsage ?? [];
-  const typeLabel = wordTypeLabel(card.type);
+  const t = useTranslations("Profile.Flashcards.CardBack");
+  const tWordType = useTranslations("Profile.Flashcards.WordType");
+  const typeLabel = wordTypeLabel(card.type, (key) => tWordType(key));
 
   return (
     <div className="flex! h-full! flex-col! [animation:fade-up_0.28s_ease-out_both]">
@@ -42,7 +45,7 @@ const CardBack: React.FC<Props> = ({ card }) => {
         <section className={sectionCard}>
           <SectionHeading
             icon={<BookOpenTextIcon size={14} weight="bold" />}
-            title="Word"
+            title={t("word")}
           />
           <div className="flex! items-center! gap-4!">
             <div className="flex! min-h-[88px]! min-w-[88px]! shrink-0! items-center! justify-center! rounded-xl! bg-hongbao-red-50/60! px-4! py-3! ring-1! ring-hongbao-red-100!">
@@ -83,7 +86,7 @@ const CardBack: React.FC<Props> = ({ card }) => {
         <section className={sectionCard}>
           <SectionHeading
             icon={<TranslateIcon size={14} weight="bold" />}
-            title="Meaning"
+            title={t("meaning")}
           />
           <div className="divide-y! divide-gray-100!">
             <MeaningRow tag="EN" lang="en" meaning={card.meaningEn} />
@@ -97,7 +100,7 @@ const CardBack: React.FC<Props> = ({ card }) => {
         <section className={sectionCard}>
           <SectionHeading
             icon={<StudentIcon size={14} weight="bold" />}
-            title="Practice"
+            title={t("practice")}
           />
           <Tabs
             defaultValue={examples.length > 0 ? "examples" : "watch"}
@@ -118,19 +121,20 @@ const CardBack: React.FC<Props> = ({ card }) => {
                 value="examples"
                 leftSection={<ChatTextIcon size={16} />}
               >
-                Examples{examples.length > 0 ? ` · ${examples.length}` : ""}
+                {t("examples")}
+                {examples.length > 0 ? ` · ${examples.length}` : ""}
               </Tabs.Tab>
               <Tabs.Tab
                 value="watch"
                 leftSection={<PlayCircleIcon size={16} />}
               >
-                Strokes
+                {t("strokes")}
               </Tabs.Tab>
               <Tabs.Tab
                 value="write"
                 leftSection={<PencilSimpleLineIcon size={16} />}
               >
-                Write
+                {t("write")}
               </Tabs.Tab>
             </Tabs.List>
 
@@ -150,7 +154,7 @@ const CardBack: React.FC<Props> = ({ card }) => {
                 <div className="flex! flex-col! items-center! gap-2! py-8! text-gray-400!">
                   <ChatsCircleIcon size={28} />
                   <Text className="text-sm! text-gray-500!">
-                    No example sentences for this word yet.
+                    {t("no_examples")}
                   </Text>
                 </div>
               )}

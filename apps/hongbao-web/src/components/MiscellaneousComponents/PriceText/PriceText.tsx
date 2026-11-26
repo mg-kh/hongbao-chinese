@@ -1,5 +1,5 @@
-import { pluralize } from "@/utils/pluralize";
 import { Text } from "@mantine/core";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface Props {
@@ -9,8 +9,8 @@ interface Props {
 }
 
 const PriceText: React.FC<Props> = ({ data, size = "lg" }) => {
+  const t = useTranslations("Shared.PriceText");
   const months = data?.perTime || 1;
-  const monthLabel = pluralize(months, "month");
   const priceClassName =
     size === "lg"
       ? "text-[40px]! text-hongbao-red-600! dark:text-night-red!"
@@ -21,10 +21,10 @@ const PriceText: React.FC<Props> = ({ data, size = "lg" }) => {
     return (
       <div className="flex! flex-col! gap-1!">
         <Text component="span" fw={800} lh={1} className={priceClassName}>
-          Free
+          {t("free")}
         </Text>
         <Text size={captionSize} c="gray.6">
-          No payment required
+          {t("no_payment_required")}
         </Text>
       </div>
     );
@@ -47,7 +47,7 @@ const PriceText: React.FC<Props> = ({ data, size = "lg" }) => {
         MMK
       </Text>
       <Text component="span" size={captionSize} c="gray.6">
-        {data?.lifetime ? "lifetime" : `/ ${monthLabel}`}
+        {data?.lifetime ? t("lifetime") : t("per_months", { count: months })}
       </Text>
     </div>
   );

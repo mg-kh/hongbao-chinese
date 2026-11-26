@@ -2,6 +2,7 @@
 
 import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 import { Button, Center, Loader, Paper, Stack, Text } from "@mantine/core";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import CardDialog from "@/app/[locale]/(protected)/(profile)/profile/[userId]/flashcards/components/CardDialog/CardDialog";
 import CardTile from "@/app/[locale]/(protected)/(profile)/profile/[userId]/flashcards/components/CardTile/CardTile";
@@ -20,19 +21,28 @@ const FlashcardDetailPage = () => {
     activeIndex,
     setActiveIndex,
   } = useContainer();
+  const t = useTranslations("Profile.Flashcards");
 
   return (
     <Stack gap={20} className="flex-1!">
       <CustomBreadCrumb
         title={flashcard?.name}
         links={[
-          { label: "Profile", href: `/profile/${userId}`, isActive: true },
           {
-            label: "Flashcards",
+            label: t("breadcrumb_profile"),
+            href: `/profile/${userId}`,
+            isActive: true,
+          },
+          {
+            label: t("breadcrumb_flashcards"),
             href: `/profile/${userId}/flashcards`,
             isActive: true,
           },
-          { label: flashcard?.name ?? "Cards", href: "", isActive: false },
+          {
+            label: flashcard?.name ?? t("breadcrumb_cards"),
+            href: "",
+            isActive: false,
+          },
         ]}
       />
 
@@ -48,17 +58,14 @@ const FlashcardDetailPage = () => {
           className={emptyClass}
         >
           <Stack gap={12} align="center">
-            <Text c="gray.6">
-              This flashcard isn&apos;t available. You may not be enrolled, or
-              your access has expired.
-            </Text>
+            <Text c="gray.6">{t("Detail.unavailable")}</Text>
             <Button
               component={Link}
               href="/shop?type=flashcard"
               color="hongbao-red"
               radius="md"
             >
-              Browse flashcards
+              {t("browse")}
             </Button>
           </Stack>
         </Paper>
@@ -69,7 +76,7 @@ const FlashcardDetailPage = () => {
           p={{ base: 28, sm: 40 }}
           className={emptyClass}
         >
-          <Text c="gray.6">No cards in this flashcard yet.</Text>
+          <Text c="gray.6">{t("Detail.no_cards")}</Text>
         </Paper>
       ) : (
         <div className="grid! grid-cols-[repeat(auto-fill,minmax(104px,1fr))]! gap-2! sm:grid-cols-[repeat(auto-fill,minmax(128px,1fr))]! sm:gap-3!">

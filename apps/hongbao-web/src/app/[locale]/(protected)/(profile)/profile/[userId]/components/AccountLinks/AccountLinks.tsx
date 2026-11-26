@@ -3,6 +3,7 @@
 import { Link } from "@/i18n/navigation";
 import { Box, Paper, Text } from "@mantine/core";
 import { CaretRightIcon, GearIcon, ReceiptIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 
 type Row = {
@@ -19,17 +20,18 @@ type Row = {
  */
 const AccountLinks = () => {
   const { userId } = useParams();
+  const t = useTranslations("Profile.AccountLinks");
 
   const rows: Row[] = [
     {
-      label: "Purchase history",
-      caption: "Orders, review status & receipts",
+      label: t("purchase_history"),
+      caption: t("purchase_history_caption"),
       href: `/profile/${userId}/purchase-history`,
       icon: <ReceiptIcon size={17} weight="fill" />,
     },
     {
-      label: "Settings",
-      caption: "Profile and account preferences",
+      label: t("settings"),
+      caption: t("settings_caption"),
       href: `/profile/${userId}/settings`,
       icon: <GearIcon size={17} weight="fill" />,
     },
@@ -37,7 +39,11 @@ const AccountLinks = () => {
 
   return (
     <Paper withBorder bdrs={16} p={6} className="border-gray-200! shadow-sm!">
-      <Box component="nav" aria-label="Account" className="flex! flex-col!">
+      <Box
+        component="nav"
+        aria-label={t("aria_account")}
+        className="flex! flex-col!"
+      >
         {rows.map((row, i) => (
           <Link
             key={row.href}

@@ -1,26 +1,28 @@
 import { ActionIcon, Skeleton, Text, Tooltip } from "@mantine/core";
+import { useTranslations } from "next-intl";
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 import React, { memo } from "react";
 import useContainer, { TIntensity } from "./useContainer";
 
 /** Monday-first, matching the grid rows. */
-const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const DAY_LABELS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
 
-/** Fill per intensity level: more completions that day, deeper red. */
+/** Fill per intensity level: more completions that day, deeper gold. */
 const LEVEL_COLORS: Record<TIntensity, string> = {
   0: "bg-gray-100",
-  1: "bg-hongbao-red-100",
-  2: "bg-hongbao-red-300",
-  3: "bg-hongbao-red-500",
-  4: "bg-hongbao-red-700",
+  1: "bg-hongbao-gold-200",
+  2: "bg-hongbao-gold-400",
+  3: "bg-hongbao-gold-600",
+  4: "bg-hongbao-gold-800",
 };
 const LEVELS: TIntensity[] = [0, 1, 2, 3, 4];
 
 /**
  * Daily learning calendar: one pill per day, shaded by how many videos and
- * quizzes the user completed that day - deeper red means more.
+ * quizzes the user completed that day - deeper gold means more.
  */
 const LearningStreak: React.FC = () => {
+  const t = useTranslations("Profile.LearningStreak");
   const {
     year,
     isCurrentYear,
@@ -39,15 +41,12 @@ const LearningStreak: React.FC = () => {
   } = useContainer();
 
   return (
-    <section
-      aria-label="Daily learning streak"
-      className="flex flex-col min-w-0"
-    >
+    <section aria-label={t("aria_section")} className="flex flex-col min-w-0">
       <div className="min-w-0 flex flex-col">
         <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 mb-3">
           <div className="flex items-center gap-1.5">
             <Text fw={700} size="sm" c="gray.8">
-              Daily streak
+              {t("title")}
             </Text>
             <div className="flex items-center gap-0.5">
               <ActionIcon
@@ -57,7 +56,7 @@ const LearningStreak: React.FC = () => {
                 className="bg-transparent! hover:text-gray-800! data-disabled:text-gray-300!"
                 onClick={goPrev}
                 disabled={!canGoPrev}
-                aria-label="Previous year"
+                aria-label={t("previous_year")}
               >
                 <CaretLeftIcon size={14} />
               </ActionIcon>
@@ -77,7 +76,7 @@ const LearningStreak: React.FC = () => {
                 className="bg-transparent! hover:text-gray-800! data-disabled:text-gray-300!"
                 onClick={goNext}
                 disabled={!canGoNext}
-                aria-label="Next year"
+                aria-label={t("next_year")}
               >
                 <CaretRightIcon size={14} />
               </ActionIcon>
@@ -87,10 +86,10 @@ const LearningStreak: React.FC = () => {
             {!isCurrentYear
               ? isLoading
                 ? "\u00a0"
-                : `${activeDays} active ${activeDays === 1 ? "day" : "days"} in ${year}`
+                : t("active_days", { count: activeDays, year })
               : currentStreak > 0
-                ? "Keep it going - learn something today"
-                : "Finish a lesson or quiz to start a streak"}
+                ? t("keep_going")
+                : t("start_streak")}
           </Text>
         </div>
 
@@ -105,7 +104,7 @@ const LearningStreak: React.FC = () => {
                   key={i}
                   className="flex-1 flex items-center text-[10px] leading-none text-gray-400"
                 >
-                  {label}
+                  {t(`days.${label}`)}
                 </div>
               ))}
             </div>
@@ -179,10 +178,10 @@ const LearningStreak: React.FC = () => {
         {/* intensity scale */}
         <div
           className="flex items-center justify-end gap-1.5 mt-3"
-          aria-label="Fewer to more completions per day"
+          aria-label={t("aria_scale")}
         >
           <Text size="xs" c="gray.5" mr={2}>
-            Less
+            {t("less")}
           </Text>
           {LEVELS.map((level) => (
             <div
@@ -191,7 +190,7 @@ const LearningStreak: React.FC = () => {
             />
           ))}
           <Text size="xs" c="gray.5" ml={2}>
-            More
+            {t("more")}
           </Text>
         </div>
       </div>

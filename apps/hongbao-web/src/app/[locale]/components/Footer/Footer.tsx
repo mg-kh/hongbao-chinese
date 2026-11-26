@@ -14,10 +14,12 @@ import {
   IconBrandTiktok,
   IconMail,
 } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import useContainer from "./useContainer";
 
 const Footer = () => {
+  const t = useTranslations("Footer");
   const { courses } = useContainer();
   return (
     <footer>
@@ -48,14 +50,13 @@ const Footer = () => {
                           Hong Bao
                         </Text>
                         <Text fw={"bold"} c={"gray.7"}>
-                          Chinese Online Class
+                          {t("tagline")}
                         </Text>
                       </Stack>
                     </Group>
                   </Link>
                   <Text c={"gray"} maw={"90%"}>
-                    The world's most complete Mandarin Chinese learning
-                    platform. From your first greeting to HSK 6 mastery.
+                    {t("description")}
                   </Text>
                   <Group>
                     <ThemeIcon
@@ -101,7 +102,7 @@ const Footer = () => {
                 <Box>
                   <Stack gap={10}>
                     <Text c={"#dee2e6"} size="lg">
-                      Courses
+                      {t("courses")}
                     </Text>
                     {courses?.map((c) => {
                       return (
@@ -123,7 +124,7 @@ const Footer = () => {
               <div>
                 <Stack gap={10}>
                   <Text c={"#dee2e6"} size="lg">
-                    Support
+                    {t("support")}
                   </Text>
                   <Link href="/privacy-policy">
                     <Text
@@ -131,7 +132,7 @@ const Footer = () => {
                       size="sm"
                       className="transition-colors! duration-200! hover:text-hongbao-red-300!"
                     >
-                      Privacy Policy
+                      {t("privacy_policy")}
                     </Text>
                   </Link>
                 </Stack>
@@ -156,7 +157,7 @@ const Footer = () => {
           <Divider color={"gray.6"} my={30} />
           <Group justify="space-between">
             <Text c={"gray"} size="sm">
-              © {new Date().getFullYear()} Hong Bao. All rights reserved.
+              {t("copyright", { year: new Date().getFullYear() })}
             </Text>
           </Group>
         </Container>

@@ -16,6 +16,7 @@ import {
   IconShoppingBagPlus,
   IconStarFilled,
 } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 import {
   SHOP_TYPE_META,
   ShopProductType,
@@ -50,6 +51,8 @@ interface Props {
 }
 
 const ProductCard: React.FC<Props> = ({ product }) => {
+  const t = useTranslations("Shop.ProductCard");
+  const tTypes = useTranslations("Shop.Types");
   const { isInCart, toggleItem } = useCart();
   const accent = typeAccent[product.type];
   // Cart state lives in localStorage, so it's only trustworthy after mount.
@@ -71,12 +74,12 @@ const ProductCard: React.FC<Props> = ({ product }) => {
 
       <span className="absolute! left-2! top-2! inline-flex! items-center! gap-1! rounded-md! bg-surface/95! px-1.5! py-0.5! text-[10px]! font-bold! text-gray-700!">
         {accent.icon}
-        {SHOP_TYPE_META[product.type].label}
+        {tTypes(SHOP_TYPE_META[product.type].labelKey)}
       </span>
 
       {product.isFree ? (
         <span className="absolute! right-0! top-2! rounded-l-md! bg-gray-900! px-2! py-0.5! text-[11px]! font-extrabold! text-gray-50!">
-          FREE
+          {t("free")}
         </span>
       ) : (
         hasDiscount && (
@@ -119,11 +122,11 @@ const ProductCard: React.FC<Props> = ({ product }) => {
         <IconStarFilled size={11} className="text-hongbao-gold-500!" />
         <span className="font-semibold!">{rating.toFixed(1)}</span>
         <span className="text-gray-300!">|</span>
-        <span>{formatCompact(sold)} sold</span>
+        <span>{t("sold", { count: formatCompact(sold) })}</span>
         {product.cardCount !== undefined && (
           <>
             <span className="text-gray-300!">|</span>
-            <span>{product.cardCount} cards</span>
+            <span>{t("cards", { count: product.cardCount })}</span>
           </>
         )}
       </div>
@@ -154,8 +157,8 @@ const ProductCard: React.FC<Props> = ({ product }) => {
           onClick={() => toggleItem(product)}
           aria-label={
             inCart
-              ? `Remove ${product.title} from cart`
-              : `Add ${product.title} to cart`
+              ? t("remove_aria", { title: product.title })
+              : t("add_aria", { title: product.title })
           }
           className={`flex! w-full! items-center! justify-center! gap-1.5! rounded-lg! py-2! text-xs! font-bold! cursor-pointer! transition-colors! duration-200! ${
             inCart
@@ -165,11 +168,11 @@ const ProductCard: React.FC<Props> = ({ product }) => {
         >
           {inCart ? (
             <>
-              <IconCheck size={14} stroke={3} /> In cart
+              <IconCheck size={14} stroke={3} /> {t("in_cart")}
             </>
           ) : (
             <>
-              <IconShoppingBagPlus size={14} /> Add to cart
+              <IconShoppingBagPlus size={14} /> {t("add_to_cart")}
             </>
           )}
         </button>

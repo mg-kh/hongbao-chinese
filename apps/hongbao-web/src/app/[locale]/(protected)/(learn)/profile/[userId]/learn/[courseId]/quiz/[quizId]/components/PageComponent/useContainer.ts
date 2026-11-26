@@ -23,6 +23,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useTranslations } from "next-intl";
 import { useForm, useWatch } from "react-hook-form";
 import { QuizAnswersFormField, QuizAnswersSchema } from "./quiz-answers-schema";
 import {
@@ -76,31 +77,13 @@ const correctLabelOf = (q: TQuizQuestion) =>
     ? rearrangeSentence(q, rearrangeAnswerIds(q))
     : answerLabelOf(q, q.data.answer);
 
-/** Performance bands drive the headline message on the results screen. */
+/** Performance bands drive the headline message on the results screen.
+ * `key` maps to `Learn.Quiz.band.<key>.{title,body}` messages. */
 const bandFor = (percent: number) => {
-  if (percent === 100)
-    return {
-      title: "Perfect score!",
-      body: "Every answer correct - you're ready for the next lesson.",
-      tone: "success" as const,
-    };
-  if (percent >= 80)
-    return {
-      title: "Nicely done!",
-      body: "You've got a solid grip on this. Review the few you missed below.",
-      tone: "success" as const,
-    };
-  if (percent >= 50)
-    return {
-      title: "Good effort",
-      body: "You're getting there. The review below shows exactly what to work on.",
-      tone: "attention" as const,
-    };
-  return {
-    title: "Worth another pass",
-    body: "Go back over the lesson, then retake this quiz - the review below is a good place to start.",
-    tone: "danger" as const,
-  };
+  if (percent === 100) return { key: "perfect", tone: "success" as const };
+  if (percent >= 80) return { key: "great", tone: "success" as const };
+  if (percent >= 50) return { key: "good", tone: "attention" as const };
+  return { key: "retry", tone: "danger" as const };
 };
 
 /** Stable fallback so `answers` keeps referential identity across renders
@@ -127,23 +110,24 @@ const selectQuestions = (data: { data: TQuiz }) =>
       : q,
   );
 
-/** A short, actionable tip per question on the review screen. */
-const suggestionFor = (g: TGradedQuestion) => {
-  if (g.isCorrect) return "Correct - keep it up.";
-  if (!g.isAnswered)
-    return "You skipped this one. Give it a try on your retake.";
+/** A short, actionable tip per question on the review screen - returns the
+ * `Learn.Quiz.suggestion.<key>` message key. */
+const suggestionKeyFor = (g: TGradedQuestion) => {
+  if (g.isCorrect) return "correct";
+  if (!g.isAnswered) return "skipped";
 
   switch (g.question.type) {
     case QuestionType.REARRANGE:
-      return "Word order tripped you up. Read the correct sentence aloud a few times to lock in the pattern.";
+      return "rearrange";
     case QuestionType.TRUE_OR_FALSE:
-      return "Re-read the statement carefully - one word usually decides true from false.";
+      return "true_or_false";
     default:
-      return "Compare your choice with the correct answer and note what makes it fit.";
+      return "default";
   }
 };
 
 const useContainer = () => {
+  const t = useTranslations("Learn.Quiz");
   const { quizId, courseId, userId } = useParams<{
     quizId: string;
     courseId: string;
@@ -299,6 +283,15 @@ const useContainer = () => {
   const score = graded.filter((g) => g.isCorrect).length;
   const percent = total ? Math.round((score / total) * 100) : 0;
 
+  const { key: bandKey, tone } = bandFor(percent);
+  const band = {
+    title: t(`band.${bandKey}.title`),
+    body: t(`band.${bandKey}.body`),
+    tone,
+  };
+  const suggestionFor = (g: TGradedQuestion) =>
+    t(`suggestion.${suggestionKeyFor(g)}`);
+
   return {
     form,
     isLoading,
@@ -320,7 +313,7 @@ const useContainer = () => {
     score,
     percent,
     elapsed,
-    band: bandFor(percent),
+    band,
     suggestionFor,
     isCompleted,
     isMarkingComplete,

@@ -4,6 +4,7 @@ import useCart from "@/hooks/useCart";
 import { currencyFormatter } from "@/utils/currencyFormatter";
 import { Box, CopyButton, Group, Image, Stack, Text } from "@mantine/core";
 import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface PayAccount {
@@ -12,7 +13,8 @@ interface PayAccount {
   label: string;
   holder: string;
   account: string;
-  accountLabel: string;
+  /** Translation key under `Checkout.PaymentMethod`. */
+  accountLabelKey: "phone";
   qr?: string;
 }
 
@@ -24,7 +26,7 @@ const ACCOUNTS: PayAccount[] = [
     label: "KBZ Pay",
     holder: "Kaung Htet Lynn",
     account: "0937605832",
-    accountLabel: "Phone",
+    accountLabelKey: "phone",
     qr: "/assets/images/kbz_pay_qr.png",
   },
   {
@@ -32,7 +34,7 @@ const ACCOUNTS: PayAccount[] = [
     label: "Wave Pay",
     holder: "Kaung Htet Lynn",
     account: "0764401234",
-    accountLabel: "Phone",
+    accountLabelKey: "phone",
   },
 ];
 
@@ -49,6 +51,7 @@ const Row: React.FC<{ label: string; children: React.ReactNode }> = ({
 );
 
 const PaymentMethod = () => {
+  const t = useTranslations("Checkout.PaymentMethod");
   const { control } = useFormContext();
   const { total } = useCart();
 
@@ -56,11 +59,10 @@ const PaymentMethod = () => {
     <Stack gap={16}>
       <Stack gap={2}>
         <Text fw={700} size="md">
-          Payment
+          {t("title")}
         </Text>
         <Text size="sm" c="gray.6">
-          Pick an account, transfer the exact amount, then continue to upload
-          your receipt.
+          {t("subtitle")}
         </Text>
       </Stack>
 
@@ -70,7 +72,7 @@ const PaymentMethod = () => {
         className="rounded-xl! bg-hongbao-red-50! px-4! py-3!"
       >
         <Text size="sm" fw={600} c="gray.7">
-          Amount to pay
+          {t("amount_to_pay")}
         </Text>
         <Text fw={800} c="hongbao-red" className="text-xl!">
           {currencyFormatter({ value: total, currencySample: "MMK" })}
@@ -115,30 +117,30 @@ const PaymentMethod = () => {
                   c="gray.5"
                   className="uppercase! tracking-[0.1em]!"
                 >
-                  Transfer to
+                  {t("transfer_to")}
                 </Text>
 
                 <div className="mt-3! flex! flex-col! items-center! gap-4! sm:flex-row! sm:items-start!">
                   {selected.qr && (
                     <Image
                       src={selected.qr}
-                      alt={`${selected.label} QR code`}
+                      alt={t("qr_alt", { wallet: selected.label })}
                       className="w-full! max-w-[172px]! shrink-0! rounded-lg! ring-1! ring-gray-200!"
                     />
                   )}
 
                   <Stack gap={12} className="w-full! min-w-0!">
-                    <Row label="Wallet">
+                    <Row label={t("wallet")}>
                       <Text fw={700} size="sm">
                         {selected.label}
                       </Text>
                     </Row>
-                    <Row label="Account name">
+                    <Row label={t("account_name")}>
                       <Text fw={700} size="sm" lineClamp={1}>
                         {selected.holder}
                       </Text>
                     </Row>
-                    <Row label={selected.accountLabel}>
+                    <Row label={t(selected.accountLabelKey)}>
                       <Group gap={6} wrap="nowrap" className="min-w-0!">
                         <Text fw={700} size="sm" lineClamp={1}>
                           {selected.account}
@@ -148,7 +150,9 @@ const PaymentMethod = () => {
                             <button
                               type="button"
                               onClick={copy}
-                              aria-label={`Copy ${selected.accountLabel.toLowerCase()}`}
+                              aria-label={t("copy_aria", {
+                                label: t(selected.accountLabelKey),
+                              })}
                               className={`flex! h-7! w-7! shrink-0! items-center! justify-center! rounded-md! transition-colors! duration-150! cursor-pointer! ${
                                 copied
                                   ? "text-green-600! dark:text-night-green!"

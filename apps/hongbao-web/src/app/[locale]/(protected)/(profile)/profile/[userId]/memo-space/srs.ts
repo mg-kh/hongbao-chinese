@@ -56,11 +56,17 @@ export const schedule = (
   };
 };
 
-export const formatInterval = (days: number) => {
-  if (days <= 0) return "now";
-  if (days < 1) return "<1d";
-  if (days < 30) return `${days}d`;
-  return `${Math.round(days / 30)}mo`;
+export type TIntervalKey = "now" | "under_day" | "days" | "months";
+
+/** Short interval label; `translate` resolves `Profile.MemoSpace.interval.*`. */
+export const formatInterval = (
+  days: number,
+  translate: (key: TIntervalKey, values?: { count: number }) => string,
+) => {
+  if (days <= 0) return translate("now");
+  if (days < 1) return translate("under_day");
+  if (days < 30) return translate("days", { count: days });
+  return translate("months", { count: Math.round(days / 30) });
 };
 
 const storageKey = (userId: string) => `hongbao:srs:${userId}`;
@@ -70,9 +76,7 @@ const storageKey = (userId: string) => `hongbao:srs:${userId}`;
  * localStorage - it survives reloads on this device/browser but won't sync
  * across devices until a real endpoint exists.
  */
-export const loadProgress = (
-  userId: string,
-): Record<string, CardProgress> => {
+export const loadProgress = (userId: string): Record<string, CardProgress> => {
   if (typeof window === "undefined") return {};
   try {
     const raw = window.localStorage.getItem(storageKey(userId));

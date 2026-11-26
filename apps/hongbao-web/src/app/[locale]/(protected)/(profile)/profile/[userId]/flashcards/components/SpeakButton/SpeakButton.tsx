@@ -1,6 +1,7 @@
 "use client";
 
 import { SpeakerHighIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import { canSpeak, speak } from "../../speech";
 
 interface Props {
@@ -10,12 +11,13 @@ interface Props {
 
 /** Plays the given Mandarin text aloud - stops the click reaching the flip handler underneath it. */
 const SpeakButton: React.FC<Props> = ({ text, light }) => {
+  const t = useTranslations("Profile.Flashcards");
   if (!canSpeak()) return null;
 
   return (
     <button
       type="button"
-      aria-label="Play pronunciation"
+      aria-label={t("play_pronunciation")}
       onClick={(e) => {
         e.stopPropagation();
         speak(text);

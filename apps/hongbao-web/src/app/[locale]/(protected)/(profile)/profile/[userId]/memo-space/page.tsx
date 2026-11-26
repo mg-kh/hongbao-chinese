@@ -1,6 +1,5 @@
 "use client";
 
-import { pluralize } from "@/utils/pluralize";
 import { Box, Paper, Progress, Stack, Text } from "@mantine/core";
 import {
   ArrowLeftIcon,
@@ -10,6 +9,7 @@ import {
   TrophyIcon,
   XCircleIcon,
 } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -27,7 +27,6 @@ import {
 
 type RatingButton = {
   rating: Rating;
-  label: string;
   icon: React.ReactNode;
   color: string;
   className: string;
@@ -36,14 +35,13 @@ type RatingButton = {
 const ratingButtons: RatingButton[] = [
   {
     rating: "again",
-    label: "Again",
     icon: <XCircleIcon size={16} weight="fill" />,
     color: "red",
-    className: "bg-red-50! text-red-700! dark:text-night-red! hover:bg-red-100!",
+    className:
+      "bg-red-50! text-red-700! dark:text-night-red! hover:bg-red-100!",
   },
   {
     rating: "hard",
-    label: "Hard",
     icon: <FlameIcon size={16} weight="fill" />,
     color: "orange",
     className:
@@ -51,7 +49,6 @@ const ratingButtons: RatingButton[] = [
   },
   {
     rating: "good",
-    label: "Good",
     icon: <CheckCircleIcon size={16} weight="fill" />,
     color: "gold",
     className:
@@ -59,10 +56,10 @@ const ratingButtons: RatingButton[] = [
   },
   {
     rating: "easy",
-    label: "Easy",
     icon: <TrophyIcon size={16} weight="fill" />,
     color: "green",
-    className: "bg-green-50! text-green-700! dark:text-night-green! hover:bg-green-100!",
+    className:
+      "bg-green-50! text-green-700! dark:text-night-green! hover:bg-green-100!",
   },
 ];
 
@@ -81,6 +78,7 @@ type Session = {
 };
 
 const SpacedRepetitionPage = () => {
+  const t = useTranslations("Profile.MemoSpace");
   const { userId } = useParams();
   const uid = String(userId);
 
@@ -194,17 +192,16 @@ const SpacedRepetitionPage = () => {
       >
         <ArrowLeftIcon size={14} weight="bold" />
         <Text size="xs" fw={600}>
-          Back to profile
+          {t("back_to_profile")}
         </Text>
       </Link>
 
       <Stack gap={4}>
         <Text size="xl" fw={"bold"} c={"hongbao-red"}>
-          Memo Space
+          {t("title")}
         </Text>
         <Text size="sm" c="gray.6">
-          Flip each card, then rate how well you knew it. Practicing the HSK 1
-          starter deck.
+          {t("description")}
         </Text>
       </Stack>
 
@@ -214,15 +211,26 @@ const SpacedRepetitionPage = () => {
           <Stack gap={6} className="w-full! max-w-md!">
             <div className="flex! items-center! justify-between!">
               <Text size="xs" c="gray.6" fw={600}>
-                {completedCount} of {totalDue} reviewed
+                {t("reviewed_progress", {
+                  completed: completedCount,
+                  total: totalDue,
+                })}
               </Text>
               {reviewedThisSession > 0 && (
                 <Text size="xs" c="gray.5">
-                  {stats.again} again · {stats.good + stats.easy} good+
+                  {t("session_summary", {
+                    again: stats.again,
+                    good: stats.good + stats.easy,
+                  })}
                 </Text>
               )}
             </div>
-            <Progress value={percent} size="sm" radius="xl" color="hongbao-red" />
+            <Progress
+              value={percent}
+              size="sm"
+              radius="xl"
+              color="hongbao-red"
+            />
           </Stack>
 
           {/* flip card */}
@@ -251,7 +259,7 @@ const SpacedRepetitionPage = () => {
                   c="gray.4"
                   className="absolute! bottom-5! uppercase! tracking-[0.14em]!"
                 >
-                  Tap to reveal
+                  {t("tap_to_reveal")}
                 </Text>
               </Paper>
 
@@ -283,7 +291,7 @@ const SpacedRepetitionPage = () => {
           {/* actions */}
           {!flipped ? (
             <Text size="xs" c="gray.4">
-              Press space to flip
+              {t("press_space")}
             </Text>
           ) : (
             <div className="grid! grid-cols-2! sm:grid-cols-4! gap-2.5! w-full! max-w-md!">
@@ -296,10 +304,13 @@ const SpacedRepetitionPage = () => {
                 >
                   {btn.icon}
                   <Text size="xs" fw={700}>
-                    {btn.label}
+                    {t(`ratings.${btn.rating}`)}
                   </Text>
                   <Text size="10px" className="opacity-60!">
-                    {formatInterval(nextInterval(currentProgress, btn.rating))}
+                    {formatInterval(
+                      nextInterval(currentProgress, btn.rating),
+                      (key, values) => t(`interval.${key}`, values),
+                    )}
                     {` · ${i + 1}`}
                   </Text>
                 </button>
@@ -319,12 +330,12 @@ const SpacedRepetitionPage = () => {
               <TrophyIcon size={30} weight="fill" />
             </Box>
             <Text fw={700} size="lg">
-              All caught up!
+              {t("all_caught_up")}
             </Text>
             <Text size="sm" c="gray.6" className="max-w-[360px]!">
               {reviewedThisSession > 0
-                ? `You reviewed ${pluralize(reviewedThisSession, "card")} this session.`
-                : "Nothing is due right now - come back later."}
+                ? t("reviewed_session", { count: reviewedThisSession })
+                : t("nothing_due")}
             </Text>
             <button
               type="button"
@@ -332,7 +343,7 @@ const SpacedRepetitionPage = () => {
               className="flex! items-center! gap-1.5! mt-3! px-5! py-2.5! rounded-full! bg-hongbao-red-600! text-white! text-sm! font-semibold! cursor-pointer! transition-colors! duration-200! hover:bg-hongbao-red-700!"
             >
               <ArrowsClockwiseIcon size={15} weight="bold" />
-              Practice again
+              {t("practice_again")}
             </button>
           </Stack>
         </Paper>

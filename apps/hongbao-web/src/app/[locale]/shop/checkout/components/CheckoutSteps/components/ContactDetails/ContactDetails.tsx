@@ -1,19 +1,25 @@
 "use client";
 
 import { Stack, Text, TextInput } from "@mantine/core";
+import { useTranslations } from "next-intl";
 import { Controller, useFormContext } from "react-hook-form";
+import { TCheckoutErrorKey } from "../../schema/checkout.schema";
 
 const ContactDetails = () => {
+  const t = useTranslations("Checkout.ContactDetails");
+  const tv = useTranslations("Checkout.Validation");
   const { control } = useFormContext();
+  const errorText = (message?: string) =>
+    message ? tv(message as TCheckoutErrorKey) : undefined;
 
   return (
     <Stack gap={18}>
       <Stack gap={2}>
         <Text fw={700} size="md">
-          Your details
+          {t("title")}
         </Text>
         <Text size="sm" c="gray.6">
-          We&apos;ll use these to confirm your purchase and send access details.
+          {t("subtitle")}
         </Text>
       </Stack>
 
@@ -24,12 +30,12 @@ const ContactDetails = () => {
           render={({ field, fieldState }) => (
             <TextInput
               {...field}
-              label="Full name"
-              placeholder="Your name"
+              label={t("full_name")}
+              placeholder={t("full_name_placeholder")}
               size="md"
               radius={10}
               withAsterisk
-              error={fieldState.error?.message}
+              error={errorText(fieldState.error?.message)}
             />
           )}
         />
@@ -39,13 +45,13 @@ const ContactDetails = () => {
           render={({ field, fieldState }) => (
             <TextInput
               {...field}
-              label="Email"
+              label={t("email")}
               placeholder="you@example.com"
               type="email"
               size="md"
               radius={10}
               withAsterisk
-              error={fieldState.error?.message}
+              error={errorText(fieldState.error?.message)}
             />
           )}
         />
@@ -55,12 +61,12 @@ const ContactDetails = () => {
           render={({ field, fieldState }) => (
             <TextInput
               {...field}
-              label="Phone number"
+              label={t("phone")}
               placeholder="09..."
               size="md"
               radius={10}
               withAsterisk
-              error={fieldState.error?.message}
+              error={errorText(fieldState.error?.message)}
             />
           )}
         />

@@ -3,6 +3,7 @@
 import RichTextContent from "@/components/RichTextContent/RichTextContent";
 import { Badge, Box, Group, Stack, Text } from "@mantine/core";
 import { BookOpenIcon, VideoIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import useContainer from "./useContainer";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
@@ -10,20 +11,22 @@ import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 const Page = () => {
   const { courseDetail } = useContainer();
   const { userId } = useParams();
+  const t = useTranslations("Learn.CoursePage");
+  const tc = useTranslations("Learn.Common");
 
   return (
     <div className="w-full min-w-0">
       <Stack gap={18}>
         <CustomBreadCrumb
           links={[
-            { label: "Profile", href: `/profile/${userId}`, isActive: true },
+            { label: tc("profile"), href: `/profile/${userId}`, isActive: true },
             {
-              label: "My courses",
+              label: tc("my_courses"),
               href: `/profile/${userId}/my-courses`,
               isActive: true,
             },
             {
-              label: courseDetail?.title || "Course",
+              label: courseDetail?.title || tc("course"),
               href: "",
               isActive: false,
             },
@@ -64,7 +67,7 @@ const Page = () => {
             color="hongbao-red"
             leftSection={<BookOpenIcon size={13} weight="fill" />}
           >
-            {courseDetail?.lessonCount || 0} Lessons
+            {t("lesson_count", { count: courseDetail?.lessonCount || 0 })}
           </Badge>
           <Badge
             size="lg"
@@ -73,7 +76,7 @@ const Page = () => {
             color="hongbao-orange"
             leftSection={<VideoIcon size={13} weight="fill" />}
           >
-            {courseDetail?.videoCount || 0} Videos
+            {t("video_count", { count: courseDetail?.videoCount || 0 })}
           </Badge>
         </Group>
 

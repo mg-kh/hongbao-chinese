@@ -3,13 +3,15 @@
 import { HOME } from "@/constants/ClientRoutes";
 import { ActionIcon, AppShell, Container, Flex, Group } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const t = useTranslations("Auth.AuthLayout");
   return (
     <>
       <AppShell padding="md" header={{ height: 60 }}>
@@ -23,6 +25,7 @@ export default function AuthLayout({
                   href={HOME}
                   color="dark"
                   c="var(--hb-text)"
+                  aria-label={t("back_to_home_aria")}
                 >
                   <IconArrowLeft />
                 </ActionIcon>
