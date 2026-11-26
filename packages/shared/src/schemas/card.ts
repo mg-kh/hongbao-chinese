@@ -27,6 +27,19 @@ export const CreateCardSchema = z.object({
 });
 export type CreateCardRequest = z.input<typeof CreateCardSchema>;
 
+/** Max cards per bulk-create request. */
+export const BULK_CREATE_CARD_LIMIT = 100;
+
+/** Creates many cards in one request (CSV import); all go to one flashcard. */
+export const BulkCreateCardSchema = z.object({
+  flashcardId: z.string().min(1).nullish(),
+  cards: z
+    .array(CreateCardSchema.omit({ flashcardId: true }))
+    .min(1)
+    .max(BULK_CREATE_CARD_LIMIT),
+});
+export type BulkCreateCardRequest = z.input<typeof BulkCreateCardSchema>;
+
 export const UpdateCardSchema = CreateCardSchema.partial();
 export type UpdateCardRequest = z.input<typeof UpdateCardSchema>;
 

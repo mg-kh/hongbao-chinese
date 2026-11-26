@@ -1,104 +1,74 @@
 "use client";
 
+import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 import { pluralize } from "@/utils/pluralize";
-import { Center, Loader, Paper, Select, Stack, Text } from "@mantine/core";
-import { ArrowLeftIcon } from "@phosphor-icons/react";
+import { Button, Center, Loader, Paper, Stack, Text } from "@mantine/core";
 import Link from "next/link";
-import CardDialog from "../CardDialog/CardDialog";
-import CardTile from "../CardTile/CardTile";
+import FlashcardTile from "../FlashcardTile/FlashcardTile";
 import useContainer from "./useContainer";
 
 const FlashcardsPage = () => {
-  const {
-    userId,
-    isLoading,
-    cards,
-    category,
-    handleCategoryChange,
-    categorySelectData,
-    activeCard,
-    activeIndex,
-    flipped,
-    showPinyin,
-    openAt,
-    closeDialog,
-    goPrev,
-    goNext,
-    toggleFlip,
-    toggleShowPinyin,
-  } = useContainer();
+  const { userId, flashcards, isLoading } = useContainer();
 
   return (
     <Stack gap={20} className="flex-1!">
-      <Link
-        href={`/profile/${userId}`}
-        className="flex! items-center! gap-1.5! w-fit! no-underline! text-gray-500! hover:text-hongbao-red-600! transition-colors! duration-200!"
-      >
-        <ArrowLeftIcon size={14} weight="bold" />
-        <Text size="xs" fw={600}>
-          Back to profile
-        </Text>
-      </Link>
+      <CustomBreadCrumb
+        title="Flashcards"
+        links={[
+          { label: "Profile", href: `/profile/${userId}`, isActive: true },
+          {
+            label: "Flashcards",
+            href: `/profile/${userId}/flashcards`,
+            isActive: false,
+          },
+        ]}
+      />
 
-      <Stack gap={4}>
-        <Text size="xl" fw={"bold"} c={"hongbao-red"}>
-          Flashcards
-        </Text>
-        <Text size="sm" c="gray.6">
-          Tap a card to open it. Drill vocabulary by category.
-        </Text>
-      </Stack>
-
-      <div className="flex! flex-col! sm:flex-row! sm:items-center! sm:justify-between! gap-3!">
-        <Text size="xs" c="gray.5">
-          {pluralize(cards.length, "card")}
-        </Text>
-
-        <Select
-          value={category}
-          onChange={handleCategoryChange}
-          data={categorySelectData}
-          allowDeselect={false}
-          radius="md"
-          color="hongbao-red"
-          className="w-full! sm:w-[200px]!"
-          aria-label="Filter by category"
-        />
-      </div>
+      <Text size="sm" c="gray.6">
+        Your enrolled flashcards. Pick one to start drilling.
+      </Text>
 
       {isLoading ? (
         <Center py={60}>
           <Loader color="hongbao-red" />
         </Center>
-      ) : cards.length === 0 ? (
+      ) : flashcards.length === 0 ? (
         <Paper
           withBorder
           bdrs={20}
           p={{ base: 28, sm: 40 }}
           className="border-dashed! border-gray-300! bg-gray-50/60! text-center!"
         >
-          <Text c="gray.6">No cards in this category yet.</Text>
+          <Stack gap={12} align="center">
+            <Text c="gray.6">
+              You haven&apos;t enrolled in any flashcards yet.
+            </Text>
+            <Button
+              component={Link}
+              href="/shop?type=flashcard"
+              color="hongbao-red"
+              radius="md"
+            >
+              Browse flashcards
+            </Button>
+          </Stack>
         </Paper>
       ) : (
-        <div className="grid! grid-cols-2! sm:grid-cols-3! lg:grid-cols-4! gap-3! sm:gap-4!">
-          {cards.map((c, i) => (
-            <CardTile key={c.id} card={c} onClick={() => openAt(i)} />
-          ))}
-        </div>
+        <>
+          <Text size="xs" c="gray.5">
+            {pluralize(flashcards.length, "flashcard")}
+          </Text>
+          <div className="grid! grid-cols-1! sm:grid-cols-2! lg:grid-cols-3! gap-3! sm:gap-4!">
+            {flashcards.map((f) => (
+              <FlashcardTile
+                key={f.id}
+                flashcard={f}
+                href={`/profile/${userId}/flashcards/${f.id}`}
+              />
+            ))}
+          </div>
+        </>
       )}
-
-      <CardDialog
-        card={activeCard}
-        index={activeIndex}
-        total={cards.length}
-        flipped={flipped}
-        showPinyin={showPinyin}
-        onClose={closeDialog}
-        onFlip={toggleFlip}
-        onPrev={goPrev}
-        onNext={goNext}
-        onTogglePinyin={toggleShowPinyin}
-      />
     </Stack>
   );
 };

@@ -78,7 +78,7 @@ const useContainer = (data: TMyCourse) => {
   const href = {
     course: `/profile/${userId}/learn/${data.productId}`,
     "mock-test": "/mock-test",
-    flashcard: `/profile/${userId}/flashcards`,
+    flashcard: `/profile/${userId}/flashcards/${data.productId}`,
   }[data.type];
 
   return {

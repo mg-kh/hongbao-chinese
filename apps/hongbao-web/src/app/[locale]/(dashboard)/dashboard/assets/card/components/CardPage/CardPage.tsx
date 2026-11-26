@@ -14,10 +14,12 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { IconPencil, IconPlus } from "@tabler/icons-react";
+import { IconFileImport, IconPencil, IconPlus } from "@tabler/icons-react";
 import { TCardRes } from "../../types/card.type";
 import EditDrawer from "../EditDrawer/EditDrawer";
+import ImportCsvModal from "../ImportCsvModal/ImportCsvModal";
 import useContainer from "./useContainer";
+import { PAGE_SIZE_OPTIONS } from "@/constants/pagination";
 
 const CardPage = () => {
   const {
@@ -31,6 +33,9 @@ const CardPage = () => {
     params,
     setParams,
     totalPages,
+    importOpened,
+    openImport,
+    closeImport,
   } = useContainer();
   return (
     <>
@@ -43,14 +48,23 @@ const CardPage = () => {
               { label: "Card", href: "", isActive: false },
             ]}
           />
-          <Button
-            leftSection={<IconPlus />}
-            onClick={() => {
-              open();
-            }}
-          >
-            Create New Card
-          </Button>
+          <Group gap={10}>
+            <Button
+              variant="light"
+              leftSection={<IconFileImport />}
+              onClick={openImport}
+            >
+              Import CSV
+            </Button>
+            <Button
+              leftSection={<IconPlus />}
+              onClick={() => {
+                open();
+              }}
+            >
+              Create New Card
+            </Button>
+          </Group>
         </Group>
 
         <Box>
@@ -76,7 +90,7 @@ const CardPage = () => {
               <Flex justify="end" align={"center"} gap={10}>
                 <Select
                   placeholder="Per page"
-                  data={["10", "20", "30", "40"]}
+                  data={PAGE_SIZE_OPTIONS}
                   w={120}
                   value={params.limit}
                   allowDeselect={false}
@@ -183,6 +197,7 @@ const CardPage = () => {
         </Box>
       </Stack>
       {opened && <EditDrawer />}
+      <ImportCsvModal opened={importOpened} onClose={closeImport} />
     </>
   );
 };

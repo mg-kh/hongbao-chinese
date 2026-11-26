@@ -1,10 +1,11 @@
 import useApiQuery from "@/hooks/fetching/useApiQuery";
 import { useState } from "react";
 import { TPurchaseRes } from "@/app/[locale]/(dashboard)/dashboard/users/purchases/types/purchases.type";
+import { DEFAULT_PAGE_SIZE } from "@/constants/pagination";
 
 const useContainer = () => {
   const [params, setParams] = useState({
-    limit: "10",
+    limit: DEFAULT_PAGE_SIZE,
     page: 1,
     search: "",
     start_date: "",

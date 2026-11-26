@@ -1,7 +1,7 @@
 "use client";
 
 import QuizIcon from "@/components/icons/QuizIcon";
-import useAllCardList from "@/hooks/global-data-fetching/useAllCardList";
+import useMyFlashcards from "@/hooks/global-data-fetching/useMyFlashcards";
 import { useCompletedQuizzes } from "@/hooks/global-data-fetching/useCompletedQuizzes";
 import { useCompletedVideos } from "@/hooks/global-data-fetching/useCompletedVideos";
 import useMyCourses from "@/hooks/global-data-fetching/useMyCourses";
@@ -46,17 +46,17 @@ const Profile = () => {
   const { completedCount } = useCompletedVideos();
   const { completedCount: answeredQuizCount } = useCompletedQuizzes();
   const { stats } = useMyCourses();
-  const { cards } = useAllCardList();
+  const { cards } = useMyFlashcards();
 
   // Flashcards/Memo Space progress is tracked client-side (no backend
   // endpoint yet), so it's read from localStorage after mount - starts at 0
   // to stay hydration-safe, then fills in once the browser can read it.
-  const [learnedCount, setLearnedCount] = useState(0);
+  const [learnedIds, setLearnedIds] = useState<string[]>([]);
   const [dueCount, setDueCount] = useState(0);
 
   useEffect(() => {
     if (!userId) return;
-    setLearnedCount(loadLearnedIds(uid).length);
+    setLearnedIds(loadLearnedIds(uid));
 
     const progress = loadMemoProgress(uid);
     const now = Date.now();
@@ -68,6 +68,9 @@ const Profile = () => {
   }, [userId]);
 
   const totalCards = cards.length;
+  // only count cards from decks the user is still enrolled in.
+  const learnedSet = new Set(learnedIds);
+  const learnedCount = cards.filter((c) => learnedSet.has(c.id)).length;
   const learnedPct = totalCards
     ? Math.round((learnedCount / totalCards) * 100)
     : 0;

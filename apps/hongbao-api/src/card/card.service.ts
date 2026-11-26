@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { successResponse } from '../utils/response';
 import { withErrorHandling } from '../utils/withErrorHandling';
+import { BulkCreateCardDto } from './dto/bulk-create-card.dto';
 import { CreateCardDto } from './dto/create-card.dto';
 import { FilterCardDto } from './dto/filter-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
@@ -27,6 +28,16 @@ export class CardService {
         include: cardInclude,
       });
       return successResponse({ data: res });
+    });
+  }
+
+  /** All-or-nothing: one bad card (e.g. unknown flashcard) rejects the batch. */
+  async bulkCreate({ flashcardId, cards }: BulkCreateCardDto) {
+    return withErrorHandling(async () => {
+      const res = await this.prisma.card.createMany({
+        data: cards.map((card) => ({ ...card, flashcardId: flashcardId ?? null })),
+      });
+      return successResponse({ data: { count: res.count } });
     });
   }
 

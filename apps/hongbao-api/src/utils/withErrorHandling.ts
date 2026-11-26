@@ -7,6 +7,17 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
+const isClientHttpError = (
+  error: unknown,
+): error is Error & { status: number; expose: boolean } =>
+  error instanceof Error &&
+  'status' in error &&
+  typeof error.status === 'number' &&
+  error.status >= 400 &&
+  error.status < 500 &&
+  'expose' in error &&
+  error.expose === true;
+
 /**
  * Maps any thrown value to an HttpException. Known Prisma errors become the
  * matching 4xx; anything unrecognised becomes a 500 that keeps the original
@@ -38,6 +49,13 @@ export const toHttpException = (error: unknown): HttpException => {
 
   if (error instanceof Prisma.PrismaClientValidationError) {
     return new BadRequestException('Invalid data provided');
+  }
+
+  // body-parser / http-errors (e.g. 413 "request entity too large", 400
+  // malformed JSON) carry their own client-error status; keep it instead of
+  // reporting them as 500s.
+  if (isClientHttpError(error)) {
+    return new HttpException(error.message, error.status);
   }
 
   if (error instanceof Error) {

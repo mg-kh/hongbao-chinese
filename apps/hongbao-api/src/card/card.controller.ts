@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CardService } from './card.service';
+import { BulkCreateCardDto } from './dto/bulk-create-card.dto';
 import { CreateCardDto } from './dto/create-card.dto';
 import { FilterCardDto } from './dto/filter-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
@@ -23,6 +24,12 @@ export class CardController {
   @Post()
   create(@Body() createCardDto: CreateCardDto) {
     return this.cardService.create(createCardDto);
+  }
+
+  /** Must stay above the `:id` routes. Used by the CSV import. */
+  @Post('bulk')
+  bulkCreate(@Body() bulkCreateCardDto: BulkCreateCardDto) {
+    return this.cardService.bulkCreate(bulkCreateCardDto);
   }
 
   @Get()
