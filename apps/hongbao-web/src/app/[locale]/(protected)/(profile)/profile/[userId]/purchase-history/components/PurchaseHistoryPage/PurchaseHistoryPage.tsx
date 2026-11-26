@@ -111,12 +111,7 @@ const PurchaseHistoryPage = () => {
               })}
             </Group>
           </Box>
-          <DateRangeInput
-            value={dateRange}
-            onChange={setDateRange}
-            radius="md"
-            size="sm"
-          />
+          <DateRangeInput value={dateRange} onChange={setDateRange} />
         </Group>
       )}
 

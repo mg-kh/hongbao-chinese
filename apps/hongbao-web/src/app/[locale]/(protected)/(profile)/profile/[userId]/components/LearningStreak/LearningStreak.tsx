@@ -7,19 +7,19 @@ import useContainer, { TIntensity } from "./useContainer";
 /** Monday-first, matching the grid rows. */
 const DAY_LABELS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
 
-/** Fill per intensity level: more completions that day, deeper red. */
+/** Fill per intensity level: more completions that day, deeper gold. */
 const LEVEL_COLORS: Record<TIntensity, string> = {
   0: "bg-gray-100",
-  1: "bg-hongbao-red-100",
-  2: "bg-hongbao-red-300",
-  3: "bg-hongbao-red-500",
-  4: "bg-hongbao-red-700",
+  1: "bg-hongbao-gold-200",
+  2: "bg-hongbao-gold-400",
+  3: "bg-hongbao-gold-600",
+  4: "bg-hongbao-gold-800",
 };
 const LEVELS: TIntensity[] = [0, 1, 2, 3, 4];
 
 /**
  * Daily learning calendar: one pill per day, shaded by how many videos and
- * quizzes the user completed that day - deeper red means more.
+ * quizzes the user completed that day - deeper gold means more.
  */
 const LearningStreak: React.FC = () => {
   const t = useTranslations("Profile.LearningStreak");

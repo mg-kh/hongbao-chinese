@@ -15,51 +15,6 @@ const DEFAULT_RANGE: TRevenueDateRange = {
   to: today.format("YYYY-MM-DD"),
 };
 
-export const REVENUE_PRESETS = [
-  {
-    label: "Today",
-    value: [today.format("YYYY-MM-DD"), today.format("YYYY-MM-DD")] as [
-      string,
-      string,
-    ],
-  },
-  {
-    label: "This Week",
-    value: [
-      today.startOf("week").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ] as [string, string],
-  },
-  {
-    label: "This Month",
-    value: [
-      today.startOf("month").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ] as [string, string],
-  },
-  {
-    label: "3 Months",
-    value: [
-      today.subtract(3, "month").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ] as [string, string],
-  },
-  {
-    label: "6 Months",
-    value: [
-      today.subtract(6, "month").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ] as [string, string],
-  },
-  {
-    label: "1 Year",
-    value: [
-      today.subtract(1, "year").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ] as [string, string],
-  },
-];
-
 export type TGranularityOption = RevenueGranularity | "auto";
 
 export const GRANULARITY_OPTIONS: {

@@ -11,7 +11,6 @@ import ProductRevenueChart from "@/app/[locale]/(dashboard)/dashboard/revenue/co
 import RevenueTrendChart from "@/app/[locale]/(dashboard)/dashboard/revenue/components/RevenuePage/components/RevenueTrendChart/RevenueTrendChart";
 import useContainer, {
   GRANULARITY_OPTIONS,
-  REVENUE_PRESETS,
 } from "@/app/[locale]/(dashboard)/dashboard/revenue/components/RevenuePage/useContainer";
 
 const RevenuePage = () => {
@@ -36,11 +35,7 @@ const RevenuePage = () => {
             { label: "Revenue", href: REVENUE, isActive: false },
           ]}
         />
-        <DateRangeInput
-          value={pickerValue}
-          onChange={onRangeChange}
-          presets={REVENUE_PRESETS}
-        />
+        <DateRangeInput value={pickerValue} onChange={onRangeChange} />
       </Group>
 
       <Grid gap="md">

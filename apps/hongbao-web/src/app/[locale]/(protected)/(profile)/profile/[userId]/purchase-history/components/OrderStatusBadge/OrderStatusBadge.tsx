@@ -23,25 +23,25 @@ const statusMeta: Record<
     labelKey: "pending",
     color: "hongbao-gold",
     icon: <HourglassMediumIcon size={12} weight="fill" />,
-    surface: "bg-hongbao-gold-50/30! border-hongbao-gold-200/50!",
+    surface: "bg-hongbao-gold-50/60! border-hongbao-gold-200/70!",
   },
   APPROVED: {
     labelKey: "approved",
     color: "green",
     icon: <CheckCircleIcon size={12} weight="fill" />,
-    surface: "bg-green-50/50! border-green-200/50!",
+    surface: "bg-green-50/80! border-green-200/70!",
   },
   CANCELLED: {
     labelKey: "cancelled",
     color: "gray",
     icon: <XCircleIcon size={12} weight="fill" />,
-    surface: "bg-gray-50/60! border-gray-200/50!",
+    surface: "bg-gray-50! border-gray-200/70!",
   },
   EXPIRED: {
     labelKey: "expired",
     color: "hongbao-red",
     icon: <ClockCountdownIcon size={12} weight="fill" />,
-    surface: "bg-hongbao-red-50/25! border-hongbao-red-200/50!",
+    surface: "bg-hongbao-red-50/50! border-hongbao-red-200/70!",
   },
 };
 
