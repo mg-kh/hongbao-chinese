@@ -1,4 +1,3 @@
-import { MockTestTypeIcon } from "@/components/icons/productTypeIcons";
 import {
   ArticleIcon,
   HouseSimpleIcon,
@@ -17,30 +16,24 @@ import { TBottomNavItem } from "./MobileBottomNav";
  */
 export const publicBottomNavItems: TBottomNavItem[] = [
   {
-    label: "Home",
+    labelKey: "home",
     href: "/",
     icon: <HouseSimpleIcon size={20} weight="fill" />,
   },
   {
-    label: "Shop",
+    labelKey: "shop",
     href: "/shop",
     match: "shop",
     icon: <StorefrontIcon size={20} weight="fill" />,
   },
   {
-    label: "Mock Test",
-    href: "/mock-test",
-    match: "mock-test",
-    icon: <MockTestTypeIcon size={20} weight="fill" />,
-  },
-  {
-    label: "Blogs",
+    labelKey: "blogs",
     href: "/blogs",
     match: "blogs",
     icon: <ArticleIcon size={20} weight="fill" />,
   },
   {
-    label: "Privacy",
+    labelKey: "privacy",
     href: "/privacy-policy",
     match: "privacy-policy",
     icon: <ShieldCheckIcon size={20} weight="fill" />,

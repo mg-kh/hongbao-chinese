@@ -14,18 +14,19 @@ import {
 } from "@mantine/core";
 import { ArrowRightIcon, ShoppingCartIcon } from "@phosphor-icons/react";
 import { isEmpty } from "lodash";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import CourseCard from "../../../components/CourseCard/CourseCard";
 import useContainer from "./useContainer";
 
-/** Copy shown when a status filter turns up nothing. */
-const emptyByFilter: Record<string, string> = {
-  ALL: "ဝယ်ယူထားသော သင်ခန်းစာများမရှိသေးပါ။",
-  APPROVED: "No courses in progress right now.",
-  PENDING: "No courses waiting for approval.",
-  EXPIRED: "No expired courses — nothing to renew.",
-};
+/** Message keys for the copy shown when a status filter turns up nothing. */
+const emptyByFilter = {
+  ALL: "empty.all",
+  APPROVED: "empty.approved",
+  PENDING: "empty.pending",
+  EXPIRED: "empty.expired",
+} as const;
 
 const PageComponent = () => {
   const {
@@ -42,16 +43,21 @@ const PageComponent = () => {
     activeCount,
   } = useContainer();
   const { userId } = useParams();
+  const t = useTranslations("Profile.MyCourses");
 
   return (
     <Stack gap={24} className="flex-1!">
       {/* page header */}
       <Group justify="space-between" align="center" wrap="wrap" gap={12}>
         <CustomBreadCrumb
-          title="ကျွန်ုပ်၏ သင်ခန်းစာများ"
+          title={t("title")}
           links={[
-            { label: "Profile", href: `/profile/${userId}`, isActive: true },
-            { label: "My courses", href: "", isActive: false },
+            {
+              label: t("breadcrumb_profile"),
+              href: `/profile/${userId}`,
+              isActive: true,
+            },
+            { label: t("breadcrumb_my_courses"), href: "", isActive: false },
           ]}
         />
         <Button
@@ -63,7 +69,7 @@ const PageComponent = () => {
           rightSection={<ArrowRightIcon size={14} />}
           className="w-full! sm:w-auto! shrink-0!"
         >
-          ဝယ်ယူရန်
+          {t("buy")}
         </Button>
       </Group>
 
@@ -98,11 +104,14 @@ const PageComponent = () => {
       {stats.total > 0 && !isLoading && (
         <Group gap={8} align="center" wrap="wrap">
           <Text size="sm" c="gray.6">
-            Showing{" "}
-            <Text span fw={700} c="gray.9">
-              {activeCount}
-            </Text>{" "}
-            {activeCount === 1 ? "course" : "courses"}
+            {t.rich("showing_count", {
+              count: activeCount,
+              b: (chunks) => (
+                <Text span fw={700} c="gray.9">
+                  {chunks}
+                </Text>
+              ),
+            })}
           </Text>
         </Group>
       )}
@@ -122,7 +131,7 @@ const PageComponent = () => {
               <ShoppingCartIcon size={26} />
             </Box>
             <Text ta={"center"} c="gray.7">
-              {emptyByFilter[filter]}
+              {t(emptyByFilter[filter])}
             </Text>
             {filter === "ALL" ? (
               <Button
@@ -132,7 +141,7 @@ const PageComponent = () => {
                 rightSection={<ArrowRightIcon size={15} />}
                 className="w-full! sm:w-auto!"
               >
-                ဝယ်ယူရန်
+                {t("buy")}
               </Button>
             ) : (
               <Button
@@ -141,7 +150,7 @@ const PageComponent = () => {
                 size="sm"
                 onClick={() => setFilter("ALL")}
               >
-                Show all courses
+                {t("show_all")}
               </Button>
             )}
           </Stack>

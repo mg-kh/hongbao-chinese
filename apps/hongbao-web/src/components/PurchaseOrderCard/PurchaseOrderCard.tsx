@@ -14,32 +14,46 @@ import {
   TPurchaseCardOrder,
 } from "@/types/purchase-order.type";
 import useContainer from "@/components/PurchaseOrderCard/useContainer";
-import { durationLabel, money } from "@/utils/purchaseOrder";
+import { currencyFormatter } from "@/utils/currencyFormatter";
+import { useTranslations } from "next-intl";
 
 const typeMeta: Record<
   TPurchaseCardItemType,
-  { label: string; tile: string; icon: React.ReactNode }
+  {
+    labelKey: "type_course" | "type_mock_test" | "type_flashcard";
+    tile: string;
+    icon: React.ReactNode;
+  }
 > = {
   course: {
-    label: "Course",
+    labelKey: "type_course",
     tile: "bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!",
     icon: <CourseTypeIcon size={14} weight="fill" />,
   },
   "mock-test": {
-    label: "Mock Test",
+    labelKey: "type_mock_test",
     tile: "bg-hongbao-orange-50! text-hongbao-orange-600! dark:text-night-orange!",
     icon: <MockTestTypeIcon size={14} weight="fill" />,
   },
   flashcard: {
-    label: "Flashcard",
+    labelKey: "type_flashcard",
     tile: "bg-hongbao-gold-50! text-hongbao-gold-700! dark:text-night-gold!",
     icon: <FlashcardTypeIcon size={14} weight="fill" />,
   },
 };
 
-const lineMeta = (item: TPurchaseCardItem) =>
+type TCardT = ReturnType<typeof useTranslations<"Shared.PurchaseOrderCard">>;
+
+/** "3 months" for whole months, otherwise "45 days"; `null` is lifetime. */
+const durationLabel = (t: TCardT, days: number | null) => {
+  if (days === null) return t("lifetime");
+  if (days > 0 && days % 30 === 0) return t("months", { count: days / 30 });
+  return t("days", { count: days });
+};
+
+const lineMeta = (t: TCardT, item: TPurchaseCardItem) =>
   [
-    durationLabel(item.durationDays),
+    durationLabel(t, item.durationDays),
     item.quantity > 1 ? `×${item.quantity}` : null,
   ]
     .filter(Boolean)
@@ -73,6 +87,11 @@ const PurchaseOrderCard: React.FC<Props> = ({
   surfaceClassName = "border-gray-200! bg-surface!",
 }) => {
   const { expanded, toggle, payment, hasDiscount } = useContainer(order);
+  const t = useTranslations("Shared.PurchaseOrderCard");
+  const money = (value: number, currency = "MMK") =>
+    value <= 0
+      ? t("free")
+      : currencyFormatter({ value, currencySample: currency });
 
   return (
     <Paper
@@ -125,10 +144,10 @@ const PurchaseOrderCard: React.FC<Props> = ({
                   </Text>
                   <div className="mt-0.5 flex min-w-0 items-center gap-1.5">
                     <span className="shrink-0 rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-600">
-                      {typeMeta[item.type].label}
+                      {t(typeMeta[item.type].labelKey)}
                     </span>
                     <Text size="11px" c="gray.5" lineClamp={1}>
-                      {lineMeta(item)}
+                      {lineMeta(t, item)}
                     </Text>
                   </div>
                 </Box>
@@ -154,7 +173,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
               className="min-w-0! whitespace-pre-line! break-words!"
             >
               <Text component="span" size="xs" fw={700}>
-                Declined:{" "}
+                {t("declined")}{" "}
               </Text>
               {order.rejectReason}
             </Text>
@@ -166,7 +185,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-gray-100 px-3 py-2 sm:px-4">
         <div className="flex items-baseline gap-1.5">
           <Text size="11px" fw={600} c="gray.5" tt="uppercase">
-            Total
+            {t("total")}
           </Text>
           <Text size="sm" fw={800} c="var(--hb-accent-strong)">
             {money(order.total, order.currency)}
@@ -180,7 +199,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
             className="flex! items-center! gap-1! rounded-md! px-1.5! py-1! text-gray-500! transition-colors! duration-150! hover:bg-gray-100! hover:text-gray-700!"
           >
             <Text size="xs" fw={600}>
-              {expanded ? "Hide" : "Details"}
+              {expanded ? t("hide") : t("details")}
             </Text>
             <CaretDownIcon
               size={12}
@@ -206,7 +225,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
             <div className="flex flex-col gap-1">
               <div className="flex justify-between">
                 <Text size="xs" c="gray.6">
-                  Subtotal
+                  {t("subtotal")}
                 </Text>
                 <Text size="xs" fw={600} c="gray.7">
                   {money(order.subtotal, order.currency)}
@@ -214,7 +233,7 @@ const PurchaseOrderCard: React.FC<Props> = ({
               </div>
               <div className="flex justify-between">
                 <Text size="xs" c="gray.6">
-                  Discount
+                  {t("discount")}
                 </Text>
                 <Text size="xs" fw={600} c="var(--hb-accent-text)">
                   -{money(order.subtotal - order.total, order.currency)}

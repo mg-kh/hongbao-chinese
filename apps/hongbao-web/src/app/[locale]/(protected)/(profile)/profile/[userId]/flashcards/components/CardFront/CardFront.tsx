@@ -4,6 +4,7 @@ import useContainer from "@/app/[locale]/(protected)/(profile)/profile/[userId]/
 import type { TCard } from "@/hooks/global-data-fetching/useMyFlashcards";
 import { Badge, Paper } from "@mantine/core";
 import { HandTapIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface Props {
@@ -19,6 +20,7 @@ interface Props {
  */
 const CardFront: React.FC<Props> = ({ card, onReveal }) => {
   const { typeLabel, showPinyin, revealPinyin } = useContainer(card);
+  const t = useTranslations("Profile.Flashcards.CardFront");
 
   return (
     <div className="flex! h-full! flex-col! p-3! [animation:fade-up_0.28s_ease-out_both] sm:p-5!">
@@ -26,7 +28,7 @@ const CardFront: React.FC<Props> = ({ card, onReveal }) => {
       <Paper
         role="button"
         tabIndex={0}
-        aria-label="Reveal the answer"
+        aria-label={t("reveal_answer")}
         onClick={onReveal}
         onKeyDown={(e) => {
           if (e.target !== e.currentTarget) return;
@@ -75,7 +77,7 @@ const CardFront: React.FC<Props> = ({ card, onReveal }) => {
           )}
           {card.pinyin && !showPinyin && (
             <span className="-mt-2! text-xs! text-gray-400!">
-              Tap the blur to peek at pinyin
+              {t("peek_pinyin")}
             </span>
           )}
         </div>
@@ -84,7 +86,7 @@ const CardFront: React.FC<Props> = ({ card, onReveal }) => {
         <div className="flex! items-center! justify-center! gap-1.5! p-5! text-gray-400! transition-colors! duration-200! group-hover:text-hongbao-red-500! dark:group-hover:text-night-red!">
           <HandTapIcon size={14} weight="fill" />
           <span className="text-[11px]! font-bold! uppercase! tracking-[0.12em]!">
-            Tap to reveal
+            {t("tap_to_reveal")}
           </span>
         </div>
       </Paper>

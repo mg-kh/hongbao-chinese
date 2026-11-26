@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { ImageIcon } from "@phosphor-icons/react";
 import { IconTag, IconTrash, IconX } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 import {
   SHOP_TYPE_META,
   ShopProductType,
@@ -43,6 +44,8 @@ const CartLine: React.FC<Props> = ({
   onRemove,
   onMonthsChange,
 }) => {
+  const t = useTranslations("Cart.CartLine");
+  const tTypes = useTranslations("Shop.Types");
   const {
     itemPromo,
     promoOpen,
@@ -80,7 +83,7 @@ const CartLine: React.FC<Props> = ({
           </Text>
           <UnstyledButton
             onClick={() => onRemove(product.id)}
-            aria-label={`Remove ${product.title}`}
+            aria-label={t("remove_aria", { title: product.title })}
             className="flex! h-8! w-8! shrink-0! items-center! justify-center! rounded-full! text-gray-400! transition-colors! duration-200! hover:bg-red-50! hover:text-red-600! dark:hover:text-night-red!"
           >
             <IconTrash size={16} />
@@ -89,7 +92,7 @@ const CartLine: React.FC<Props> = ({
 
         <div className="mt-1! flex! flex-wrap! items-center! gap-1.5!">
           <span className="rounded! bg-gray-100! px-1.5! py-0.5! text-[10px]! font-bold! text-gray-600!">
-            {SHOP_TYPE_META[product.type].label}
+            {tTypes(SHOP_TYPE_META[product.type].labelKey)}
           </span>
           {product.level && (
             <span className="rounded! bg-hongbao-red-50! px-1.5! py-0.5! text-[10px]! font-bold! text-hongbao-red-700! dark:text-night-red!">
@@ -100,18 +103,18 @@ const CartLine: React.FC<Props> = ({
 
         {!product.isFree && !product.lifetime && (
           <Text size="11px" c="gray.5" className="mt-1.5!">
-            {money(perMonth)} <span className="text-gray-400!">/ month</span>
+            {money(perMonth)} <span className="text-gray-400!">{t("per_month")}</span>
           </Text>
         )}
 
         <div className="mt-auto! flex! items-end! justify-between! gap-3! pt-3!">
           {product.isFree ? (
             <span className="rounded-md! bg-gray-900! px-2! py-1! text-[11px]! font-extrabold! text-gray-50!">
-              FREE
+              {t("free_badge")}
             </span>
           ) : product.lifetime ? (
             <span className="rounded-md! bg-gray-100! px-2! py-1! text-[11px]! font-bold! text-gray-600!">
-              Lifetime access
+              {t("lifetime_access")}
             </span>
           ) : (
             <MonthStepper
@@ -127,7 +130,7 @@ const CartLine: React.FC<Props> = ({
               </Text>
             )}
             <Text fw={800} c="hongbao-red" className="text-[15px]!">
-              {product.isFree ? "Free" : money(Math.max(lineTotal, 0))}
+              {product.isFree ? t("free") : money(Math.max(lineTotal, 0))}
             </Text>
           </Stack>
         </div>
@@ -157,7 +160,7 @@ const CartLine: React.FC<Props> = ({
                 <UnstyledButton
                   onClick={remove}
                   disabled={isRemovingPromo}
-                  aria-label="Remove promo code"
+                  aria-label={t("remove_promo")}
                   className="flex! items-center! justify-center! shrink-0! w-7! h-7! rounded-full! text-gray-500! hover:bg-surface! hover:text-hongbao-red-600! dark:hover:text-night-red! transition-colors! duration-200! disabled:opacity-50! disabled:cursor-not-allowed!"
                 >
                   <IconX size={13} />
@@ -170,10 +173,10 @@ const CartLine: React.FC<Props> = ({
                     value={code}
                     onChange={(e) => setCode(e.currentTarget.value)}
                     onKeyDown={(e) => e.key === "Enter" && apply()}
-                    placeholder="Promo code"
+                    placeholder={t("promo_code")}
                     size="xs"
                     radius="md"
-                    aria-label="Promo code"
+                    aria-label={t("promo_code")}
                     error={!!error}
                     disabled={isApplyingPromo}
                     autoFocus
@@ -191,7 +194,7 @@ const CartLine: React.FC<Props> = ({
                     variant="light"
                     color="hongbao-red"
                   >
-                    Apply
+                    {t("apply")}
                   </Button>
                 </Group>
                 {error && (
@@ -206,7 +209,7 @@ const CartLine: React.FC<Props> = ({
                 className="flex! items-center! gap-1.5! text-xs! font-semibold! text-hongbao-red-600! dark:text-night-red! transition-colors! duration-200! hover:underline!"
               >
                 <IconTag size={13} />
-                Use promo code
+                {t("use_promo")}
               </UnstyledButton>
             )}
           </Box>

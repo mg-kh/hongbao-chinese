@@ -2,21 +2,27 @@
 
 import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 import { Button, Center, Loader, Paper, Stack, Text } from "@mantine/core";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import FlashcardTile from "../FlashcardTile/FlashcardTile";
 import useContainer from "./useContainer";
 
 const FlashcardsPage = () => {
   const { userId, flashcards, isLoading } = useContainer();
+  const t = useTranslations("Profile.Flashcards");
 
   return (
     <Stack gap={20} className="flex-1!">
       <CustomBreadCrumb
-        title="Flashcards"
+        title={t("title")}
         links={[
-          { label: "Profile", href: `/profile/${userId}`, isActive: true },
           {
-            label: "Flashcards",
+            label: t("breadcrumb_profile"),
+            href: `/profile/${userId}`,
+            isActive: true,
+          },
+          {
+            label: t("breadcrumb_flashcards"),
             href: `/profile/${userId}/flashcards`,
             isActive: false,
           },
@@ -35,16 +41,14 @@ const FlashcardsPage = () => {
           className="border-dashed! border-gray-300! bg-gray-50/60! text-center!"
         >
           <Stack gap={12} align="center">
-            <Text c="gray.6">
-              You haven&apos;t enrolled in any flashcards yet.
-            </Text>
+            <Text c="gray.6">{t("List.empty")}</Text>
             <Button
               component={Link}
               href="/shop?type=flashcard"
               color="hongbao-red"
               radius="md"
             >
-              Browse flashcards
+              {t("browse")}
             </Button>
           </Stack>
         </Paper>

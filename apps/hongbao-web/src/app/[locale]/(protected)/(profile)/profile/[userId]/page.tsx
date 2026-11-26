@@ -17,6 +17,7 @@ import {
   ClockIcon,
   PlayCircleIcon,
 } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -41,6 +42,7 @@ const StatGroupLabel: React.FC<{ children: React.ReactNode }> = ({
 );
 
 const Profile = () => {
+  const t = useTranslations("Profile.Overview");
   const { userId } = useParams();
   const uid = String(userId);
   const { completedCount } = useCompletedVideos();
@@ -84,7 +86,7 @@ const Profile = () => {
           page; these are the headline numbers for it. */}
       <Stack gap={10}>
         <Group justify="space-between" align="center" gap={8}>
-          <StatGroupLabel>My courses</StatGroupLabel>
+          <StatGroupLabel>{t("my_courses")}</StatGroupLabel>
           <Text
             component={Link}
             href={`/profile/${userId}/my-courses`}
@@ -93,7 +95,7 @@ const Profile = () => {
             c="var(--hb-accent-text)"
             className="no-underline! hover:underline!"
           >
-            View all
+            {t("view_all")}
           </Text>
         </Group>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -101,28 +103,28 @@ const Profile = () => {
             layout="graphic"
             icon={<CourseTypeIcon size={18} weight="fill" />}
             value={stats.total}
-            label="Enrolled"
+            label={t("enrolled")}
             tone={stats.total > 0 ? "brand" : "neutral"}
           />
           <StatTile
             layout="graphic"
             icon={<PlayCircleIcon size={18} weight="fill" />}
             value={stats.active}
-            label="In progress"
+            label={t("in_progress")}
             tone={stats.active > 0 ? "brand" : "neutral"}
           />
           <StatTile
             layout="graphic"
             icon={<ClockIcon size={18} weight="fill" />}
             value={stats.pending}
-            label="Pending approval"
+            label={t("pending_approval")}
             tone={stats.pending > 0 ? "attention" : "neutral"}
           />
           <StatTile
             layout="graphic"
             icon={<CalendarXIcon size={18} weight="fill" />}
             value={stats.expired}
-            label="Expired"
+            label={t("expired")}
             tone={stats.expired > 0 ? "attention" : "neutral"}
           />
         </div>
@@ -130,43 +132,43 @@ const Profile = () => {
 
       {/* activity */}
       <Stack gap={10}>
-        <StatGroupLabel>Learning activity</StatGroupLabel>
+        <StatGroupLabel>{t("learning_activity")}</StatGroupLabel>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <StatTile
             icon={<CheckCircleIcon size={18} weight="fill" />}
             value={completedCount}
-            label="Videos completed"
+            label={t("videos_completed")}
             caption={
               completedCount > 0
-                ? "Lessons finished across your courses"
-                : "Finish a lesson to start your streak"
+                ? t("videos_caption")
+                : t("videos_caption_empty")
             }
             tone={completedCount > 0 ? "success" : "neutral"}
           />
           <StatTile
             icon={<QuizIcon width={18} height={18} />}
             value={answeredQuizCount}
-            label="Quizzes answered"
+            label={t("quizzes_answered")}
             caption={
               answeredQuizCount > 0
-                ? "Quizzes completed across your courses"
-                : "Answer a quiz to test yourself"
+                ? t("quizzes_caption")
+                : t("quizzes_caption_empty")
             }
             tone={answeredQuizCount > 0 ? "success" : "neutral"}
           />
           <StatTile
             icon={<FlashcardTypeIcon size={18} weight="fill" />}
             value={`${learnedCount}/${totalCards}`}
-            label="Flashcards learned"
-            caption={`${learnedPct}% of the deck reviewed`}
+            label={t("flashcards_learned")}
+            caption={t("flashcards_caption", { pct: learnedPct })}
             progress={learnedPct}
             tone={learnedCount > 0 ? "brand" : "neutral"}
           />
           <StatTile
             icon={<BrainIcon size={18} weight="fill" />}
             value={dueCount}
-            label="Due for review"
-            caption={dueCount > 0 ? "Ready to review now" : "All caught up!"}
+            label={t("due_for_review")}
+            caption={dueCount > 0 ? t("due_caption") : t("due_caption_empty")}
             tone={dueCount > 0 ? "attention" : "success"}
           />
         </div>

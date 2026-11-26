@@ -19,6 +19,7 @@ import {
   ListBulletsIcon,
   SealQuestionIcon,
 } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import NavItem from "./components/NavItem/NavItem";
@@ -39,6 +40,7 @@ const CourseNavigator = () => {
     isQuizCompleted,
     activeLessonId,
   } = useContainer();
+  const t = useTranslations("Learn.Navigator");
   const [drawerOpened, { open: openDrawer, close: closeDrawer }] =
     useDisclosure(false);
 
@@ -81,7 +83,7 @@ const CourseNavigator = () => {
             c="white"
             className="uppercase! tracking-[0.16em]! opacity-70!"
           >
-            Course
+            {t("course")}
           </Text>
           <Text
             component={Link}
@@ -109,7 +111,10 @@ const CourseNavigator = () => {
       <Stack gap={6}>
         <Group justify="space-between">
           <Text size="xs" c="white" className="opacity-85!">
-            {progress.completed} of {progress.total} complete
+            {t("progress_complete", {
+              completed: progress.completed,
+              total: progress.total,
+            })}
           </Text>
           <Text size="xs" fw={700} c="white">
             {progress.percent}%
@@ -171,8 +176,11 @@ const CourseNavigator = () => {
                     </Text>
                     <Text size="xs" c="gray.6">
                       {totalCount > 0
-                        ? `${doneCount}/${totalCount} completed`
-                        : "No content yet"}
+                        ? t("lesson_completed", {
+                            done: doneCount,
+                            total: totalCount,
+                          })
+                        : t("no_content")}
                     </Text>
                   </Stack>
                 </Group>
@@ -199,7 +207,7 @@ const CourseNavigator = () => {
                       {(sub?.videos?.length || 0) === 0 &&
                         (sub?.quizzes?.length || 0) === 0 && (
                           <Text size="xs" c="gray.5" px={10} py={4}>
-                            No content yet
+                            {t("no_content")}
                           </Text>
                         )}
 
@@ -263,7 +271,7 @@ const CourseNavigator = () => {
               color="hongbao-gold"
               leftSection={<SealQuestionIcon size={11} weight="fill" />}
             >
-              Final Assessment
+              {t("final_assessment")}
             </Badge>
           </Group>
           {courseDetail?.quizzes?.map((quiz) => (
@@ -292,7 +300,7 @@ const CourseNavigator = () => {
         bdrs={16}
         p={10}
         onClick={openDrawer}
-        aria-label="Open course content"
+        aria-label={t("open_course_content")}
         className="lg:hidden! w-full! text-left! border-gray-200! shadow-sm! cursor-pointer! active:bg-gray-50! transition-colors! duration-200!"
       >
         <Group justify="space-between" wrap="nowrap">
@@ -302,10 +310,13 @@ const CourseNavigator = () => {
             </Box>
             <Stack gap={0} className="min-w-0!">
               <Text size="sm" fw={700} lineClamp={1}>
-                Course content
+                {t("course_content")}
               </Text>
               <Text size="xs" c="gray.6">
-                {progress.completed} of {progress.total} complete
+                {t("progress_complete", {
+                  completed: progress.completed,
+                  total: progress.total,
+                })}
               </Text>
             </Stack>
           </Group>
@@ -356,7 +367,7 @@ const CourseNavigator = () => {
           p={6}
           className="hidden! lg:block! border-gray-200! shadow-sm!"
         >
-          <Tooltip label="Show course menu" position="right">
+          <Tooltip label={t("show_course_menu")} position="right">
             <Burger
               opened={expandSidbar}
               onClick={() => setExpendSidebar((prev) => !prev)}

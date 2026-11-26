@@ -2,7 +2,6 @@
 
 import CharacterGrid from "@/components/HanziPractice/components/CharacterGrid/CharacterGrid";
 import StrokeArrows from "@/components/HanziPractice/components/StrokeArrows/StrokeArrows";
-import { pluralize } from "@/utils/pluralize";
 import {
   ArrowClockwiseIcon,
   ArrowUpRightIcon,
@@ -11,6 +10,7 @@ import {
 } from "@phosphor-icons/react";
 import { useComputedColorScheme } from "@mantine/core";
 import HanziWriter from "hanzi-writer";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 interface Props {
@@ -75,6 +75,7 @@ const HanziPractice: React.FC<Props> = ({
   drawingColor: drawingColorProp,
   className,
 }) => {
+  const t = useTranslations("Shared.HanziPractice");
   // Light: dark ink on a pale warm-paper ground. Dark: pale ink on charcoal -
   // either way a high ink/ground contrast, which best supports recall.
   const isDark =
@@ -257,7 +258,7 @@ const HanziPractice: React.FC<Props> = ({
                   : "text-hongbao-brown-800/60! dark:text-night-brown/60! hover:text-hongbao-brown-800! dark:hover:text-night-brown!"
               }`}
             >
-              {m}
+              {t(m === "watch" ? "mode_watch" : "mode_write")}
             </button>
           ))}
         </div>
@@ -345,7 +346,7 @@ const HanziPractice: React.FC<Props> = ({
               }`}
             >
               <ArrowUpRightIcon size={12} weight="bold" />
-              Arrows
+              {t("arrows")}
             </button>
             <button
               type="button"
@@ -353,14 +354,14 @@ const HanziPractice: React.FC<Props> = ({
               className="flex! items-center! gap-1! rounded-full! bg-hongbao-brown-900/8! dark:bg-white/8! px-2.5! py-1! text-xs! font-bold! text-hongbao-brown-800! dark:text-night-brown! transition-colors! duration-150! hover:bg-hongbao-brown-900/15! dark:hover:bg-white/12!"
             >
               <PlayIcon size={12} weight="fill" />
-              Replay
+              {t("replay")}
             </button>
           </div>
         ) : (
           <div className="flex! shrink-0! items-center! gap-2!">
             {displayMistakes > 0 && (
               <span className="text-xs! font-medium! text-hongbao-brown-800/60! dark:text-night-brown/60!">
-                {pluralize(displayMistakes, "miss", "misses")}
+                {t("misses", { count: displayMistakes })}
               </span>
             )}
             <button
@@ -372,7 +373,7 @@ const HanziPractice: React.FC<Props> = ({
               className="flex! items-center! gap-1! rounded-full! bg-hongbao-brown-900/8! dark:bg-white/8! px-2.5! py-1! text-xs! font-bold! text-hongbao-brown-800! dark:text-night-brown! transition-colors! duration-150! hover:bg-hongbao-brown-900/15! dark:hover:bg-white/12!"
             >
               <ArrowClockwiseIcon size={12} weight="bold" />
-              Restart
+              {t("restart")}
             </button>
           </div>
         )}

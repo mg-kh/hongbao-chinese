@@ -10,9 +10,11 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
+import { useTranslations } from "next-intl";
 import useContainer from "./useContainer";
 
 const DailyLesson = () => {
+  const t = useTranslations("Home.DailyLesson");
   const {
     handleCelebrate,
     canvasRef,
@@ -37,10 +39,10 @@ const DailyLesson = () => {
         />
         <Stack gap={0}>
           <Text fw="bold" className="text-base! sm:text-xl!">
-            TODAY&apos;S LESSON - Giving Directions
+            {t("title")}
           </Text>
           <Text c={"gray.6"} size="sm">
-            Choose the correct answer
+            {t("instruction")}
           </Text>
         </Stack>
         <Stack className="relative">
@@ -60,7 +62,7 @@ const DailyLesson = () => {
                       mx={"auto"}
                       alt=""
                     />
-                    <Text>Almost there! Give it another try.</Text>
+                    <Text>{t("error_message")}</Text>
                   </Stack>
                   <Button
                     onClick={() => {
@@ -68,7 +70,7 @@ const DailyLesson = () => {
                     }}
                     color="hongbao-red"
                   >
-                    Try again
+                    {t("try_again")}
                   </Button>
                 </Stack>
               </Center>
@@ -90,7 +92,7 @@ const DailyLesson = () => {
                       mx={"auto"}
                       alt=""
                     />
-                    <Text>Correct! Great job.</Text>
+                    <Text>{t("success_message")}</Text>
                   </Stack>
                   <Button
                     onClick={() => {
@@ -98,7 +100,7 @@ const DailyLesson = () => {
                     }}
                     color="green"
                   >
-                    Close
+                    {t("close")}
                   </Button>
                 </Stack>
               </Center>
@@ -131,10 +133,10 @@ const DailyLesson = () => {
                 c={"white"}
                 ta={"center"}
               >
-                What time is it?
+                {t("option_what_time")}
               </Radio.Card>
               <Radio.Card checked={true} bdrs={15} p={10} ta={"center"}>
-                What did you eat?
+                {t("option_what_eat")}
               </Radio.Card>
               <Radio.Card
                 onClick={() => {
@@ -145,7 +147,7 @@ const DailyLesson = () => {
                 p={10}
                 ta={"center"}
               >
-                What is your name?
+                {t("option_what_name")}
               </Radio.Card>
               <Radio.Card
                 onClick={() => {
@@ -157,7 +159,7 @@ const DailyLesson = () => {
                 p={10}
                 ta={"center"}
               >
-                What is this?
+                {t("option_what_this")}
               </Radio.Card>
             </SimpleGrid>
           </Radio.Group>

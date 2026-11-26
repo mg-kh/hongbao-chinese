@@ -1,6 +1,5 @@
 "use client";
 
-import { pluralize } from "@/utils/pluralize";
 import RubyButtonComponent from "@/components/Buttons/RubyButtonComponent/RubyButtonComponent";
 import LoaderComponent from "@/components/LoaderComponent/LoaderComponent";
 import PriceText from "@/components/MiscellaneousComponents/PriceText/PriceText";
@@ -39,50 +38,56 @@ import {
   DefaultVideoLayout,
   defaultLayoutIcons,
 } from "@vidstack/react/player/layouts/default";
+import { useTranslations } from "next-intl";
 import useContainer from "./useContainer";
 
 const CurriculumRow: React.FC<{ title?: string; type: "video" | "quiz" }> = ({
   title,
   type,
-}) => (
-  <Group
-    justify="space-between"
-    py={9}
-    px={10}
-    wrap="nowrap"
-    className="rounded-xl! transition-colors! duration-200! ease-out! hover:bg-gray-50!"
-  >
-    <Group gap={12} wrap="nowrap">
-      <Box
-        className={`flex! items-center! justify-center! w-8! h-8! rounded-lg! shrink-0! ${
-          type === "video"
-            ? "bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!"
-            : "bg-hongbao-gold-50! text-hongbao-gold-700! dark:text-night-gold!"
-        }`}
-      >
-        {type === "video" ? (
-          <VideoIcon size={15} weight="fill" />
-        ) : (
-          <SealQuestionIcon size={15} weight="fill" />
-        )}
-      </Box>
-      <Text size="sm" fw={500} c={"gray.8"}>
-        {title}
-      </Text>
-    </Group>
-    <Badge
-      size="xs"
-      variant="light"
-      radius="sm"
-      color={type === "video" ? "hongbao-red" : "hongbao-gold"}
-      className="shrink-0!"
+}) => {
+  const t = useTranslations("CourseDetail.PageComponent");
+
+  return (
+    <Group
+      justify="space-between"
+      py={9}
+      px={10}
+      wrap="nowrap"
+      className="rounded-xl! transition-colors! duration-200! ease-out! hover:bg-gray-50!"
     >
-      {type === "video" ? "Video" : "Quiz"}
-    </Badge>
-  </Group>
-);
+      <Group gap={12} wrap="nowrap">
+        <Box
+          className={`flex! items-center! justify-center! w-8! h-8! rounded-lg! shrink-0! ${
+            type === "video"
+              ? "bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!"
+              : "bg-hongbao-gold-50! text-hongbao-gold-700! dark:text-night-gold!"
+          }`}
+        >
+          {type === "video" ? (
+            <VideoIcon size={15} weight="fill" />
+          ) : (
+            <SealQuestionIcon size={15} weight="fill" />
+          )}
+        </Box>
+        <Text size="sm" fw={500} c={"gray.8"}>
+          {title}
+        </Text>
+      </Group>
+      <Badge
+        size="xs"
+        variant="light"
+        radius="sm"
+        color={type === "video" ? "hongbao-red" : "hongbao-gold"}
+        className="shrink-0!"
+      >
+        {type === "video" ? t("video") : t("quiz")}
+      </Badge>
+    </Group>
+  );
+};
 
 const PageComponent = () => {
+  const t = useTranslations("CourseDetail.PageComponent");
   const { courseDetail, isFetching } = useContainer();
   const [previewOpened, { open: openPreview, close: closePreview }] =
     useDisclosure(false);
@@ -108,7 +113,7 @@ const PageComponent = () => {
         <Stack py={{ base: 20, md: 30 }} gap={24}>
           <Group gap={6}>
             <Anchor component={Link} href="/" c="gray.6" size="sm">
-              Home
+              {t("home")}
             </Anchor>
             <IconChevronRight size={14} className="text-gray-400!" />
             <Text size="sm" c="gray.7" fw={600} lineClamp={1}>
@@ -157,13 +162,16 @@ const PageComponent = () => {
                       className="text-hongbao-red-600! dark:text-night-red!"
                     />
                     <Text size="sm" fw={600} c={"gray.7"}>
-                      {courseDetail?.lessonCount || 0} Lessons
+                      {t("lessons", { count: courseDetail?.lessonCount || 0 })}
                     </Text>
                   </Group>
                   <Group gap={8}>
-                    <VideoIcon size={18} className="text-hongbao-red-600! dark:text-night-red!" />
+                    <VideoIcon
+                      size={18}
+                      className="text-hongbao-red-600! dark:text-night-red!"
+                    />
                     <Text size="sm" fw={600} c={"gray.7"}>
-                      {courseDetail?.videoCount || 0} Videos
+                      {t("videos", { count: courseDetail?.videoCount || 0 })}
                     </Text>
                   </Group>
                 </Group>
@@ -172,7 +180,7 @@ const PageComponent = () => {
               {/* course preview */}
               <Stack gap={12}>
                 <Text fw={700} size="lg">
-                  Course Preview
+                  {t("course_preview")}
                 </Text>
                 {previewVideo ? (
                   <Paper
@@ -208,8 +216,13 @@ const PageComponent = () => {
                           className="text-white/70! translate-x-[2px]!"
                         />
                       </Box>
-                      <Text size="sm" fw={600} c="white" className="opacity-80!">
-                        Preview video coming soon
+                      <Text
+                        size="sm"
+                        fw={600}
+                        c="white"
+                        className="opacity-80!"
+                      >
+                        {t("preview_coming_soon")}
                       </Text>
                     </Box>
                   </Box>
@@ -220,7 +233,7 @@ const PageComponent = () => {
               <Stack gap={16}>
                 <Stack gap={10}>
                   <Text fw={700} size="lg">
-                    Course Curriculum
+                    {t("course_curriculum")}
                   </Text>
                   <Group gap={8}>
                     <Badge
@@ -230,7 +243,7 @@ const PageComponent = () => {
                       color="hongbao-red"
                       leftSection={<BookOpenIcon size={13} weight="fill" />}
                     >
-                      {courseDetail?.lessonCount || 0} Modules
+                      {t("modules", { count: courseDetail?.lessonCount || 0 })}
                     </Badge>
                     <Badge
                       size="lg"
@@ -239,7 +252,7 @@ const PageComponent = () => {
                       color="hongbao-orange"
                       leftSection={<VideoIcon size={13} weight="fill" />}
                     >
-                      {courseDetail?.videoCount || 0} Videos
+                      {t("videos", { count: courseDetail?.videoCount || 0 })}
                     </Badge>
                     {totalQuizCount > 0 && (
                       <Badge
@@ -251,7 +264,7 @@ const PageComponent = () => {
                           <SealQuestionIcon size={13} weight="fill" />
                         }
                       >
-                        {pluralize(totalQuizCount, "Quiz", "Quizzes")}
+                        {t("quizzes", { count: totalQuizCount })}
                       </Badge>
                     )}
                   </Group>
@@ -292,13 +305,13 @@ const PageComponent = () => {
                                 c="var(--hb-accent-text)"
                                 className="uppercase! tracking-[0.14em]!"
                               >
-                                Module {index + 1}
+                                {t("module_n", { n: index + 1 })}
                               </Text>
                               <Text fw={700} size="sm">
                                 {lesson.title}
                               </Text>
                               <Text size="xs" c={"gray.6"}>
-                                {pluralize(itemCount, "item")}
+                                {t("items", { count: itemCount })}
                               </Text>
                             </Stack>
                           </Group>
@@ -365,16 +378,15 @@ const PageComponent = () => {
                               c="var(--hb-gold-text)"
                               className="uppercase! tracking-[0.14em]!"
                             >
-                              Assessment
+                              {t("assessment")}
                             </Text>
                             <Text fw={700} size="sm">
-                              Final Assessment
+                              {t("final_assessment")}
                             </Text>
                             <Text size="xs" c={"gray.6"}>
-                              {courseDetail?.quizzes?.length}{" "}
-                              {courseDetail?.quizzes?.length === 1
-                                ? "quiz"
-                                : "quizzes"}
+                              {t("quizzes_lower", {
+                                count: courseDetail?.quizzes?.length || 0,
+                              })}
                             </Text>
                           </Stack>
                         </Group>
@@ -431,7 +443,7 @@ const PageComponent = () => {
                     c="white"
                     className="absolute! bottom-3! left-1/2! -translate-x-1/2!"
                   >
-                    Preview this course
+                    {t("preview_this_course")}
                   </Text>
                 )}
                 {courseDetail?.level && (
@@ -450,7 +462,7 @@ const PageComponent = () => {
                     color="dark.9"
                     className="absolute! top-3! right-3! text-white!"
                   >
-                    Free
+                    {t("free")}
                   </Badge>
                 ) : (
                   (courseDetail?.discount || 0) > 0 && (
@@ -460,7 +472,7 @@ const PageComponent = () => {
                       color="hongbao-gold.6"
                       className="absolute! top-3! right-3! text-white!"
                     >
-                      {courseDetail?.discount}% off
+                      {t("percent_off", { pct: courseDetail?.discount || 0 })}
                     </Badge>
                   )
                 )}
@@ -481,14 +493,14 @@ const PageComponent = () => {
                   component={Link}
                   href="/shop?type=course"
                 >
-                  Buy Now
+                  {t("buy_now")}
                 </RubyButtonComponent>
 
                 <Divider />
 
                 <Stack gap={12}>
                   <Text fw={700} size="sm">
-                    What&apos;s included
+                    {t("whats_included")}
                   </Text>
                   <Stack gap={10}>
                     {courseDetail?.includedAssets?.map((asset) => (
@@ -509,7 +521,7 @@ const PageComponent = () => {
                 <button className="flex! items-center! justify-center! gap-2! text-gray-500! hover:text-hongbao-red-600! dark:hover:text-night-red! transition-colors! duration-200! cursor-pointer!">
                   <IconShare size={14} />
                   <Text size="xs" fw={600}>
-                    Share this course
+                    {t("share_course")}
                   </Text>
                 </button>
               </Stack>
@@ -520,7 +532,7 @@ const PageComponent = () => {
             <Modal
               opened={previewOpened}
               onClose={closePreview}
-              title="Course Preview"
+              title={t("course_preview")}
               size="xl"
               radius={16}
               centered

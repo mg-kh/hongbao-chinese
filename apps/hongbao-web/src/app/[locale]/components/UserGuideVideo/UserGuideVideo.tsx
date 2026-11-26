@@ -1,6 +1,7 @@
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { Box, Container, Space, Text } from "@mantine/core";
 import { IconPlayerPlayFilled } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 
 /**
  * Placeholder poster until a real walkthrough video is uploaded - swap this
@@ -9,13 +10,14 @@ import { IconPlayerPlayFilled } from "@tabler/icons-react";
  * already used elsewhere in this codebase) once a src is available.
  */
 const UserGuideVideo = () => {
+  const t = useTranslations("Home.UserGuideVideo");
   return (
     <Box>
       <Container size={"xl"} px={{ base: 16, sm: 24 }}>
         <SectionTitle
-          eyebrow="See It In Action"
-          title="Watch How Hong Bao Works"
-          subtitle="A quick walkthrough of lessons, quizzes, and the tools that help you master Chinese faster."
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          subtitle={t("subtitle")}
           align="center"
         />
         <Space h={40} />
@@ -34,10 +36,10 @@ const UserGuideVideo = () => {
 
           <Box className="absolute! bottom-0! left-0! right-0! p-6! bg-gradient-to-t! from-black/60! to-transparent!">
             <Text fw={700} c="white" size="lg">
-              Product Walkthrough
+              {t("video_title")}
             </Text>
             <Text size="sm" c="#dee2e6">
-              Video coming soon
+              {t("video_coming_soon")}
             </Text>
           </Box>
         </Box>

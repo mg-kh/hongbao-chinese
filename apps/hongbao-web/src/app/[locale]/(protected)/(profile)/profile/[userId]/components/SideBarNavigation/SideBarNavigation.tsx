@@ -3,6 +3,7 @@
 import { useActiveRoute } from "@/hooks/useActiveRoute";
 import { Link } from "@/i18n/navigation";
 import { Box, Paper, Text } from "@mantine/core";
+import { useTranslations } from "next-intl";
 import {
   CourseTypeIcon,
   FlashcardTypeIcon,
@@ -27,40 +28,41 @@ type NavItem = {
 const SideBarNavigation = () => {
   const { userId } = useContainer();
   const isActiveRoute = useActiveRoute();
+  const t = useTranslations("Profile.Nav");
 
   const items: NavItem[] = [
     {
-      label: "ပင်မ စာမျက်နှာ",
+      label: t("home_page"),
       href: `/profile/${userId}`,
       match: `/profile/${userId}`,
       icon: <HouseSimpleIcon size={17} weight="fill" />,
     },
     {
-      label: "ကျွန်ုပ်၏ သင်ခန်းစာများ",
+      label: t("my_courses"),
       href: `/profile/${userId}/my-courses`,
       match: "my-courses",
       icon: <CourseTypeIcon size={17} weight="fill" />,
     },
     {
-      label: "ဝယ်ယူမှု မှတ်တမ်း",
+      label: t("purchase_history"),
       href: `/profile/${userId}/purchase-history`,
       match: "purchase-history",
       icon: <ReceiptIcon size={17} weight="fill" />,
     },
     {
-      label: "Flashcards",
+      label: t("flashcards"),
       href: `/profile/${userId}/flashcards`,
       match: "flashcards",
       icon: <FlashcardTypeIcon size={17} weight="fill" />,
     },
     {
-      label: "Memo Space",
+      label: t("memo_space"),
       href: `/profile/${userId}/memo-space`,
       match: "memo-space",
       icon: <BrainIcon size={17} weight="fill" />,
     },
     {
-      label: "Settings",
+      label: t("settings"),
       href: `/profile/${userId}/settings`,
       match: "settings",
       icon: <GearIcon size={17} weight="fill" />,
@@ -80,12 +82,12 @@ const SideBarNavigation = () => {
         c="gray.4"
         className="uppercase! tracking-[0.14em]! px-3! pt-1.5! pb-2.5!"
       >
-        Menu
+        {t("menu")}
       </Text>
 
       <Box
         component="nav"
-        aria-label="Profile"
+        aria-label={t("aria_profile")}
         className="flex! flex-col! gap-1!"
       >
         {items.map((item) => {

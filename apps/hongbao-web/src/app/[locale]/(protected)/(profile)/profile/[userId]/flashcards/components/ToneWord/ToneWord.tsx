@@ -2,6 +2,7 @@ import {
   segmentByTone,
   TONE_CLASS,
 } from "@/app/[locale]/(protected)/(profile)/profile/[userId]/flashcards/pinyin";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface Props {
@@ -31,6 +32,7 @@ const ToneWord: React.FC<Props> = ({
   hanziClassName = "",
   pinyinClassName = "",
 }) => {
+  const t = useTranslations("Profile.Flashcards");
   const segments = segmentByTone(word, pinyin);
 
   const hanzi = (
@@ -58,7 +60,7 @@ const ToneWord: React.FC<Props> = ({
     hidePinyin ? (
       <button
         type="button"
-        aria-label="Show pinyin"
+        aria-label={t("show_pinyin")}
         onClick={(e) => {
           e.stopPropagation();
           onRevealPinyin?.();

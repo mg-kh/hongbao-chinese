@@ -1,11 +1,16 @@
 import { Box, Text } from "@mantine/core";
 import { CheckIcon, XIcon } from "@phosphor-icons/react";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 import { TPurchaseOrder } from "../../../types/purchase-history.type";
 
 type StepState = "done" | "current" | "failed" | "upcoming";
 
 type Step = { title: string; detail: string; state: StepState };
+
+type TFn = ReturnType<
+  typeof useTranslations<"Profile.PurchaseHistory.Timeline">
+>;
 
 const fmt = (iso: string | null) =>
   iso ? format(new Date(iso), "d MMM yyyy") : "";
@@ -26,9 +31,9 @@ const DotMark: React.FC<{ state: StepState }> = ({ state }) => {
 };
 
 /** The three lifecycle steps for an order, from its status + timestamps. */
-const buildSteps = (order: TPurchaseOrder): Step[] => {
+const buildSteps = (order: TPurchaseOrder, t: TFn): Step[] => {
   const placed: Step = {
-    title: "Order placed",
+    title: t("order_placed"),
     detail: fmt(order.createdAt),
     state: "done",
   };
@@ -37,13 +42,13 @@ const buildSteps = (order: TPurchaseOrder): Step[] => {
     return [
       placed,
       {
-        title: "Verifying your transfer",
-        detail: "Usually confirmed within a few hours",
+        title: t("verifying"),
+        detail: t("verifying_detail"),
         state: "current",
       },
       {
-        title: "Access activated",
-        detail: "After your payment is confirmed",
+        title: t("access_activated"),
+        detail: t("access_activated_detail"),
         state: "upcoming",
       },
     ];
@@ -53,17 +58,15 @@ const buildSteps = (order: TPurchaseOrder): Step[] => {
     return [
       placed,
       {
-        title: "Payment reviewed",
+        title: t("payment_reviewed"),
         detail: fmt(order.updatedAt),
         state: "done",
       },
       {
-        title: "Order declined",
+        title: t("order_declined"),
         // The admin's reason is shown on the card; the generic copy only
         // covers older orders rejected before reasons were recorded.
-        detail: order.rejectReason
-          ? "See the reason above"
-          : "The transfer couldn't be verified",
+        detail: order.rejectReason ? t("see_reason") : t("not_verified"),
         state: "failed",
       },
     ];
@@ -73,18 +76,18 @@ const buildSteps = (order: TPurchaseOrder): Step[] => {
   return [
     placed,
     {
-      title: "Payment confirmed",
+      title: t("payment_confirmed"),
       detail: fmt(order.paidAt),
       state: "done",
     },
     order.status === "EXPIRED"
       ? {
-          title: "Access ended",
+          title: t("access_ended"),
           detail: "",
           state: "failed",
         }
       : {
-          title: "Access active",
+          title: t("access_active"),
           detail: "",
           state: "done",
         },
@@ -96,7 +99,8 @@ interface Props {
 }
 
 const OrderStatusTimeline: React.FC<Props> = ({ order }) => {
-  const steps = buildSteps(order);
+  const t = useTranslations("Profile.PurchaseHistory.Timeline");
+  const steps = buildSteps(order, t);
 
   return (
     <Box className="flex! flex-col!">

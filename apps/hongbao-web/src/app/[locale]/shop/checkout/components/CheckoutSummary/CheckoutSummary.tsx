@@ -1,6 +1,5 @@
 "use client";
 
-import { pluralize } from "@/utils/pluralize";
 import useCart from "@/hooks/useCart";
 import { Link } from "@/i18n/navigation";
 import calculateDiscountPrice from "@/utils/calculateDiscountPrice";
@@ -16,6 +15,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { CaretDownIcon, PencilSimpleIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import { SHOP_TYPE_META } from "../../../types/shop.type";
 
 const money = (value: number) =>
@@ -23,6 +23,8 @@ const money = (value: number) =>
 
 /** Keeps the cart contents and total visible through every checkout step. */
 const CheckoutSummary = () => {
+  const t = useTranslations("Checkout.CheckoutSummary");
+  const tTypes = useTranslations("Shop.Types");
   const { items, count, total, discountTotal, promoTotal, getItemPromo } =
     useCart();
   const [open, { toggle }] = useDisclosure(false);
@@ -40,10 +42,10 @@ const CheckoutSummary = () => {
             c="var(--hb-accent-text)"
             className="uppercase! tracking-[0.08em]!"
           >
-            Order
+            {t("order")}
           </Text>
           <Text fw={700} size="sm" lineClamp={1}>
-            {pluralize(count, "item")}
+            {t("items", { count })}
           </Text>
         </Group>
         <Group gap={10} wrap="nowrap" className="shrink-0!">
@@ -80,20 +82,22 @@ const CheckoutSummary = () => {
                       {product.title}
                     </Text>
                     <Text size="xs" c="gray.5">
-                      {SHOP_TYPE_META[product.type].label}
+                      {tTypes(SHOP_TYPE_META[product.type].labelKey)}
                       {product.level ? ` · ${product.level}` : ""}
                       {!product.isFree &&
-                        ` · ${product.lifetime ? "Lifetime" : pluralize(m, "month")}`}
+                        ` · ${product.lifetime ? t("lifetime") : t("months", { count: m })}`}
                     </Text>
                     {itemPromo && (
                       <Text size="xs" c="var(--hb-accent-text)" fw={600}>
-                        Promo {itemPromo.promo.code} · -
-                        {money(itemPromo.discount)}
+                        {t("promo_line", {
+                          code: itemPromo.promo.code,
+                          amount: money(itemPromo.discount),
+                        })}
                       </Text>
                     )}
                   </Stack>
                   <Text size="sm" fw={600} className="shrink-0!">
-                    {product.isFree ? "Free" : money(price)}
+                    {product.isFree ? t("free") : money(price)}
                   </Text>
                 </Group>
               );
@@ -102,7 +106,7 @@ const CheckoutSummary = () => {
             {discountTotal > 0 && (
               <Group justify="space-between">
                 <Text size="xs" c="gray.6">
-                  Discounts
+                  {t("discounts")}
                 </Text>
                 <Text size="xs" fw={600} c="hongbao-red">
                   -{money(discountTotal)}
@@ -113,7 +117,7 @@ const CheckoutSummary = () => {
             {promoTotal > 0 && (
               <Group justify="space-between">
                 <Text size="xs" c="gray.6">
-                  Promo codes
+                  {t("promo_codes")}
                 </Text>
                 <Text size="xs" fw={600} c="hongbao-red">
                   -{money(promoTotal)}
@@ -124,7 +128,7 @@ const CheckoutSummary = () => {
             <Divider color="gray.2" />
             <Group justify="space-between">
               <Text size="sm" fw={700}>
-                Total
+                {t("total")}
               </Text>
               <Text size="sm" fw={800} c="var(--hb-accent-text)">
                 {money(total)}
@@ -137,7 +141,7 @@ const CheckoutSummary = () => {
             >
               <PencilSimpleIcon size={13} weight="bold" />
               <Text size="xs" fw={700}>
-                Edit cart
+                {t("edit_cart")}
               </Text>
             </Link>
           </Stack>

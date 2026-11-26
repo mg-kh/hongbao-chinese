@@ -8,6 +8,7 @@ import { Progress, Text } from "@mantine/core";
 import { useMounted } from "@mantine/hooks";
 import { ImageIcon } from "@phosphor-icons/react";
 import { IconCheck, IconShoppingBagPlus } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 import {
   ShopProductType,
   TShopProduct,
@@ -28,6 +29,7 @@ interface Props {
 }
 
 const FlashDealCard: React.FC<Props> = ({ product }) => {
+  const t = useTranslations("Shop.ProductCard");
   const { isInCart, toggleItem } = useCart();
   const mounted = useMounted();
   const inCart = mounted && isInCart(product.id);
@@ -80,7 +82,7 @@ const FlashDealCard: React.FC<Props> = ({ product }) => {
             className="bg-hongbao-red-50!"
           />
           <Text size="10px" fw={600} c="gray.6" className="mt-1!">
-            {claimed}% claimed
+            {t("claimed", { pct: claimed })}
           </Text>
         </div>
 
@@ -89,8 +91,8 @@ const FlashDealCard: React.FC<Props> = ({ product }) => {
           onClick={() => toggleItem(product)}
           aria-label={
             inCart
-              ? `Remove ${product.title} from cart`
-              : `Add ${product.title} to cart`
+              ? t("remove_aria", { title: product.title })
+              : t("add_aria", { title: product.title })
           }
           className={`mt-auto! flex! items-center! justify-center! gap-1! rounded-lg! py-1.5! text-[11px]! font-bold! cursor-pointer! transition-colors! duration-200! ${
             inCart
@@ -100,11 +102,11 @@ const FlashDealCard: React.FC<Props> = ({ product }) => {
         >
           {inCart ? (
             <>
-              <IconCheck size={13} stroke={3} /> In cart
+              <IconCheck size={13} stroke={3} /> {t("in_cart")}
             </>
           ) : (
             <>
-              <IconShoppingBagPlus size={13} /> Add
+              <IconShoppingBagPlus size={13} /> {t("add")}
             </>
           )}
         </button>

@@ -3,6 +3,7 @@ import calculateDiscountPrice from "@/utils/calculateDiscountPrice";
 import { currencyFormatter } from "@/utils/currencyFormatter";
 import { Badge, Group, Text } from "@mantine/core";
 import { IconRosetteDiscount } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 
 interface Props {
   product: Pick<TShopProduct, "price" | "discount" | "isFree">;
@@ -23,12 +24,13 @@ const ProductPrice: React.FC<Props> = ({
   months = 1,
   size = "lg",
 }) => {
+  const t = useTranslations("Shared.ProductPrice");
   const bigClass = size === "lg" ? "text-2xl!" : "text-lg!";
 
   if (product.isFree) {
     return (
       <Text c="hongbao-red" fw={800} className={bigClass}>
-        Free
+        {t("free")}
       </Text>
     );
   }
@@ -47,7 +49,7 @@ const ProductPrice: React.FC<Props> = ({
           radius="sm"
           leftSection={<IconRosetteDiscount size={13} />}
         >
-          {product.discount}% off
+          {t("percent_off", { discount: product.discount })}
         </Badge>
       )}
 
@@ -67,7 +69,7 @@ const ProductPrice: React.FC<Props> = ({
           {money(lineTotal)}
         </Text>
         <Text size="xs" fw={600} c="gray.5">
-          {span === 1 ? "/ month" : `for ${span} months`}
+          {span === 1 ? t("per_month") : t("for_months", { count: span })}
         </Text>
       </Group>
     </Group>

@@ -6,10 +6,12 @@ import { Link } from "@/i18n/navigation";
 import ClientLayout from "@/layouts/ClientLayout/ClientLayout";
 import { Box, Button, Container, Stack, Text } from "@mantine/core";
 import { ArrowLeftIcon, CheckCircleIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import CheckoutStepsContainer from "../CheckoutSteps/CheckoutStepsContainer/CheckoutStepsContainer";
 import useContainer from "./useContainer";
 
 const CheckoutPage = () => {
+  const t = useTranslations("Checkout.CheckoutPage");
   const { isReady, isEmpty, submitted, onSubmitted } = useContainer();
 
   return (
@@ -22,12 +24,10 @@ const CheckoutPage = () => {
                 <CheckCircleIcon size={30} weight="fill" />
               </Box>
               <Text fw={800} className="text-xl!" c="var(--hb-accent-strong)">
-                Order received
+                {t("order_received")}
               </Text>
               <Text size="sm" c="gray.6" className="mt-2! max-w-[420px]! mx-auto! leading-relaxed!">
-                Our team will verify your transfer and activate your purchase.
-                You&apos;ll get an email once it&apos;s ready - this usually
-                takes a few hours.
+                {t("order_received_body")}
               </Text>
               <Stack gap={10} className="mt-6! max-w-[280px]! mx-auto!">
                 <Button
@@ -37,7 +37,7 @@ const CheckoutPage = () => {
                   color="hongbao-red"
                   radius="xl"
                 >
-                  Keep shopping
+                  {t("keep_shopping")}
                 </Button>
                 <Button
                   component={Link}
@@ -46,7 +46,7 @@ const CheckoutPage = () => {
                   color="gray"
                   radius="xl"
                 >
-                  Back to home
+                  {t("back_home")}
                 </Button>
               </Stack>
             </Box>
@@ -58,16 +58,16 @@ const CheckoutPage = () => {
               >
                 <ArrowLeftIcon size={14} weight="bold" />
                 <Text size="xs" fw={600}>
-                  Back to cart
+                  {t("back_to_cart")}
                 </Text>
               </Link>
 
               <Stack gap={4}>
                 <Text fw={800} className="text-[1.4rem]! sm:text-[1.7rem]!">
-                  Checkout
+                  {t("title")}
                 </Text>
                 <Text size="sm" c="gray.6">
-                  Three quick steps: your details, payment, and proof of transfer.
+                  {t("subtitle")}
                 </Text>
               </Stack>
 

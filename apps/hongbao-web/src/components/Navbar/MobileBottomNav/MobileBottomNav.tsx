@@ -3,9 +3,15 @@
 import { useActiveRoute } from "@/hooks/useActiveRoute";
 import { Link } from "@/i18n/navigation";
 import { Box, Text } from "@mantine/core";
+import { useTranslations } from "next-intl";
+
+export type TPublicNavLabelKey = "home" | "shop" | "blogs" | "privacy";
 
 export interface TBottomNavItem {
-  label: string;
+  /** Already-translated label. Ignored when `labelKey` is set. */
+  label?: string;
+  /** Key under `MobileNav.items`, translated at render time. */
+  labelKey?: TPublicNavLabelKey;
   href: string;
   icon: React.ReactNode;
   /**
@@ -32,6 +38,7 @@ const ROW_HEIGHT = 64;
  */
 const MobileBottomNav: React.FC<Props> = ({ items }) => {
   const isActiveRoute = useActiveRoute();
+  const t = useTranslations("MobileNav");
 
   return (
     <>
@@ -46,7 +53,7 @@ const MobileBottomNav: React.FC<Props> = ({ items }) => {
 
       <Box
         component="nav"
-        aria-label="Primary"
+        aria-label={t("primary_nav_aria")}
         className="lg:hidden! fixed! bottom-0! left-0! right-0! z-50! border-t! border-gray-200! bg-surface/95! backdrop-blur-md! shadow-[0_-4px_20px_-6px_rgba(0,0,0,0.12)]!"
       >
         <div
@@ -87,7 +94,7 @@ const MobileBottomNav: React.FC<Props> = ({ items }) => {
                     className="leading-none! text-center!"
                     lineClamp={1}
                   >
-                    {item.label}
+                    {item.labelKey ? t(`items.${item.labelKey}`) : item.label}
                   </Text>
                 </div>
               </Link>

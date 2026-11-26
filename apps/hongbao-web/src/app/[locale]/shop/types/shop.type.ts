@@ -1,4 +1,3 @@
-import { pluralize } from "@/utils/pluralize";
 import type { ProductType } from "@repo/shared";
 
 export type ShopProductType = Exclude<ProductType, "all">;
@@ -87,16 +86,24 @@ export const clampMonths = (n: number): number => {
   return Math.min(SHOP_MAX_MONTHS, rounded);
 };
 
-export const MONTH_OPTIONS = Array.from({ length: SHOP_MAX_MONTHS }, (_, i) => {
-  const m = i + 1;
-  return { value: String(m), label: pluralize(m, "month") };
-});
+/** 1-12 - labels are translated at render time (see `MonthSelect`). */
+export const MONTH_VALUES = Array.from(
+  { length: SHOP_MAX_MONTHS },
+  (_, i) => i + 1,
+);
 
+/**
+ * Translation keys (under `Shop.Types`) for each product type's singular and
+ * plural label.
+ */
 export const SHOP_TYPE_META: Record<
   ShopProductType,
-  { label: string; plural: string }
+  {
+    labelKey: "course" | "mock_test" | "flashcard";
+    pluralKey: "courses" | "mock_tests" | "flashcards";
+  }
 > = {
-  course: { label: "Course", plural: "Courses" },
-  "mock-test": { label: "Mock Test", plural: "Mock Tests" },
-  flashcard: { label: "Flashcard", plural: "Flashcards" },
+  course: { labelKey: "course", pluralKey: "courses" },
+  "mock-test": { labelKey: "mock_test", pluralKey: "mock_tests" },
+  flashcard: { labelKey: "flashcard", pluralKey: "flashcards" },
 };

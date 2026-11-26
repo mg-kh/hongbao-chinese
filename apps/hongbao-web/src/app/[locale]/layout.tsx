@@ -5,6 +5,7 @@ import "@vidstack/react/player/styles/default/layouts/video.css";
 import "@vidstack/react/player/styles/default/theme.css";
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 import { Noto_Sans_Myanmar } from "next/font/google";
 import "./globals.css";
 
@@ -43,9 +44,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
   return (
     <html
-      lang="en"
+      lang={locale === "mm" ? "my" : "en"}
       className={`${myanmarFont.className} h-full antialiased scroll-smooth`}
       {...mantineHtmlProps}
     >

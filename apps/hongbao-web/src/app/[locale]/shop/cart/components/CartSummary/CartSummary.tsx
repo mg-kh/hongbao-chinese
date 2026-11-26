@@ -1,6 +1,5 @@
 "use client";
 
-import { pluralize } from "@/utils/pluralize";
 import calculateDiscountPrice from "@/utils/calculateDiscountPrice";
 import { currencyFormatter } from "@/utils/currencyFormatter";
 import {
@@ -13,6 +12,7 @@ import {
   Text,
 } from "@mantine/core";
 import { IconArrowRight, IconShieldCheck } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 import { TCartItem } from "../../../types/shop.type";
 
 interface Props {
@@ -41,6 +41,8 @@ const CartSummary: React.FC<Props> = ({
   onAgreedToTermsChange,
   onCheckout,
 }) => {
+  const t = useTranslations("Cart.CartSummary");
+
   return (
     <Stack
       gap={16}
@@ -48,7 +50,7 @@ const CartSummary: React.FC<Props> = ({
       className="rounded-2xl! bg-surface! ring-1! ring-gray-200! shadow-sm!"
     >
       <Text fw={800} size="lg">
-        Order summary
+        {t("title")}
       </Text>
 
       {/* per-course price breakdown: pure per-month price, then the total for the chosen duration */}
@@ -72,20 +74,20 @@ const CartSummary: React.FC<Props> = ({
                   {product.title}
                 </Text>
                 <Text size="sm" fw={700} className="shrink-0!">
-                  {product.isFree ? "Free" : money(lineTotal)}
+                  {product.isFree ? t("free") : money(lineTotal)}
                 </Text>
               </Group>
               <Group justify="space-between" gap={8} wrap="nowrap">
                 <Text size="xs" c="gray.5">
                   {product.isFree
-                    ? "Free access"
+                    ? t("free_access")
                     : product.lifetime
-                      ? "Lifetime access"
-                      : `${money(product.price)} / mo`}
+                      ? t("lifetime_access")
+                      : t("per_month_price", { price: money(product.price) })}
                 </Text>
                 {!product.isFree && !product.lifetime && (
                   <Text size="xs" c="gray.5">
-                    × {pluralize(m, "month")}
+                    × {t("months", { count: m })}
                   </Text>
                 )}
               </Group>
@@ -99,7 +101,7 @@ const CartSummary: React.FC<Props> = ({
       <Stack gap={10}>
         <Group justify="space-between">
           <Text size="sm" c="gray.6">
-            Items ({count})
+            {t("items_count", { count })}
           </Text>
           <Text size="sm" fw={600}>
             {money(subtotal + discountTotal)}
@@ -108,7 +110,7 @@ const CartSummary: React.FC<Props> = ({
         {discountTotal > 0 && (
           <Group justify="space-between">
             <Text size="sm" c="gray.6">
-              Discounts
+              {t("discounts")}
             </Text>
             <Text size="sm" fw={600} c="hongbao-red">
               -{money(discountTotal)}
@@ -118,7 +120,7 @@ const CartSummary: React.FC<Props> = ({
         {promoTotal > 0 && (
           <Group justify="space-between">
             <Text size="sm" c="gray.6">
-              Promo codes
+              {t("promo_codes")}
             </Text>
             <Text size="sm" fw={600} c="hongbao-red">
               -{money(promoTotal)}
@@ -130,7 +132,7 @@ const CartSummary: React.FC<Props> = ({
       <Divider color="gray.2" />
 
       <Group justify="space-between" align="end">
-        <Text fw={700}>Total</Text>
+        <Text fw={700}>{t("total")}</Text>
         <Text fw={800} className="text-xl!" c="hongbao-red">
           {money(total)}
         </Text>
@@ -139,7 +141,7 @@ const CartSummary: React.FC<Props> = ({
       {discountTotal + promoTotal > 0 && (
         <Box className="rounded-lg! bg-green-50! px-3! py-2! text-center!">
           <Text size="xs" fw={700} c="var(--hb-success-text)">
-            You&apos;re saving {money(discountTotal + promoTotal)}
+            {t("saving", { amount: money(discountTotal + promoTotal) })}
           </Text>
         </Box>
       )}
@@ -150,7 +152,7 @@ const CartSummary: React.FC<Props> = ({
         color="hongbao-red"
         label={
           <Text size="xs" c="gray.6">
-            I agree to the Terms and Conditions and Privacy Policy
+            {t("agree_terms")}
           </Text>
         }
       />
@@ -164,7 +166,7 @@ const CartSummary: React.FC<Props> = ({
         fullWidth
         rightSection={<IconArrowRight size={16} />}
       >
-        Proceed to checkout
+        {t("proceed")}
       </Button>
 
       <Group gap={8} wrap="nowrap" align="start">
@@ -173,8 +175,7 @@ const CartSummary: React.FC<Props> = ({
           className="text-gray-400! shrink-0! mt-0.5!"
         />
         <Text size="xs" c="gray.5" className="leading-relaxed!">
-          Payment is by bank transfer and reviewed by our team before your
-          purchase is activated.
+          {t("payment_note")}
         </Text>
       </Group>
     </Stack>

@@ -3,20 +3,26 @@
 import { Box, Image, Stack, Text, TextInput, UnstyledButton } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { CaretDownIcon, UploadSimpleIcon, XIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import { Controller } from "react-hook-form";
+import { TCheckoutErrorKey } from "../../schema/checkout.schema";
 import useContainer from "./useContainer";
 
 const UploadProof = () => {
+  const t = useTranslations("Checkout.UploadProof");
+  const tv = useTranslations("Checkout.Validation");
   const { form, preview, handleDrop, clearPreview } = useContainer();
+  const errorText = (message?: string) =>
+    message ? tv(message as TCheckoutErrorKey) : undefined;
 
   return (
     <Stack gap={18}>
       <Stack gap={2}>
         <Text fw={700} size="md">
-          Confirm payment
+          {t("title")}
         </Text>
         <Text size="sm" c="gray.6">
-          Add your transfer reference and a screenshot so we can verify it.
+          {t("subtitle")}
         </Text>
       </Stack>
 
@@ -28,19 +34,19 @@ const UploadProof = () => {
           render={({ field, fieldState }) => (
             <TextInput
               {...field}
-              label="Transaction number"
-              description="The last 6 digits of your transfer reference"
-              placeholder="6-digit number"
+              label={t("transaction_no")}
+              description={t("transaction_no_desc")}
+              placeholder={t("transaction_no_placeholder")}
               type="number"
               size="md"
               radius={10}
-              error={fieldState.error?.message}
+              error={errorText(fieldState.error?.message)}
             />
           )}
         />
         <details className="group! rounded-lg! bg-gray-50! px-3! py-2!">
           <summary className="flex! cursor-pointer! list-none! items-center! justify-between! text-xs! font-semibold! text-gray-600! [&::-webkit-details-marker]:hidden!">
-            Where do I find this?
+            {t("where_find")}
             <CaretDownIcon
               size={12}
               weight="bold"
@@ -49,7 +55,7 @@ const UploadProof = () => {
           </summary>
           <Image
             src="/assets/images/kpay_last_6_ditit.png"
-            alt="The last 6 digits are shown on your payment receipt"
+            alt={t("where_find_alt")}
             radius={8}
             className="mt-2! max-w-[240px]!"
           />
@@ -59,14 +65,14 @@ const UploadProof = () => {
       {/* screenshot */}
       <Stack gap={8}>
         <Text fw={500} size="sm">
-          Payment screenshot
+          {t("screenshot")}
         </Text>
 
         {preview ? (
           <div className="flex! items-center! gap-3! rounded-xl! p-3! ring-1! ring-gray-200!">
             <Image
               src={preview.url}
-              alt="Payment screenshot preview"
+              alt={t("screenshot_preview_alt")}
               w={48}
               h={48}
               radius="md"
@@ -82,7 +88,7 @@ const UploadProof = () => {
             </Stack>
             <UnstyledButton
               onClick={clearPreview}
-              aria-label="Remove screenshot"
+              aria-label={t("remove_screenshot")}
               className="flex! h-8! w-8! shrink-0! items-center! justify-center! rounded-full! text-gray-400! transition-colors! duration-200! hover:bg-gray-100! hover:text-gray-600!"
             >
               <XIcon size={16} />
@@ -109,10 +115,10 @@ const UploadProof = () => {
               <UploadSimpleIcon size={26} className="text-gray-400!" />
               <Box>
                 <Text size="sm" fw={600}>
-                  Tap to upload a screenshot
+                  {t("tap_upload")}
                 </Text>
                 <Text size="xs" c="dimmed">
-                  PNG or JPG, up to 5 MB
+                  {t("file_hint")}
                 </Text>
               </Box>
             </Stack>

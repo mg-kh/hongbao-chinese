@@ -26,6 +26,7 @@ import {
   defaultLayoutIcons,
 } from "@vidstack/react/player/layouts/default";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
+import { useTranslations } from "next-intl";
 import useContainer from "./useContainer";
 
 const PageComponent = () => {
@@ -47,6 +48,8 @@ const PageComponent = () => {
     isMarkingComplete,
     handleMarkComplete,
   } = useContainer();
+  const t = useTranslations("Learn.Video");
+  const tc = useTranslations("Learn.Common");
 
   const duration = formatDuration(video?.duration);
 
@@ -54,9 +57,9 @@ const PageComponent = () => {
     <Stack gap={18} className="w-full!">
       <CustomBreadCrumb
         links={[
-          { label: "My courses", href: myCoursesHref, isActive: true },
-          { label: courseTitle || "Course", href: courseHref, isActive: true },
-          { label: video?.title || "Video", href: "", isActive: false },
+          { label: tc("my_courses"), href: myCoursesHref, isActive: true },
+          { label: courseTitle || tc("course"), href: courseHref, isActive: true },
+          { label: video?.title || tc("video"), href: "", isActive: false },
         ]}
       />
 
@@ -71,9 +74,9 @@ const PageComponent = () => {
             <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
               <VideoIcon size={26} weight="fill" />
             </Box>
-            <Text fw={700}>Video not found</Text>
+            <Text fw={700}>{t("not_found_title")}</Text>
             <Text size="sm" c="gray.6" ta="center">
-              This lesson may have been moved or removed.
+              {t("not_found_description")}
             </Text>
           </Stack>
         </Paper>
@@ -109,7 +112,7 @@ const PageComponent = () => {
                 >
                   <CloseButton
                     onClick={closeCompleteOverlay}
-                    aria-label="Close"
+                    aria-label={tc("close")}
                     size="sm"
                     className="absolute! top-1.5! right-1.5! sm:top-3! sm:right-3!"
                   />
@@ -129,13 +132,13 @@ const PageComponent = () => {
                     fw={800}
                     className="text-sm! sm:text-lg! mt-2! sm:mt-3.5!"
                   >
-                    Lesson complete!
+                    {t("complete_title")}
                   </Text>
                   <Text
                     c="gray.6"
                     className="text-xs! sm:text-sm! mt-1! sm:mt-1!"
                   >
-                    Nice work — you&apos;ve finished watching this video.
+                    {t("complete_description")}
                   </Text>
                   <Group
                     justify="center"
@@ -148,7 +151,7 @@ const PageComponent = () => {
                       onClick={closeCompleteOverlay}
                       className="sm:h-[36px]! sm:px-[18px]! sm:text-sm!"
                     >
-                      Stay here
+                      {t("stay_here")}
                     </Button>
                     {nextHref && (
                       <Button
@@ -159,7 +162,7 @@ const PageComponent = () => {
                         rightSection={<ArrowRightIcon size={13} />}
                         className="sm:h-[36px]! sm:px-[18px]! sm:text-sm!"
                       >
-                        Continue
+                        {t("continue")}
                       </Button>
                     )}
                   </Group>
@@ -206,7 +209,7 @@ const PageComponent = () => {
                     : undefined
                 }
               >
-                {isCompleted ? "Completed" : "Mark as complete"}
+                {isCompleted ? tc("completed") : tc("mark_as_complete")}
               </Button>
             </Group>
 
@@ -250,7 +253,7 @@ const PageComponent = () => {
                       c="var(--hb-accent-text)"
                       className="uppercase! tracking-[0.1em]!"
                     >
-                      Up next
+                      {t("up_next")}
                     </Text>
                     <Text
                       fw={700}
@@ -286,7 +289,7 @@ const PageComponent = () => {
                 leftSection={<ArrowLeftIcon size={16} />}
                 className="w-full! sm:w-auto!"
               >
-                နောက်သို့
+                {tc("previous")}
               </Button>
             ) : (
               <Button
@@ -296,7 +299,7 @@ const PageComponent = () => {
                 leftSection={<ArrowLeftIcon size={16} />}
                 className="w-full! sm:w-auto!"
               >
-                နောက်သို့
+                {tc("previous")}
               </Button>
             )}
             {nextHref ? (
@@ -308,7 +311,7 @@ const PageComponent = () => {
                 rightSection={<ArrowRightIcon size={16} />}
                 className="w-full! sm:w-auto!"
               >
-                နောက်ထပ်
+                {tc("next")}
               </Button>
             ) : (
               <Button
@@ -318,7 +321,7 @@ const PageComponent = () => {
                 rightSection={<ArrowRightIcon size={16} />}
                 className="w-full! sm:w-auto!"
               >
-                နောက်ထပ်
+                {tc("next")}
               </Button>
             )}
           </Group>

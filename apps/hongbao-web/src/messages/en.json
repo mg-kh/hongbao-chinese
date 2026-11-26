@@ -17,5 +17,934 @@
     "description": "Add Hong Bao to your home screen for quick access and a faster, app-like experience.",
     "install": "Install",
     "not_now": "Not now"
+  },
+  "Home": {
+    "HeroSection": {
+      "trusted_badge": "Trusted by 248,000+ learners worldwide",
+      "headline_1": "Master Chinese.",
+      "headline_2": "From HSK 1 to 5.",
+      "description": "The world's most complete Mandarin platform — structured HSK curriculum, AI-powered tone coaching, and adaptive lessons that take you from your very first character to full native fluency.",
+      "lessons_button": "Lessons"
+    },
+    "ToolsPreviewSection": {
+      "stroke_styles_tab": "Stroke styles",
+      "todays_lesson_tab": "Today's lesson"
+    },
+    "StrokeStyle": {
+      "input_placeholder": "Type a Chinese character",
+      "replay_aria": "Replay stroke animation",
+      "update": "Update"
+    },
+    "DailyLesson": {
+      "title": "TODAY'S LESSON - Giving Directions",
+      "instruction": "Choose the correct answer",
+      "error_message": "Almost there! Give it another try.",
+      "try_again": "Try again",
+      "success_message": "Correct! Great job.",
+      "close": "Close",
+      "option_what_time": "What time is it?",
+      "option_what_eat": "What did you eat?",
+      "option_what_name": "What is your name?",
+      "option_what_this": "What is this?"
+    },
+    "UserGuideVideo": {
+      "eyebrow": "See It In Action",
+      "title": "Watch How Hong Bao Works",
+      "subtitle": "A quick walkthrough of lessons, quizzes, and the tools that help you master Chinese faster.",
+      "video_title": "Product Walkthrough",
+      "video_coming_soon": "Video coming soon"
+    },
+    "InstallAppSection": {
+      "pwa_badge": "Progressive Web App",
+      "loved_by": "Loved by 248,000+ learners worldwide",
+      "benefits": {
+        "one_tap": {
+          "title": "Opens in one tap",
+          "body": "Launch straight from your home screen — no browser, no waiting."
+        },
+        "reminders": {
+          "title": "Never miss a review",
+          "body": "Gentle reminders keep your streak and due flashcards on track."
+        },
+        "no_download": {
+          "title": "Nothing to download",
+          "body": "Installs in seconds. No app store, no storage worries."
+        }
+      },
+      "steps": {
+        "open_menu": "Open your browser menu",
+        "add_to_home": "Choose \"Add to Home Screen\"",
+        "confirm": "Confirm — that's it"
+      }
+    },
+    "WeOffer": {
+      "eyebrow": "Why Learn With Us",
+      "title": "We Generously Offer",
+      "subtitle": "Everything you need to start learning Chinese — free courses, lessons, videos, quizzes and more.",
+      "free_courses": "Free Courses",
+      "free_lessons": "Free Lessons",
+      "free_videos": "Free Videos",
+      "free_quizzes": "Free Quizzes",
+      "mock_test": "Mock Test",
+      "spaced_repetition": "Spaced Repetition System"
+    },
+    "StudentReview": {
+      "eyebrow": "Testimonials",
+      "title": "Our Student Feedbacks",
+      "subtitle": "Real stories from learners who went from their first character to real confidence with Hong Bao.",
+      "loved_by": "Loved by {count, plural, one {# learner} other {# learners}}",
+      "previous_aria": "Previous feedbacks",
+      "next_aria": "Next feedbacks",
+      "go_to_page_aria": "Go to page {page}",
+      "default_position": "Student",
+      "rating_aria": "Rated {rating} out of {max}"
+    },
+    "PlanAndPricing": {
+      "title": "Plan & Pricing",
+      "subtitle": "Choose the course that fits your level and goals, and start learning today.",
+      "see_all_courses": "See all courses"
+    },
+    "PricingCard": {
+      "free": "Free",
+      "discount_off": "{discount}% off",
+      "we_provided": "We provided:",
+      "view_detail": "View Detail",
+      "add_to_cart_aria": "Add to cart",
+      "remove_from_cart_aria": "Remove from cart"
+    },
+    "BeginYourJourneyBanner": {
+      "badge": "Start today — basic lessons are free",
+      "title": "Your Chinese journey begins right now",
+      "description": "Join thousands of learners mastering Mandarin with structured HSK courses, AI-powered tone coaching, and lessons that fit your schedule.",
+      "start_with_basics": "Start with basics",
+      "view_all_courses": "View all courses",
+      "no_card_required": "No card required to start — upgrade anytime as you progress.",
+      "loved_by": "Loved by 248,000+ learners worldwide"
+    }
+  },
+  "Footer": {
+    "tagline": "Chinese Online Class",
+    "description": "The world's most complete Mandarin Chinese learning platform. From your first greeting to HSK 6 mastery.",
+    "courses": "Courses",
+    "support": "Support",
+    "privacy_policy": "Privacy Policy",
+    "copyright": "© {year} Hong Bao. All rights reserved."
+  },
+  "Unauthorized": {
+    "title": "Unauthorized Access",
+    "go_home": "Go to home"
+  },
+  "Auth": {
+    "AuthLayout": {
+      "back_to_home_aria": "Back to home"
+    }
+  },
+  "PrivacyPolicy": {
+    "title": "Privacy Policy",
+    "intro": "Plain-language details on what we collect, why, and the choices you have — for the Hong Bao website and app.",
+    "last_updated": "Last updated: {date}",
+    "last_updated_date": "August 22, 2026",
+    "sections": {
+      "information_we_collect": {
+        "title": "Information We Collect",
+        "p1": "We collect only what we need to run your account, process your course purchases, and personalize your learning experience.",
+        "b1": "Account information — your name, email address, and optional profile photo, managed through our authentication provider, Clerk. We never see or store your password.",
+        "b2": "Purchase verification — the course you select, the KBZ Pay transaction reference number, and the payment screenshot you upload for manual confirmation.",
+        "b3": "Learning activity — course progress, lesson completion, and quiz results tied to your account.",
+        "b4": "Device-local data — your Flashcards \"learned\" status and Memo Space review schedule are stored only in your browser's local storage. This never leaves your device or reaches our servers.",
+        "b5": "Technical data — your language preference (English/Myanmar) and general usage logs used for troubleshooting."
+      },
+      "how_we_use_it": {
+        "title": "How We Use Your Information",
+        "b1": "Create, secure, and manage your account.",
+        "b2": "Verify and process your course purchases.",
+        "b3": "Track your learning progress and personalize your dashboard.",
+        "b4": "Send optional push notifications, such as flashcard or review reminders.",
+        "b5": "Respond to your support requests.",
+        "b6": "Improve the platform and fix bugs."
+      },
+      "payments": {
+        "title": "Payments & Purchase Verification",
+        "p1": "Hong Bao currently uses manual bank-app transfer (KBZ Pay) rather than an embedded card payment processor.",
+        "p2": "We never ask for or store your banking password, PIN, or full card number. You transfer payment directly through your own banking app.",
+        "p3": "To confirm your purchase, you submit the last 6 digits of your transaction number and a screenshot as proof of payment. Our team manually reviews this to activate your course.",
+        "p4": "Please double-check your transaction number before submitting — as noted during checkout, we can't be responsible for issues caused by an incorrect number."
+      },
+      "notifications": {
+        "title": "Push Notifications",
+        "p1": "If you install Hong Bao as an app on your device (as a PWA), we may ask permission to send push notifications through Firebase Cloud Messaging.",
+        "p2": "We use this only for learning reminders — for example, letting you know when flashcards or a Memo Space review are due.",
+        "b1": "Notifications are always optional and require your explicit permission.",
+        "b2": "You can turn them off anytime in your browser or device settings."
+      },
+      "cookies": {
+        "title": "Cookies & Local Storage",
+        "b1": "We use minimal, essential cookies for keeping you signed in (via Clerk) and remembering your language preference.",
+        "b2": "We do not use third-party advertising or analytics trackers.",
+        "b3": "Flashcards and Memo Space progress live in your browser's local storage, not on our servers, and clear automatically if you clear your browser data."
+      },
+      "sharing": {
+        "title": "Sharing Your Information",
+        "p1": "We do not sell your personal information — ever.",
+        "b1": "Clerk — handles authentication and account security.",
+        "b2": "Firebase — delivers optional push notifications.",
+        "b3": "We may disclose information if required to comply with the law."
+      },
+      "retention": {
+        "title": "Data Retention",
+        "b1": "We keep your account and learning data for as long as your account stays active.",
+        "b2": "Payment verification screenshots are kept only as long as needed to confirm and audit your purchase.",
+        "b3": "You can request deletion of your account and associated data at any time."
+      },
+      "children": {
+        "title": "Children's Privacy",
+        "p1": "Hong Bao is intended for learners aged 13 and above. If you're under 13, please use the platform together with a parent or guardian.",
+        "p2": "We do not knowingly collect personal information from children under 13 without a parent or guardian's consent. If you believe a child has provided us with personal information, please contact us and we'll remove it."
+      },
+      "your_rights": {
+        "title": "Your Rights & Choices",
+        "b1": "Access the personal information we hold about you.",
+        "b2": "Correct inaccurate details through your profile settings.",
+        "b3": "Request deletion of your account and data.",
+        "b4": "Opt out of push notifications at any time.",
+        "b5": "Contact us anytime to exercise any of these rights."
+      },
+      "security": {
+        "title": "Data Security",
+        "p1": "We rely on industry-standard practices to protect your information, including secure authentication through Clerk and encrypted (HTTPS) connections across the platform.",
+        "p2": "Payment screenshots are stored securely and only accessed by authorized staff for verification.",
+        "p3": "No method of transmission over the internet is 100% secure, but we work continuously to protect your information."
+      },
+      "changes": {
+        "title": "Changes to This Policy",
+        "p1": "We may update this policy from time to time as Hong Bao grows. Material changes will always be reflected by updating the \"Last updated\" date at the top of this page.",
+        "p2": "Continuing to use Hong Bao after a change means you accept the updated policy."
+      },
+      "contact": {
+        "title": "Contact Us",
+        "p1": "Questions about this policy, or want to access, correct, or delete your data? Reach out and we'll help.",
+        "b1": "Phone — 0937605832",
+        "b2": "Email — privacy@hongbaochinese.com"
+      }
+    }
+  },
+  "Navbar": {
+    "ClientNavbar": {
+      "tagline": "Chinese Online Class",
+      "primary_nav_aria": "Primary",
+      "home": "Home",
+      "shop": "Shop",
+      "reading_blogs": "Reading Blogs",
+      "privacy_policy": "Privacy Policy",
+      "account": "Account",
+      "profile": "Profile",
+      "my_courses": "My courses",
+      "dashboard": "Dashboard",
+      "danger_zone": "Danger zone",
+      "sign_out": "Sign out",
+      "sign_in": "Sign in",
+      "open_menu": "Open menu",
+      "menu": "Menu",
+      "welcome_title": "Welcome to Hong Bao",
+      "welcome_body": "Sign in to track your progress and pick up where you left off.",
+      "trusted_by": "Trusted by 248,000+ learners worldwide",
+      "browse": "Browse"
+    },
+    "CartButton": {
+      "cart": "Cart",
+      "aria_with_count": "Cart, {count, plural, one {# item} other {# items}}"
+    }
+  },
+  "MobileNav": {
+    "primary_nav_aria": "Primary",
+    "items": {
+      "home": "Home",
+      "shop": "Shop",
+      "blogs": "Blogs",
+      "privacy": "Privacy"
+    }
+  },
+  "Shared": {
+    "LanguageSelector": {
+      "title": "Language",
+      "description": "Choose the language used across the site."
+    },
+    "AppearanceSelector": {
+      "title": "Appearance",
+      "description": "Dark mode is easier on the eyes at night. System follows your device setting.",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "AdsenseBanner": {
+      "title": "Advertisement",
+      "placeholder": "Google AdSense will appear here"
+    },
+    "PriceText": {
+      "free": "Free",
+      "no_payment_required": "No payment required",
+      "lifetime": "lifetime",
+      "per_months": "/ {count, plural, one {# month} other {# months}}"
+    },
+    "ProductPrice": {
+      "free": "Free",
+      "percent_off": "{discount}% off",
+      "per_month": "/ month",
+      "for_months": "for {count} months"
+    },
+    "PurchaseOrderCard": {
+      "txn": "Txn {number}",
+      "no_payment_info": "No payment info",
+      "type_course": "Course",
+      "type_mock_test": "Mock Test",
+      "type_flashcard": "Flashcard",
+      "lifetime": "Lifetime",
+      "months": "{count, plural, one {# month} other {# months}}",
+      "days": "{count, plural, one {# day} other {# days}}",
+      "free": "Free",
+      "declined": "Declined:",
+      "total": "Total",
+      "hide": "Hide",
+      "details": "Details",
+      "subtotal": "Subtotal",
+      "discount": "Discount"
+    },
+    "HanziPractice": {
+      "mode_watch": "Watch",
+      "mode_write": "Write",
+      "arrows": "Arrows",
+      "replay": "Replay",
+      "misses": "{count, plural, one {# miss} other {# misses}}",
+      "restart": "Restart"
+    }
+  },
+  "Blogs": {
+    "categories": {
+      "grammar": "Grammar",
+      "vocabulary": "Vocabulary",
+      "culture": "Culture",
+      "hsk_exam": "HSK Exam",
+      "study_tips": "Study Tips"
+    },
+    "ListPage": {
+      "title": "Hong Bao Journal",
+      "subtitle": "Grammar breakdowns, exam strategy, and culture notes from our teaching team.",
+      "search_placeholder": "Search articles...",
+      "search_aria": "Search articles",
+      "all": "All",
+      "empty_title": "No articles found",
+      "empty_body": "Try a different search term or category."
+    },
+    "ArticleRow": {
+      "min_read": "{minutes} min read"
+    },
+    "BlogCard": {
+      "min": "{minutes} min"
+    },
+    "DetailPage": {
+      "not_found_title": "Article not found",
+      "not_found_body": "This article may have been moved or removed.",
+      "back_to_blogs": "Back to blogs",
+      "all_articles": "All articles",
+      "min_read": "{minutes} min read",
+      "keep_reading": "Keep reading",
+      "cta_title": "Ready to put this into practice?",
+      "cta_body": "Structured HSK courses, flashcards, and spaced repetition — all in one place.",
+      "cta_button": "Explore courses"
+    }
+  },
+  "LanguageSwitch": {
+    "label": "Language"
+  },
+  "Shop": {
+    "Types": {
+      "course": "Course",
+      "courses": "Courses",
+      "mock_test": "Mock Test",
+      "mock_tests": "Mock Tests",
+      "flashcard": "Flashcard",
+      "flashcards": "Flashcards",
+      "all_products": "All products"
+    },
+    "MonthSelect": {
+      "months": "{count, plural, one {# month} other {# months}}"
+    },
+    "ShopPage": {
+      "title": "Shop",
+      "home": "Home",
+      "empty_title": "No products match your filters",
+      "empty_body": "Try removing a filter or clearing your search.",
+      "clear_all_filters": "Clear all filters",
+      "filters": "Filters",
+      "show_results": "Show {count, plural, one {# result} other {# results}}"
+    },
+    "FlashDeals": {
+      "title": "Flash Deals",
+      "ends_in": "Ends in"
+    },
+    "ProductCard": {
+      "free": "FREE",
+      "sold": "{count} sold",
+      "cards": "{count, plural, one {# card} other {# cards}}",
+      "claimed": "{pct}% claimed",
+      "in_cart": "In cart",
+      "add": "Add",
+      "add_to_cart": "Add to cart",
+      "add_aria": "Add {title} to cart",
+      "remove_aria": "Remove {title} from cart"
+    },
+    "ResultsToolbar": {
+      "results": "{count, plural, one {# result} other {# results}}",
+      "filters": "Filters",
+      "remove_filter": "Remove {label}",
+      "clear_all": "Clear all"
+    },
+    "SortMenu": {
+      "aria": "Sort products, currently {current}",
+      "sort_by_colon": "Sort by:",
+      "sort_by": "Sort by",
+      "options": {
+        "relevance": "Recommended",
+        "top_sales": "Best selling",
+        "price_low": "Price: low to high",
+        "price_high": "Price: high to low"
+      }
+    },
+    "Filters": {
+      "title": "Filters",
+      "clear_all": "Clear all",
+      "search_placeholder": "Search products",
+      "clear_search": "Clear search",
+      "product_type": "Product type",
+      "hsk_level": "HSK level",
+      "all_levels": "All levels",
+      "level": "Level",
+      "deals": "Deals",
+      "on_sale": "On sale"
+    }
+  },
+  "Cart": {
+    "Promo": {
+      "enter_code": "Enter a promo code.",
+      "invalid_code": "That code isn't valid."
+    },
+    "MonthStepper": {
+      "fewer": "Fewer months",
+      "more": "More months",
+      "months_short": "{count} mo"
+    },
+    "CartPage": {
+      "title": "Shopping Cart",
+      "shop": "Shop",
+      "cart": "Cart",
+      "items": "{count, plural, one {# item} other {# items}}",
+      "clear_cart": "Clear cart",
+      "empty_title": "Your cart is empty",
+      "empty_body": "Browse courses, flashcards, and mock tests to get started.",
+      "browse_shop": "Browse the shop",
+      "agree_terms": "I agree to the Terms and Conditions and Privacy Policy",
+      "total_count": "Total ({count})",
+      "checkout": "Checkout"
+    },
+    "CartLine": {
+      "remove_aria": "Remove {title}",
+      "per_month": "/ month",
+      "free_badge": "FREE",
+      "free": "Free",
+      "lifetime_access": "Lifetime access",
+      "remove_promo": "Remove promo code",
+      "promo_code": "Promo code",
+      "apply": "Apply",
+      "use_promo": "Use promo code"
+    },
+    "CartSummary": {
+      "title": "Order summary",
+      "free": "Free",
+      "free_access": "Free access",
+      "lifetime_access": "Lifetime access",
+      "per_month_price": "{price} / mo",
+      "months": "{count, plural, one {# month} other {# months}}",
+      "items_count": "Items ({count})",
+      "discounts": "Discounts",
+      "promo_codes": "Promo codes",
+      "total": "Total",
+      "saving": "You're saving {amount}",
+      "agree_terms": "I agree to the Terms and Conditions and Privacy Policy",
+      "proceed": "Proceed to checkout",
+      "payment_note": "Payment is by bank transfer and reviewed by our team before your purchase is activated."
+    }
+  },
+  "Checkout": {
+    "CheckoutPage": {
+      "order_received": "Order received",
+      "order_received_body": "Our team will verify your transfer and activate your purchase. You'll get an email once it's ready - this usually takes a few hours.",
+      "keep_shopping": "Keep shopping",
+      "back_home": "Back to home",
+      "back_to_cart": "Back to cart",
+      "title": "Checkout",
+      "subtitle": "Three quick steps: your details, payment, and proof of transfer."
+    },
+    "CheckoutSummary": {
+      "order": "Order",
+      "items": "{count, plural, one {# item} other {# items}}",
+      "lifetime": "Lifetime",
+      "months": "{count, plural, one {# month} other {# months}}",
+      "promo_line": "Promo {code} · -{amount}",
+      "free": "Free",
+      "discounts": "Discounts",
+      "promo_codes": "Promo codes",
+      "total": "Total",
+      "edit_cart": "Edit cart"
+    },
+    "CheckoutSteps": {
+      "steps": {
+        "details": "Details",
+        "payment": "Payment",
+        "confirm": "Confirm"
+      },
+      "confirm_title": "Submit your order?",
+      "confirm_body": "Double-check your 6-digit transaction number and payment screenshot. We can't activate a purchase from an incorrect reference.",
+      "cancel": "Cancel",
+      "confirm_order": "Confirm order",
+      "back": "Back",
+      "submit_order": "Submit order",
+      "continue": "Continue",
+      "order_received": "Order received"
+    },
+    "Validation": {
+      "name_required": "Please enter your name",
+      "email_invalid": "Please enter a valid email",
+      "phone_invalid": "Please enter a valid phone number",
+      "transaction_digits": "Enter the last 6 digits"
+    },
+    "ContactDetails": {
+      "title": "Your details",
+      "subtitle": "We'll use these to confirm your purchase and send access details.",
+      "full_name": "Full name",
+      "full_name_placeholder": "Your name",
+      "email": "Email",
+      "phone": "Phone number"
+    },
+    "PaymentMethod": {
+      "title": "Payment",
+      "subtitle": "Pick an account, transfer the exact amount, then continue to upload your receipt.",
+      "amount_to_pay": "Amount to pay",
+      "transfer_to": "Transfer to",
+      "qr_alt": "{wallet} QR code",
+      "wallet": "Wallet",
+      "account_name": "Account name",
+      "phone": "Phone",
+      "copy_aria": "Copy {label}"
+    },
+    "UploadProof": {
+      "title": "Confirm payment",
+      "subtitle": "Add your transfer reference and a screenshot so we can verify it.",
+      "transaction_no": "Transaction number",
+      "transaction_no_desc": "The last 6 digits of your transfer reference",
+      "transaction_no_placeholder": "6-digit number",
+      "where_find": "Where do I find this?",
+      "where_find_alt": "The last 6 digits are shown on your payment receipt",
+      "screenshot": "Payment screenshot",
+      "screenshot_preview_alt": "Payment screenshot preview",
+      "remove_screenshot": "Remove screenshot",
+      "tap_upload": "Tap to upload a screenshot",
+      "file_hint": "PNG or JPG, up to 5 MB"
+    }
+  },
+  "CourseDetail": {
+    "PageComponent": {
+      "home": "Home",
+      "video": "Video",
+      "quiz": "Quiz",
+      "lessons": "{count, plural, one {# Lesson} other {# Lessons}}",
+      "videos": "{count, plural, one {# Video} other {# Videos}}",
+      "modules": "{count, plural, one {# Module} other {# Modules}}",
+      "quizzes": "{count, plural, one {# Quiz} other {# Quizzes}}",
+      "quizzes_lower": "{count, plural, one {# quiz} other {# quizzes}}",
+      "items": "{count, plural, one {# item} other {# items}}",
+      "course_preview": "Course Preview",
+      "preview_coming_soon": "Preview video coming soon",
+      "course_curriculum": "Course Curriculum",
+      "module_n": "Module {n}",
+      "assessment": "Assessment",
+      "final_assessment": "Final Assessment",
+      "preview_this_course": "Preview this course",
+      "free": "Free",
+      "percent_off": "{pct}% off",
+      "buy_now": "Buy Now",
+      "whats_included": "What's included",
+      "share_course": "Share this course"
+    }
+  },
+  "Profile": {
+    "Nav": {
+      "home": "Home",
+      "home_page": "Home",
+      "my_courses": "My courses",
+      "my_courses_short": "My courses",
+      "purchase_history": "Purchase history",
+      "flashcards": "Flashcards",
+      "memo_space": "Memo Space",
+      "settings": "Settings",
+      "menu": "Menu",
+      "aria_profile": "Profile"
+    },
+    "Overview": {
+      "my_courses": "My courses",
+      "view_all": "View all",
+      "enrolled": "Enrolled",
+      "in_progress": "In progress",
+      "pending_approval": "Pending approval",
+      "expired": "Expired",
+      "learning_activity": "Learning activity",
+      "videos_completed": "Videos completed",
+      "videos_caption": "Lessons finished across your courses",
+      "videos_caption_empty": "Finish a lesson to start your streak",
+      "quizzes_answered": "Quizzes answered",
+      "quizzes_caption": "Quizzes completed across your courses",
+      "quizzes_caption_empty": "Answer a quiz to test yourself",
+      "flashcards_learned": "Flashcards learned",
+      "flashcards_caption": "{pct}% of the deck reviewed",
+      "due_for_review": "Due for review",
+      "due_caption": "Ready to review now",
+      "due_caption_empty": "All caught up!"
+    },
+    "AccountLinks": {
+      "purchase_history": "Purchase history",
+      "purchase_history_caption": "Orders, review status & receipts",
+      "settings": "Settings",
+      "settings_caption": "Profile and account preferences",
+      "aria_account": "Account"
+    },
+    "CourseCard": {
+      "renew": "Renew",
+      "types": {
+        "course": "Course",
+        "mock_test": "Mock Test",
+        "flashcard": "Flashcard"
+      },
+      "status": {
+        "approved": "In progress",
+        "pending": "Pending approval",
+        "expired": "Expired",
+        "rejected": "Rejected"
+      },
+      "meta": {
+        "access_until": "Access until {date}",
+        "lifetime": "Lifetime access",
+        "months_access": "{months, plural, one {# month access} other {# months access}}",
+        "pending": "Requested {date} · waiting for admin approval",
+        "rejected": "This purchase was not approved"
+      }
+    },
+    "LearningStreak": {
+      "aria_section": "Daily learning streak",
+      "title": "Daily streak",
+      "previous_year": "Previous year",
+      "next_year": "Next year",
+      "active_days": "{count, plural, one {# active day} other {# active days}} in {year}",
+      "keep_going": "Keep it going - learn something today",
+      "start_streak": "Finish a lesson or quiz to start a streak",
+      "days": {
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun"
+      },
+      "aria_scale": "Fewer to more completions per day",
+      "less": "Less",
+      "more": "More",
+      "upcoming": "Upcoming",
+      "no_activity": "No activity",
+      "completions": "{count, plural, one {# completion} other {# completions}}"
+    },
+    "UserInfo": {
+      "learning_for": "Learning for {days} days",
+      "roles": {
+        "ADMIN": "Admin",
+        "TEACHER": "Teacher",
+        "STAFF": "Staff",
+        "STUDENT": "Student"
+      },
+      "greeting": "Hello! Welcome to HongBao Chinese.",
+      "email": "Email",
+      "joined_label": "Joined",
+      "joined": "Joined <time>{date}</time>",
+      "user_id": "User ID",
+      "id_copied": "ID copied",
+      "copy_id": "Copy ID",
+      "copy_user_id": "Copy user ID",
+      "settings": "Settings"
+    },
+    "Flashcards": {
+      "title": "Flashcards",
+      "breadcrumb_profile": "Profile",
+      "breadcrumb_flashcards": "Flashcards",
+      "breadcrumb_cards": "Cards",
+      "browse": "Browse flashcards",
+      "play_pronunciation": "Play pronunciation",
+      "show_pinyin": "Show pinyin",
+      "List": {
+        "empty": "You haven't enrolled in any flashcards yet."
+      },
+      "Detail": {
+        "unavailable": "This flashcard isn't available. You may not be enrolled, or your access has expired.",
+        "no_cards": "No cards in this flashcard yet."
+      },
+      "Tile": {
+        "type": "Flashcard",
+        "card_count": "{count, plural, one {# card} other {# cards}}"
+      },
+      "CardBack": {
+        "word": "Word",
+        "meaning": "Meaning",
+        "practice": "Practice",
+        "examples": "Examples",
+        "strokes": "Strokes",
+        "write": "Write",
+        "no_examples": "No example sentences for this word yet."
+      },
+      "CardFront": {
+        "reveal_answer": "Reveal the answer",
+        "peek_pinyin": "Tap the blur to peek at pinyin",
+        "tap_to_reveal": "Tap to reveal"
+      },
+      "CardDialog": {
+        "rating": {
+          "learning": "Still learning",
+          "known": "Got it"
+        },
+        "rating_badge": {
+          "learning": "Still learning",
+          "known": "Known"
+        },
+        "card_position": "Card {position} / {total}",
+        "default_deck_name": "Flashcards",
+        "close_card": "Close card",
+        "card_of": "Card {position} of {total}",
+        "card_navigation": "Card navigation",
+        "previous_word": "Previous: {word}",
+        "first_card": "First card",
+        "previous_card": "Previous card",
+        "show_answer": "Show answer",
+        "next_word": "Next: {word}",
+        "last_card": "Last card",
+        "next_card": "Next card"
+      },
+      "WordType": {
+        "noun": "noun",
+        "verb": "verb",
+        "adjective": "adjective",
+        "adverb": "adverb",
+        "pronoun": "pronoun",
+        "numeral": "numeral",
+        "measure_word": "measure word",
+        "preposition": "preposition",
+        "conjunction": "conjunction",
+        "particle": "particle",
+        "interjection": "interjection"
+      }
+    },
+    "MemoSpace": {
+      "back_to_profile": "Back to profile",
+      "title": "Memo Space",
+      "description": "Flip each card, then rate how well you knew it. Practicing the HSK 1 starter deck.",
+      "reviewed_progress": "{completed} of {total} reviewed",
+      "session_summary": "{again} again · {good} good+",
+      "tap_to_reveal": "Tap to reveal",
+      "press_space": "Press space to flip",
+      "ratings": {
+        "again": "Again",
+        "hard": "Hard",
+        "good": "Good",
+        "easy": "Easy"
+      },
+      "interval": {
+        "now": "now",
+        "under_day": "<1d",
+        "days": "{count}d",
+        "months": "{count}mo"
+      },
+      "all_caught_up": "All caught up!",
+      "reviewed_session": "You reviewed {count, plural, one {# card} other {# cards}} this session.",
+      "nothing_due": "Nothing is due right now - come back later.",
+      "practice_again": "Practice again"
+    },
+    "MyCourses": {
+      "title": "My courses",
+      "breadcrumb_profile": "Profile",
+      "breadcrumb_my_courses": "My courses",
+      "buy": "Buy courses",
+      "showing_count": "Showing <b>{count}</b> {count, plural, one {course} other {courses}}",
+      "empty": {
+        "all": "You haven't purchased any courses yet.",
+        "approved": "No courses in progress right now.",
+        "pending": "No courses waiting for approval.",
+        "expired": "No expired courses — nothing to renew."
+      },
+      "show_all": "Show all courses",
+      "filters": {
+        "all": "All",
+        "approved": "In progress",
+        "pending": "Pending",
+        "expired": "Expired"
+      }
+    },
+    "Settings": {
+      "title": "Settings",
+      "coming_soon": "Settings coming soon",
+      "coming_soon_description": "Account preferences and notification controls will live here."
+    },
+    "PurchaseHistory": {
+      "title": "Purchase history",
+      "breadcrumb_profile": "Profile",
+      "go_to_shop": "Go to shop",
+      "showing_count": "Showing <b>{count}</b> {count, plural, one {order} other {orders}}",
+      "date_range_applied": "Date range applied",
+      "empty": {
+        "all": "You haven't placed any orders yet.",
+        "pending": "Nothing is waiting for review.",
+        "approved": "No active purchases right now.",
+        "expired": "Nothing has expired.",
+        "cancelled": "No declined orders.",
+        "date_range": "No orders in this date range."
+      },
+      "clear_date_range": "Clear date range",
+      "browse_shop": "Browse the shop",
+      "show_all": "Show all orders",
+      "per_page": "Per page",
+      "orders_per_page": "Orders per page",
+      "filter_all": "All",
+      "status": {
+        "pending": "Under review",
+        "approved": "Active",
+        "cancelled": "Declined",
+        "expired": "Expired"
+      },
+      "OrderCard": {
+        "buy_again": "Buy again",
+        "start_learning": "Start learning",
+        "renew_access": "Renew access",
+        "try_again": "Try again"
+      },
+      "Timeline": {
+        "order_placed": "Order placed",
+        "verifying": "Verifying your transfer",
+        "verifying_detail": "Usually confirmed within a few hours",
+        "access_activated": "Access activated",
+        "access_activated_detail": "After your payment is confirmed",
+        "payment_reviewed": "Payment reviewed",
+        "order_declined": "Order declined",
+        "see_reason": "See the reason above",
+        "not_verified": "The transfer couldn't be verified",
+        "payment_confirmed": "Payment confirmed",
+        "access_ended": "Access ended",
+        "access_active": "Access active"
+      }
+    }
+  },
+  "Learn": {
+    "Common": {
+      "profile": "Profile",
+      "my_courses": "My courses",
+      "course": "Course",
+      "video": "Video",
+      "quiz": "Quiz",
+      "previous": "Previous",
+      "next": "Next",
+      "completed": "Completed",
+      "mark_as_complete": "Mark as complete",
+      "close": "Close"
+    },
+    "CoursePage": {
+      "lesson_count": "{count, plural, one {# Lesson} other {# Lessons}}",
+      "video_count": "{count, plural, one {# Video} other {# Videos}}"
+    },
+    "AccessGate": {
+      "expired_title": "Your access has expired",
+      "pending_title": "Waiting for admin approval",
+      "no_access_title": "You don't have access to this course",
+      "expired_description_on": "Your access ended on {date}. Renew to keep learning - your progress is saved.",
+      "expired_description": "Your access has ended. Renew to keep learning - your progress is saved.",
+      "pending_description": "Your purchase is being reviewed. You can start learning once it's approved.",
+      "no_access_description": "Purchase this course to start learning.",
+      "renew": "Renew",
+      "go_to_shop": "Go to shop",
+      "back_to_my_courses": "Back to my courses"
+    },
+    "Navigator": {
+      "course": "Course",
+      "progress_complete": "{completed} of {total} complete",
+      "lesson_completed": "{done}/{total} completed",
+      "no_content": "No content yet",
+      "final_assessment": "Final Assessment",
+      "open_course_content": "Open course content",
+      "course_content": "Course content",
+      "show_course_menu": "Show course menu"
+    },
+    "Video": {
+      "not_found_title": "Video not found",
+      "not_found_description": "This lesson may have been moved or removed.",
+      "complete_title": "Lesson complete!",
+      "complete_description": "Nice work — you've finished watching this video.",
+      "stay_here": "Stay here",
+      "continue": "Continue",
+      "up_next": "Up next"
+    },
+    "Quiz": {
+      "no_questions_title": "No questions yet",
+      "no_questions_description": "This quiz doesn't have any questions added to it.",
+      "question_number": "Question {number}",
+      "of_total": "of {total}",
+      "answered_count": "{answered}/{total} answered",
+      "go_to_question": "Go to question {number}",
+      "submit_quiz": "Submit quiz",
+      "band": {
+        "perfect": {
+          "title": "Perfect score!",
+          "body": "Every answer correct - you're ready for the next lesson."
+        },
+        "great": {
+          "title": "Nicely done!",
+          "body": "You've got a solid grip on this. Review the few you missed below."
+        },
+        "good": {
+          "title": "Good effort",
+          "body": "You're getting there. The review below shows exactly what to work on."
+        },
+        "retry": {
+          "title": "Worth another pass",
+          "body": "Go back over the lesson, then retake this quiz - the review below is a good place to start."
+        }
+      },
+      "suggestion": {
+        "correct": "Correct - keep it up.",
+        "skipped": "You skipped this one. Give it a try on your retake.",
+        "rearrange": "Word order tripped you up. Read the correct sentence aloud a few times to lock in the pattern.",
+        "true_or_false": "Re-read the statement carefully - one word usually decides true from false.",
+        "default": "Compare your choice with the correct answer and note what makes it fit."
+      }
+    },
+    "QuestionCard": {
+      "rearrange_hint": "Tap the words below to build your sentence.",
+      "undo_last_word": "Undo last word"
+    },
+    "QuizResult": {
+      "correct_count": "{count} correct",
+      "wrong_count": "{count} wrong",
+      "skipped_count": "{count} skipped",
+      "elapsed_minutes": "{minutes}m {seconds}s",
+      "elapsed_seconds": "{seconds}s",
+      "back_to_course": "Back to course",
+      "retake_quiz": "Retake quiz",
+      "review_your_answers": "Review your answers",
+      "question_number": "Question {number}",
+      "your_answer": "Your answer",
+      "not_answered": "Not answered",
+      "correct_answer": "Correct answer"
+    }
   }
 }

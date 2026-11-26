@@ -1,9 +1,12 @@
 import useApiQuery from "@/hooks/fetching/useApiQuery";
 import { DatesRangeValue } from "@mantine/dates";
 import dayjs from "dayjs";
-import { useMemo, useState } from "react";
-import { TRevenueDateRange, TRevenueRes } from "../../../types/revenue.type";
-import { getMockRevenue } from "./mockRevenue";
+import { RevenueGranularity } from "@repo/shared";
+import { useState } from "react";
+import {
+  TRevenueDateRange,
+  TRevenueRes,
+} from "@/app/[locale]/(dashboard)/dashboard/types/revenue.type";
 
 const today = dayjs();
 
@@ -12,79 +15,72 @@ const DEFAULT_RANGE: TRevenueDateRange = {
   to: today.format("YYYY-MM-DD"),
 };
 
-export const REVENUE_PRESETS = [
-  {
-    label: "Today",
-    value: [today.format("YYYY-MM-DD"), today.format("YYYY-MM-DD")] as [string, string],
-  },
-  {
-    label: "This Week",
-    value: [
-      today.startOf("week").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ] as [string, string],
-  },
-  {
-    label: "This Month",
-    value: [
-      today.startOf("month").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ] as [string, string],
-  },
-  {
-    label: "3 Months",
-    value: [
-      today.subtract(3, "month").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ] as [string, string],
-  },
-  {
-    label: "6 Months",
-    value: [
-      today.subtract(6, "month").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ] as [string, string],
-  },
-  {
-    label: "1 Year",
-    value: [
-      today.subtract(1, "year").format("YYYY-MM-DD"),
-      today.format("YYYY-MM-DD"),
-    ] as [string, string],
-  },
+export type TGranularityOption = RevenueGranularity | "auto";
+
+export const GRANULARITY_OPTIONS: {
+  label: string;
+  value: TGranularityOption;
+}[] = [
+  { label: "Auto", value: "auto" },
+  { label: "Day", value: "day" },
+  { label: "Week", value: "week" },
+  { label: "Month", value: "month" },
 ];
 
 const useContainer = () => {
   const [range, setRange] = useState<TRevenueDateRange>(DEFAULT_RANGE);
+  const [granularity, setGranularity] = useState<TGranularityOption>("auto");
+
+  // The picker reports a half-picked range ([start, null]) after the first
+  // click, so it needs its own value; the query range only updates once both
+  // ends are picked. Clearing falls back to the default range.
+  const [pickerValue, setPickerValue] = useState<DatesRangeValue<string>>([
+    DEFAULT_RANGE.from,
+    DEFAULT_RANGE.to,
+  ]);
 
   const handleRangeChange = (value: DatesRangeValue) => {
     const [from, to] = value;
-    if (!from || !to) return;
-    setRange({
-      from: dayjs(from).format("YYYY-MM-DD"),
-      to: dayjs(to).format("YYYY-MM-DD"),
-    });
+
+    if (!from && !to) {
+      setPickerValue([DEFAULT_RANGE.from, DEFAULT_RANGE.to]);
+      setRange(DEFAULT_RANGE);
+      return;
+    }
+
+    const next: DatesRangeValue<string> = [
+      from ? dayjs(from).format("YYYY-MM-DD") : null,
+      to ? dayjs(to).format("YYYY-MM-DD") : null,
+    ];
+    setPickerValue(next);
+    if (next[0] && next[1]) setRange({ from: next[0], to: next[1] });
   };
 
-  // TODO(api): backend endpoint isn't built yet. Flip `enabled` to `true`
-  // once GET /dashboard/revenue ships, then drop the `?? mockRevenue`
-  // fallback below - the response shape already matches TRevenueRes so
-  // nothing else in this page needs to change.
-  const { data, isLoading } = useApiQuery<TRevenueRes>({
-    url: "dashboard/revenue",
-    key: ["dashboard-revenue", range.from, range.to],
-    params: range,
-    enabled: false,
-  });
+  // "auto" lets the API pick day/week/month from the range width.
+  const params = {
+    ...range,
+    ...(granularity !== "auto" && { granularity }),
+  };
 
-  const mockRevenue = useMemo(() => getMockRevenue(range), [range]);
-  const revenue = data ?? mockRevenue;
+  const { data: revenue, isLoading } = useApiQuery<
+    { data: TRevenueRes },
+    TRevenueRes
+  >({
+    url: "dashboard/revenue",
+    key: ["dashboard-revenue", range.from, range.to, granularity],
+    params,
+    select: (res) => res.data,
+  });
 
   return {
     revenue,
     isLoading,
     range,
+    pickerValue,
     onRangeChange: handleRangeChange,
+    granularity,
+    onGranularityChange: (value: string) =>
+      setGranularity(value as TGranularityOption),
   };
 };
 

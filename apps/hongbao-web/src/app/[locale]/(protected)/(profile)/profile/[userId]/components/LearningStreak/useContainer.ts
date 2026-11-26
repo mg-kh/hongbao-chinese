@@ -3,6 +3,7 @@ import {
   toDayKey,
   useLearningActivity,
 } from "@/hooks/global-data-fetching/useLearningActivity";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 /** Jan 1 to today is at most 366 days, which is also the API's cap. The
@@ -103,6 +104,7 @@ const buildCalendar = (year: number, today: Date) => {
 
 const useContainer = () => {
   const { data: user } = useProfile();
+  const t = useTranslations("Profile.LearningStreak");
 
   // Created once - "today" doesn't need to tick over while the page is open.
   const [today] = useState(() => new Date());
@@ -150,10 +152,10 @@ const useContainer = () => {
       days.map((day) => {
         const count = day.isFuture ? 0 : (dayCounts.get(day.key) ?? 0);
         const summary = day.isFuture
-          ? "Upcoming"
+          ? t("upcoming")
           : count === 0
-            ? "No activity"
-            : `${count} ${count === 1 ? "completion" : "completions"}`;
+            ? t("no_activity")
+            : t("completions", { count });
         return {
           key: day.key,
           isOutside: day.isOutside,
@@ -165,7 +167,7 @@ const useContainer = () => {
           summary,
         };
       }),
-    [days, dayCounts],
+    [days, dayCounts, t],
   );
 
   /** Days in `year` with at least one completion - the past-year summary. */
