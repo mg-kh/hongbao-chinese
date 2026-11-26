@@ -6,10 +6,11 @@ import useCart from "@/hooks/useCart";
 import { Text } from "@mantine/core";
 import { useMounted } from "@mantine/hooks";
 import {
-  BookOpenIcon,
-  ClipboardTextIcon,
-  ImageIcon,
-} from "@phosphor-icons/react";
+  CourseTypeIcon,
+  FlashcardTypeIcon,
+  MockTestTypeIcon,
+} from "@/components/icons/productTypeIcons";
+import { ImageIcon } from "@phosphor-icons/react";
 import {
   IconCheck,
   IconShoppingBagPlus,
@@ -32,11 +33,15 @@ const typeAccent: Record<
 > = {
   course: {
     gradient: "from-hongbao-red-500! to-hongbao-maroon-600!",
-    icon: <BookOpenIcon size={12} weight="fill" />,
+    icon: <CourseTypeIcon size={12} weight="fill" />,
   },
   "mock-test": {
     gradient: "from-hongbao-gold-500! to-hongbao-orange-600!",
-    icon: <ClipboardTextIcon size={12} weight="fill" />,
+    icon: <MockTestTypeIcon size={12} weight="fill" />,
+  },
+  flashcard: {
+    gradient: "from-hongbao-orange-500! to-hongbao-red-600!",
+    icon: <FlashcardTypeIcon size={12} weight="fill" />,
   },
 };
 
@@ -106,6 +111,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
           price: product.price,
           perTime: 1,
           isFree: !!product.isFree,
+          lifetime: product.lifetime,
         }}
       />
 
@@ -114,6 +120,12 @@ const ProductCard: React.FC<Props> = ({ product }) => {
         <span className="font-semibold!">{rating.toFixed(1)}</span>
         <span className="text-gray-300!">|</span>
         <span>{formatCompact(sold)} sold</span>
+        {product.cardCount !== undefined && (
+          <>
+            <span className="text-gray-300!">|</span>
+            <span>{product.cardCount} cards</span>
+          </>
+        )}
       </div>
     </div>
   );

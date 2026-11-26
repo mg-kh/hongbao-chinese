@@ -22,6 +22,11 @@ const typeConfig: Record<
     color: "hongbao-gold",
     tile: "bg-hongbao-gold-50! text-hongbao-gold-700!",
   },
+  flashcard: {
+    label: "Flashcard",
+    color: "hongbao-orange",
+    tile: "bg-hongbao-orange-50! text-hongbao-orange-600!",
+  },
 };
 
 const statusConfig: Record<
@@ -47,7 +52,9 @@ const getMeta = (data: TMyCourse): { kind: TMetaKind; text: string } | null => {
         kind: "calendar",
         text: data.expiredAt
           ? `Access until ${fmt(data.expiredAt)}`
-          : `${data.perTime} month access`,
+          : data.type === "flashcard"
+            ? "Lifetime access"
+            : `${data.perTime} month access`,
       };
     case "PENDING":
       return {
@@ -68,10 +75,11 @@ const useContainer = (data: TMyCourse) => {
   const isExpired = data.status === "EXPIRED";
   const isMuted = isExpired || data.status === "REJECTED";
 
-  const href =
-    data.type === "course"
-      ? `/profile/${userId}/learn/${data.productId}`
-      : "/mock-test";
+  const href = {
+    course: `/profile/${userId}/learn/${data.productId}`,
+    "mock-test": "/mock-test",
+    flashcard: `/profile/${userId}/flashcards/${data.productId}`,
+  }[data.type];
 
   return {
     type: typeConfig[data.type],

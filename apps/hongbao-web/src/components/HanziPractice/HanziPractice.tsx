@@ -1,8 +1,11 @@
 "use client";
 
+import CharacterGrid from "@/components/HanziPractice/components/CharacterGrid/CharacterGrid";
+import StrokeArrows from "@/components/HanziPractice/components/StrokeArrows/StrokeArrows";
 import { pluralize } from "@/utils/pluralize";
 import {
   ArrowClockwiseIcon,
+  ArrowUpRightIcon,
   CheckCircleIcon,
   PlayIcon,
 } from "@phosphor-icons/react";
@@ -14,6 +17,8 @@ interface Props {
   text: string;
   /** Only build the writer while the panel is actually visible. */
   active?: boolean;
+  /** Lock to one mode and hide the built-in Watch / Write toggle (e.g. when a parent's tabs pick the mode). */
+  mode?: TPracticeMode;
   strokeColor?: string;
   outlineColor?: string;
   radicalColor?: string;
@@ -25,9 +30,13 @@ interface Props {
 /** Matches CJK ideographs (incl. Extension A/B and compatibility blocks). */
 const CJK_CHAR = /[㐀-䶿一-鿿豈-﫿\u{20000}-\u{2FA1F}]/u;
 
-type Mode = "watch" | "write";
+export type TPracticeMode = "watch" | "write";
+type Mode = TPracticeMode;
 
 const MODES: Mode[] = ["watch", "write"];
+
+/** Writer padding - shared with the stroke-arrow overlay so they line up. */
+const WRITER_PADDING = 6;
 
 /**
  * Stroke-order coach: watch the character animate, then switch to "write" to
@@ -39,6 +48,7 @@ const MODES: Mode[] = ["watch", "write"];
 const HanziPractice: React.FC<Props> = ({
   text,
   active = true,
+  mode: modeProp,
   // tuned for a light (warm paper) card back - dark strokes on a pale ground
   // give the high foreground/background contrast that best supports recall
   strokeColor = "#8c1515",
@@ -58,12 +68,19 @@ const HanziPractice: React.FC<Props> = ({
   const writerRef = useRef<HanziWriter | null>(null);
 
   const [charIndex, setCharIndex] = useState(0);
-  const [mode, setMode] = useState<Mode>("watch");
+  const [modeState, setMode] = useState<Mode>(modeProp ?? "watch");
+  const mode = modeProp ?? modeState;
   const [size, setSize] = useState(0);
   const [restartNonce, setRestartNonce] = useState(0);
   const [mistakes, setMistakes] = useState(0);
   const [completed, setCompleted] = useState<number[]>([]);
   const [failed, setFailed] = useState(false);
+  // stroke centre-lines of the loaded character, for the direction arrows
+  const [strokeData, setStrokeData] = useState<{
+    char: string;
+    medians: number[][][];
+  } | null>(null);
+  const [showArrows, setShowArrows] = useState(true);
 
   const char = chars[charIndex] ?? chars[0] ?? "";
 
@@ -100,7 +117,7 @@ const HanziPractice: React.FC<Props> = ({
     const writer = HanziWriter.create(el, char, {
       width: size,
       height: size,
-      padding: 6,
+      padding: WRITER_PADDING,
       showCharacter: false,
       showOutline: true,
       strokeColor,
@@ -115,8 +132,10 @@ const HanziPractice: React.FC<Props> = ({
       onLoadCharDataError: () => {
         if (!cancelled) setFailed(true);
       },
-      onLoadCharDataSuccess: () => {
-        if (!cancelled) setFailed(false);
+      onLoadCharDataSuccess: (data) => {
+        if (cancelled) return;
+        setFailed(false);
+        setStrokeData({ char, medians: data.medians });
       },
     });
     writerRef.current = writer;
@@ -183,29 +202,37 @@ const HanziPractice: React.FC<Props> = ({
   // a fresh quiz for the current character has no mistakes yet
   const displayMistakes = mode === "write" ? mistakes : 0;
 
+  // arrows only while watching - in write mode they'd give the answer away
+  const arrowMedians =
+    mode === "watch" && showArrows && strokeData?.char === char
+      ? strokeData.medians
+      : null;
+
   return (
     <div className={`flex! h-full! flex-col! gap-3! ${className ?? ""}`}>
       {/* mode toggle */}
-      <div className="flex! shrink-0! gap-1! rounded-xl! bg-hongbao-brown-900/8! p-1! text-sm! font-bold!">
-        {MODES.map((m) => (
-          <button
-            key={m}
-            type="button"
-            onClick={() => {
-              setMistakes(0);
-              setMode(m);
-            }}
-            aria-pressed={mode === m}
-            className={`flex-1! rounded-lg! py-2! capitalize! transition-colors! duration-150! ${
-              mode === m
-                ? "bg-hongbao-red-600! text-white! shadow-sm!"
-                : "text-hongbao-brown-800/60! hover:text-hongbao-brown-800!"
-            }`}
-          >
-            {m}
-          </button>
-        ))}
-      </div>
+      {!modeProp && (
+        <div className="flex! shrink-0! gap-1! rounded-xl! bg-hongbao-brown-900/8! p-1! text-sm! font-bold!">
+          {MODES.map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => {
+                setMistakes(0);
+                setMode(m);
+              }}
+              aria-pressed={mode === m}
+              className={`flex-1! rounded-lg! py-2! capitalize! transition-colors! duration-150! ${
+                mode === m
+                  ? "bg-hongbao-red-600! text-white! shadow-sm!"
+                  : "text-hongbao-brown-800/60! hover:text-hongbao-brown-800!"
+              }`}
+            >
+              {m}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* writer target */}
       <div
@@ -213,15 +240,32 @@ const HanziPractice: React.FC<Props> = ({
         className="flex! min-h-0! flex-1! items-center! justify-center! py-1!"
       >
         {failed ? (
-          <span lang="zh" className="text-4xl! font-bold! text-hongbao-brown-800!">
+          <span
+            lang="zh"
+            className="text-4xl! font-bold! text-hongbao-brown-800!"
+          >
             {char}
           </span>
         ) : (
           <div
-            ref={targetRef}
             style={{ width: size || undefined, height: size || undefined }}
-            className="touch-none! rounded-2xl! bg-white/60! ring-1! ring-inset! ring-hongbao-brown-900/10!"
-          />
+            className="relative! shrink-0! overflow-hidden! rounded-2xl! bg-white/60! ring-1! ring-inset! ring-hongbao-brown-900/10!"
+          >
+            {size > 0 && <CharacterGrid size={size} />}
+            {/* hanzi-writer owns this node's children - keep the overlays siblings */}
+            <div
+              ref={targetRef}
+              className="relative! h-full! w-full! touch-none!"
+            />
+            {arrowMedians && size > 0 && (
+              <StrokeArrows
+                key={char}
+                medians={arrowMedians}
+                size={size}
+                padding={WRITER_PADDING}
+              />
+            )}
+          </div>
         )}
       </div>
 
@@ -260,14 +304,29 @@ const HanziPractice: React.FC<Props> = ({
         )}
 
         {mode === "watch" ? (
-          <button
-            type="button"
-            onClick={() => writerRef.current?.animateCharacter()}
-            className="flex! shrink-0! items-center! gap-1! rounded-full! bg-hongbao-brown-900/8! px-2.5! py-1! text-xs! font-bold! text-hongbao-brown-800! transition-colors! duration-150! hover:bg-hongbao-brown-900/15!"
-          >
-            <PlayIcon size={12} weight="fill" />
-            Replay
-          </button>
+          <div className="flex! shrink-0! items-center! gap-1.5!">
+            <button
+              type="button"
+              aria-pressed={showArrows}
+              onClick={() => setShowArrows((v) => !v)}
+              className={`flex! items-center! gap-1! rounded-full! px-2.5! py-1! text-xs! font-bold! transition-colors! duration-150! ${
+                showArrows
+                  ? "bg-hongbao-maroon-900! text-white! hover:bg-hongbao-maroon-800!"
+                  : "bg-hongbao-brown-900/8! text-hongbao-brown-800! hover:bg-hongbao-brown-900/15!"
+              }`}
+            >
+              <ArrowUpRightIcon size={12} weight="bold" />
+              Arrows
+            </button>
+            <button
+              type="button"
+              onClick={() => writerRef.current?.animateCharacter()}
+              className="flex! items-center! gap-1! rounded-full! bg-hongbao-brown-900/8! px-2.5! py-1! text-xs! font-bold! text-hongbao-brown-800! transition-colors! duration-150! hover:bg-hongbao-brown-900/15!"
+            >
+              <PlayIcon size={12} weight="fill" />
+              Replay
+            </button>
+          </div>
         ) : (
           <div className="flex! shrink-0! items-center! gap-2!">
             {displayMistakes > 0 && (

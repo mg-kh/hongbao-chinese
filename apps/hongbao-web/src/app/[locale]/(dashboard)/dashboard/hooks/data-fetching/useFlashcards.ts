@@ -16,7 +16,7 @@ const useFlashcards = () => {
 
   const flashcardDropdownData = useMemo(() => {
     return map(flashcardRes, (f) => ({
-      label: f.cnWord,
+      label: f.name,
       value: f.id,
     }));
   }, [flashcardRes]);

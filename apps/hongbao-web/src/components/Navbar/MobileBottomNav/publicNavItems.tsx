@@ -1,6 +1,6 @@
+import { MockTestTypeIcon } from "@/components/icons/productTypeIcons";
 import {
   ArticleIcon,
-  ExamIcon,
   HouseSimpleIcon,
   ShieldCheckIcon,
   StorefrontIcon,
@@ -31,7 +31,7 @@ export const publicBottomNavItems: TBottomNavItem[] = [
     label: "Mock Test",
     href: "/mock-test",
     match: "mock-test",
-    icon: <ExamIcon size={20} weight="fill" />,
+    icon: <MockTestTypeIcon size={20} weight="fill" />,
   },
   {
     label: "Blogs",

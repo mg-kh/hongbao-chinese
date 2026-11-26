@@ -3,7 +3,8 @@ import { Text } from "@mantine/core";
 import React from "react";
 
 interface Props {
-  data: { price: number; perTime: number; isFree: boolean };
+  /** `lifetime`: one-off price, no per-month caption. */
+  data: { price: number; perTime: number; isFree: boolean; lifetime?: boolean };
   size?: "lg" | "sm";
 }
 
@@ -46,7 +47,7 @@ const PriceText: React.FC<Props> = ({ data, size = "lg" }) => {
         MMK
       </Text>
       <Text component="span" size={captionSize} c="gray.6">
-        / {monthLabel}
+        {data?.lifetime ? "lifetime" : `/ ${monthLabel}`}
       </Text>
     </div>
   );

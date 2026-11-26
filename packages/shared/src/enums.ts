@@ -64,5 +64,6 @@ export const ProductType = {
   ALL: "all",
   COURSE: "course",
   MOCK_TEST: "mock-test",
+  FLASHCARD: "flashcard",
 } as const;
 export type ProductType = (typeof ProductType)[keyof typeof ProductType];

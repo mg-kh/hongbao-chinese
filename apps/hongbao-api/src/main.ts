@@ -1,4 +1,5 @@
 import { NestFactory, Reflector } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import express from 'express';
 import { Logger } from 'nestjs-pino';
@@ -7,7 +8,9 @@ import { AppModule } from './app.module';
 import { RolesGuard } from './role/role.guard';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bufferLogs: true,
+  });
   app.useLogger(app.get(Logger));
   app.enableCors({
     origin: [
@@ -23,6 +26,10 @@ async function bootstrap() {
   app.useGlobalGuards(new RolesGuard(reflector));
 
   app.use('/api/clerk-webhook', express.raw({ type: 'application/json' }));
+  // Default JSON limit is 100kb, too small for bulk card import (100 cards
+  // with examples). Registered after the webhook's raw parser so that route
+  // still gets the raw body for signature verification.
+  app.useBodyParser('json', { limit: '2mb' });
 
   const config = new DocumentBuilder()
     .setTitle('Hongbao API')

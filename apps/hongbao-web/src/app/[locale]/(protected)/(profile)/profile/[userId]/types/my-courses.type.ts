@@ -15,6 +15,7 @@ export type TMyEnrollment = {
   userId: string;
   courseId: string | null;
   mockTestId: string | null;
+  flashcardId: string | null;
   status: TEnrollmentStatus;
   startedAt: string | null;
   expiredAt: string | null;
@@ -22,6 +23,8 @@ export type TMyEnrollment = {
   updatedAt: string;
   course: TEnrollmentProduct | null;
   mockTest: TEnrollmentProduct | null;
+  /** Decks have a `name` and no access period (lifetime). */
+  flashcard: { id: string; name: string } | null;
   hasAccess: boolean;
 };
 
@@ -45,7 +48,7 @@ export type TMyCourse = {
   id: string;
   /** The course / mock test this enrollment grants access to. */
   productId: string;
-  type: "course" | "mock-test";
+  type: "course" | "mock-test" | "flashcard";
   title: string;
   /** Cover image; the card falls back to a type icon when missing. */
   thumbnail: string | null;

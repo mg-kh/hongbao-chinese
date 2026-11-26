@@ -76,6 +76,7 @@ export class PurchasesService {
             include: {
               course: { select: selectFromResponse(['id', 'title']) },
               mockTest: { select: selectFromResponse(['id', 'title']) },
+              flashcard: { select: selectFromResponse(['id', 'name']) },
             },
             orderBy: { createdAt: 'asc' },
           },
@@ -192,13 +193,15 @@ export class PurchasesService {
         orderNo: purchase.orderNo,
         status: 'PENDING',
       },
-      select: { id: true, courseId: true, mockTestId: true },
+      select: { id: true, courseId: true, mockTestId: true, flashcardId: true },
     });
 
     for (const request of requests) {
       const product = request.courseId
         ? { courseId: request.courseId }
-        : { mockTestId: request.mockTestId };
+        : request.mockTestId
+          ? { mockTestId: request.mockTestId }
+          : { flashcardId: request.flashcardId };
 
       const otherPending = await tx.purchase.findFirst({
         where: {
@@ -287,6 +290,8 @@ export class PurchasesService {
       product = { courseId: item.courseId };
     } else if (item.mockTestId) {
       product = { mockTestId: item.mockTestId };
+    } else if (item.flashcardId) {
+      product = { flashcardId: item.flashcardId };
     } else {
       // Product was deleted after checkout; nothing to grant.
       return;
@@ -359,7 +364,11 @@ export class PurchasesService {
           {
             items: {
               some: {
-                OR: [{ courseId: search }, { mockTestId: search }],
+                OR: [
+                  { courseId: search },
+                  { mockTestId: search },
+                  { flashcardId: search },
+                ],
               },
             },
           },
@@ -400,6 +409,9 @@ export class PurchasesService {
               },
               mockTest: {
                 select: selectFromResponse(['title']),
+              },
+              flashcard: {
+                select: selectFromResponse(['name']),
               },
             },
           },

@@ -24,6 +24,7 @@ import useContainer from "./useContainer";
 const gradientByType: Record<ShopProductType, string> = {
   course: "from-hongbao-red-500! to-hongbao-maroon-600!",
   "mock-test": "from-hongbao-gold-500! to-hongbao-orange-600!",
+  flashcard: "from-hongbao-orange-500! to-hongbao-red-600!",
 };
 
 const money = (value: number) =>
@@ -97,7 +98,7 @@ const CartLine: React.FC<Props> = ({
           )}
         </div>
 
-        {!product.isFree && (
+        {!product.isFree && !product.lifetime && (
           <Text size="11px" c="gray.5" className="mt-1.5!">
             {money(perMonth)} <span className="text-gray-400!">/ month</span>
           </Text>
@@ -107,6 +108,10 @@ const CartLine: React.FC<Props> = ({
           {product.isFree ? (
             <span className="rounded-md! bg-gray-900! px-2! py-1! text-[11px]! font-extrabold! text-white!">
               FREE
+            </span>
+          ) : product.lifetime ? (
+            <span className="rounded-md! bg-gray-100! px-2! py-1! text-[11px]! font-bold! text-gray-600!">
+              Lifetime access
             </span>
           ) : (
             <MonthStepper

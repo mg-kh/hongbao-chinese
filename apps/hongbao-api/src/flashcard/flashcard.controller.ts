@@ -11,6 +11,7 @@ import {
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FlashcardService } from './flashcard.service';
 import { CreateFlashcardDto } from './dto/create-flashcard.dto';
+import { FilterFlashcardDto } from './dto/filter-flashcard.dto';
 import { UpdateFlashcardDto } from './dto/update-flashcard.dto';
 
 @ApiTags('Dashboard - Flashcard')
@@ -25,8 +26,8 @@ export class FlashcardController {
   }
 
   @Get()
-  findAll(@Query('categoryId') categoryId?: string) {
-    return this.flashcardService.findAll(categoryId);
+  findAll(@Query() query: FilterFlashcardDto) {
+    return this.flashcardService.findAll(query);
   }
 
   @Get(':id')

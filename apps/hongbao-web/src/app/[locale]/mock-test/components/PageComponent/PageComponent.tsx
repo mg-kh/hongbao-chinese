@@ -5,12 +5,12 @@ import { publicBottomNavItems } from "@/components/Navbar/MobileBottomNav/public
 import { Link } from "@/i18n/navigation";
 import ClientLayout from "@/layouts/ClientLayout/ClientLayout";
 import { Box, Button, Container, Stack, Text } from "@mantine/core";
+import { MockTestTypeIcon } from "@/components/icons/productTypeIcons";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
   ChartLineUpIcon,
   ClockIcon,
-  ExamIcon,
   SealQuestionIcon,
 } from "@phosphor-icons/react";
 
@@ -28,7 +28,7 @@ const planned = [
     body: "See where you land from HSK 1 to 6, with a breakdown by skill.",
   },
   {
-    icon: <ExamIcon size={18} weight="fill" />,
+    icon: <MockTestTypeIcon size={18} weight="fill" />,
     title: "A course to match",
     body: "Get pointed at the course that starts exactly where you are.",
   },
@@ -64,10 +64,7 @@ const PageComponent = () => {
             Find your HSK level
           </Text>
 
-          <Text
-            c="gray.6"
-            className="mt-4! text-[1.05rem]! leading-relaxed!"
-          >
+          <Text c="gray.6" className="mt-4! text-[1.05rem]! leading-relaxed!">
             We&apos;re still building this one. Soon you&apos;ll answer a few
             adaptive questions, get your HSK level in minutes, and jump straight
             into the course that fits.
@@ -96,7 +93,11 @@ const PageComponent = () => {
                   <Text fw={700} size="sm" className="text-gray-900!">
                     {p.title}
                   </Text>
-                  <Text size="sm" c="gray.6" className="mt-0.5! leading-relaxed!">
+                  <Text
+                    size="sm"
+                    c="gray.6"
+                    className="mt-0.5! leading-relaxed!"
+                  >
                     {p.body}
                   </Text>
                 </div>

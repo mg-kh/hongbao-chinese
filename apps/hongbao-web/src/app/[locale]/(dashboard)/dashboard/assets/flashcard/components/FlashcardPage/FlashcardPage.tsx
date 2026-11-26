@@ -1,7 +1,7 @@
 import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 import CustomTable from "@/components/CustomTable/CustomTable";
 import { DASHBOARD } from "@/constants/DashboardRoutes";
-import { ActionIcon, Box, Button, Group, Stack, Text } from "@mantine/core";
+import { ActionIcon, Badge, Box, Button, Group, Stack } from "@mantine/core";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
 import { TFlashcardRes } from "../../types/flashcard.type";
 import EditDrawer from "../EditDrawer/EditDrawer";
@@ -39,46 +39,46 @@ const FlashcardPage = () => {
             rows={flashcardRes || []}
             columns={[
               {
-                id: "cnWord",
-                header: "Word",
+                id: "name",
+                header: "Name",
                 element: (v) => {
-                  return <>{v?.cnWord}</>;
+                  return <>{v?.name}</>;
                 },
-                columnClass: "min-w-[80px]! max-w-[160px]!",
+                columnClass: "min-w-[80px]! max-w-[200px]!",
               },
               {
-                id: "pinyin",
-                header: "Pinyin",
+                id: "category",
+                header: "Category",
                 element: (v) => {
-                  return <>{v?.pinyin}</>;
-                },
-              },
-              {
-                id: "type",
-                header: "Type",
-                element: (v) => {
-                  return <>{v?.type}</>;
+                  return <>{v?.category?.name ?? "-"}</>;
                 },
               },
               {
-                id: "meaningEn",
-                header: "Meaning (EN)",
+                id: "price",
+                header: "Price",
                 element: (v) => {
-                  return (
-                    <Text size="sm" lineClamp={2}>
-                      {v?.meaningEn}
-                    </Text>
+                  return v?.price ? (
+                    <>{v.price.toLocaleString()} MMK</>
+                  ) : (
+                    <Badge color="green">Free</Badge>
                   );
                 },
               },
               {
-                id: "meaningMm",
-                header: "Meaning (MM)",
+                id: "cards",
+                header: "Cards",
                 element: (v) => {
-                  return (
-                    <Text size="sm" lineClamp={2}>
-                      {v?.meaningMm}
-                    </Text>
+                  return <>{v?._count?.cards ?? 0}</>;
+                },
+              },
+              {
+                id: "published",
+                header: "Is published",
+                element: (v) => {
+                  return v?.published ? (
+                    <Badge color="green">Yes</Badge>
+                  ) : (
+                    <Badge color="gray">No</Badge>
                   );
                 },
               },

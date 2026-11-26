@@ -33,9 +33,9 @@ const toCourse = (e: TMyEnrollment, now = Date.now()): TMyCourse => {
   const status = resolveStatus(e, now);
   return {
     id: e.id,
-    productId: e.courseId ?? e.mockTestId ?? product?.id ?? "",
-    type: e.courseId ? "course" : "mock-test",
-    title: product?.title ?? "",
+    productId: e.courseId ?? e.mockTestId ?? e.flashcardId ?? product?.id ?? "",
+    type: e.courseId ? "course" : e.mockTestId ? "mock-test" : "flashcard",
+    title: product?.title ?? e.flashcard?.name ?? "",
     thumbnail: product?.thumbnail ?? null,
     perTime: product?.perTime ?? 1,
     status,
@@ -79,13 +79,10 @@ const useMyCourses = () => {
     placeholderData: keepPreviousData,
   });
 
-  const coursesRes = useMemo<TMyCourse[]>(
-    () => {
-      const now = Date.now();
-      return (data?.items ?? []).map((e) => toCourse(e, now));
-    },
-    [data],
-  );
+  const coursesRes = useMemo<TMyCourse[]>(() => {
+    const now = Date.now();
+    return (data?.items ?? []).map((e) => toCourse(e, now));
+  }, [data]);
 
   const stats = {
     total: data?.counts?.ALL ?? 0,

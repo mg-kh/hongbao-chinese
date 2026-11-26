@@ -9,6 +9,7 @@ import { DASHBOARD } from "@/constants/DashboardRoutes";
 import { Flex, Group, Pagination, Select, Stack } from "@mantine/core";
 import { first, last } from "lodash";
 import useContainer from "./useContainer";
+import { PAGE_SIZE_OPTIONS } from "@/constants/pagination";
 
 const PageComponent = () => {
   const {
@@ -66,7 +67,7 @@ const PageComponent = () => {
           <Flex justify="end" align="center" gap={10}>
             <Select
               placeholder="Per page"
-              data={["10", "20", "30", "40"]}
+              data={PAGE_SIZE_OPTIONS}
               w={120}
               value={params.limit}
               allowDeselect={false}

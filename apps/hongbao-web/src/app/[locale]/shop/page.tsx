@@ -2,7 +2,7 @@ import ShopPage from "./components/ShopPage/ShopPage";
 import { ShopProductType } from "./types/shop.type";
 
 const isShopType = (v?: string): v is ShopProductType =>
-  v === "course" || v === "mock-test";
+  v === "course" || v === "mock-test" || v === "flashcard";
 
 type Props = {
   searchParams: Promise<{ type?: string }>;
