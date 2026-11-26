@@ -45,7 +45,7 @@ const CartSummary: React.FC<Props> = ({
     <Stack
       gap={16}
       p={{ base: 20, md: 24 }}
-      className="rounded-2xl! bg-white! ring-1! ring-gray-200! shadow-sm!"
+      className="rounded-2xl! bg-surface! ring-1! ring-gray-200! shadow-sm!"
     >
       <Text fw={800} size="lg">
         Order summary
@@ -138,7 +138,7 @@ const CartSummary: React.FC<Props> = ({
 
       {discountTotal + promoTotal > 0 && (
         <Box className="rounded-lg! bg-green-50! px-3! py-2! text-center!">
-          <Text size="xs" fw={700} c="green.7">
+          <Text size="xs" fw={700} c="var(--hb-success-text)">
             You&apos;re saving {money(discountTotal + promoTotal)}
           </Text>
         </Box>

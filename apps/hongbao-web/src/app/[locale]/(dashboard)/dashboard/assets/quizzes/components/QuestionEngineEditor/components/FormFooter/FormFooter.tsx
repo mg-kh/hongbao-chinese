@@ -7,7 +7,7 @@ const FormFooter = () => {
   const router = useRouter();
   return (
     <Flex
-      bg={"white"}
+      bg="var(--hb-surface)"
       align="center"
       justify="flex-end"
       className="sticky! bottom-0! z-10"

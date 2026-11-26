@@ -81,7 +81,7 @@ const CartLine: React.FC<Props> = ({
           <UnstyledButton
             onClick={() => onRemove(product.id)}
             aria-label={`Remove ${product.title}`}
-            className="flex! h-8! w-8! shrink-0! items-center! justify-center! rounded-full! text-gray-400! transition-colors! duration-200! hover:bg-red-50! hover:text-red-600!"
+            className="flex! h-8! w-8! shrink-0! items-center! justify-center! rounded-full! text-gray-400! transition-colors! duration-200! hover:bg-red-50! hover:text-red-600! dark:hover:text-night-red!"
           >
             <IconTrash size={16} />
           </UnstyledButton>
@@ -92,7 +92,7 @@ const CartLine: React.FC<Props> = ({
             {SHOP_TYPE_META[product.type].label}
           </span>
           {product.level && (
-            <span className="rounded! bg-hongbao-red-50! px-1.5! py-0.5! text-[10px]! font-bold! text-hongbao-red-700!">
+            <span className="rounded! bg-hongbao-red-50! px-1.5! py-0.5! text-[10px]! font-bold! text-hongbao-red-700! dark:text-night-red!">
               {product.level}
             </span>
           )}
@@ -106,7 +106,7 @@ const CartLine: React.FC<Props> = ({
 
         <div className="mt-auto! flex! items-end! justify-between! gap-3! pt-3!">
           {product.isFree ? (
-            <span className="rounded-md! bg-gray-900! px-2! py-1! text-[11px]! font-extrabold! text-white!">
+            <span className="rounded-md! bg-gray-900! px-2! py-1! text-[11px]! font-extrabold! text-gray-50!">
               FREE
             </span>
           ) : product.lifetime ? (
@@ -145,9 +145,9 @@ const CartLine: React.FC<Props> = ({
                 <Group gap={6} wrap="nowrap" className="min-w-0!">
                   <IconTag
                     size={13}
-                    className="text-hongbao-red-600! shrink-0!"
+                    className="text-hongbao-red-600! dark:text-night-red! shrink-0!"
                   />
-                  <Text size="xs" fw={700} c="hongbao-red.7" lineClamp={1}>
+                  <Text size="xs" fw={700} c="var(--hb-accent-strong)" lineClamp={1}>
                     {itemPromo.promo.code}
                   </Text>
                   <Text size="11px" c="gray.6" lineClamp={1}>
@@ -158,7 +158,7 @@ const CartLine: React.FC<Props> = ({
                   onClick={remove}
                   disabled={isRemovingPromo}
                   aria-label="Remove promo code"
-                  className="flex! items-center! justify-center! shrink-0! w-7! h-7! rounded-full! text-gray-500! hover:bg-white! hover:text-hongbao-red-600! transition-colors! duration-200! disabled:opacity-50! disabled:cursor-not-allowed!"
+                  className="flex! items-center! justify-center! shrink-0! w-7! h-7! rounded-full! text-gray-500! hover:bg-surface! hover:text-hongbao-red-600! dark:hover:text-night-red! transition-colors! duration-200! disabled:opacity-50! disabled:cursor-not-allowed!"
                 >
                   <IconX size={13} />
                 </UnstyledButton>
@@ -203,7 +203,7 @@ const CartLine: React.FC<Props> = ({
             ) : (
               <UnstyledButton
                 onClick={togglePromo}
-                className="flex! items-center! gap-1.5! text-xs! font-semibold! text-hongbao-red-600! transition-colors! duration-200! hover:underline!"
+                className="flex! items-center! gap-1.5! text-xs! font-semibold! text-hongbao-red-600! dark:text-night-red! transition-colors! duration-200! hover:underline!"
               >
                 <IconTag size={13} />
                 Use promo code

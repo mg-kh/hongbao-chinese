@@ -42,9 +42,9 @@ const NavItem: React.FC<Props> = ({
       <Box
         className={`flex! items-center! justify-center! w-7! h-7! rounded-lg! shrink-0! ${
           isCompleted
-            ? "bg-green-100! text-green-600!"
+            ? "bg-green-100! text-green-600! dark:text-night-green!"
             : isActive
-              ? "bg-hongbao-red-100! text-hongbao-red-600!"
+              ? "bg-hongbao-red-100! text-hongbao-red-600! dark:text-night-red!"
               : "bg-gray-100! text-gray-500!"
         }`}
       >

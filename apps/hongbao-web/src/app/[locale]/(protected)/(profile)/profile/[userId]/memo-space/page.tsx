@@ -39,7 +39,7 @@ const ratingButtons: RatingButton[] = [
     label: "Again",
     icon: <XCircleIcon size={16} weight="fill" />,
     color: "red",
-    className: "bg-red-50! text-red-700! hover:bg-red-100!",
+    className: "bg-red-50! text-red-700! dark:text-night-red! hover:bg-red-100!",
   },
   {
     rating: "hard",
@@ -47,7 +47,7 @@ const ratingButtons: RatingButton[] = [
     icon: <FlameIcon size={16} weight="fill" />,
     color: "orange",
     className:
-      "bg-hongbao-orange-50! text-hongbao-orange-700! hover:bg-hongbao-orange-100!",
+      "bg-hongbao-orange-50! text-hongbao-orange-700! dark:text-night-orange! hover:bg-hongbao-orange-100!",
   },
   {
     rating: "good",
@@ -55,14 +55,14 @@ const ratingButtons: RatingButton[] = [
     icon: <CheckCircleIcon size={16} weight="fill" />,
     color: "gold",
     className:
-      "bg-hongbao-gold-50! text-hongbao-gold-800! hover:bg-hongbao-gold-100!",
+      "bg-hongbao-gold-50! text-hongbao-gold-800! dark:text-night-gold! hover:bg-hongbao-gold-100!",
   },
   {
     rating: "easy",
     label: "Easy",
     icon: <TrophyIcon size={16} weight="fill" />,
     color: "green",
-    className: "bg-green-50! text-green-700! hover:bg-green-100!",
+    className: "bg-green-50! text-green-700! dark:text-night-green! hover:bg-green-100!",
   },
 ];
 
@@ -190,7 +190,7 @@ const SpacedRepetitionPage = () => {
     <Stack gap={20} className="flex-1!">
       <Link
         href={`/profile/${uid}`}
-        className="flex! items-center! gap-1.5! w-fit! no-underline! text-gray-500! hover:text-hongbao-red-600! transition-colors! duration-200!"
+        className="flex! items-center! gap-1.5! w-fit! no-underline! text-gray-500! hover:text-hongbao-red-600! dark:hover:text-night-red! transition-colors! duration-200!"
       >
         <ArrowLeftIcon size={14} weight="bold" />
         <Text size="xs" fw={600}>
@@ -238,7 +238,7 @@ const SpacedRepetitionPage = () => {
               <Paper
                 withBorder
                 bdrs={28}
-                className="absolute! inset-0! [backface-visibility:hidden]! flex! flex-col! items-center! justify-center! gap-4! border-gray-200! bg-white! shadow-sm!"
+                className="absolute! inset-0! [backface-visibility:hidden]! flex! flex-col! items-center! justify-center! gap-4! border-gray-200! bg-surface! shadow-sm!"
               >
                 <Text className="text-6xl! sm:text-7xl! font-bold! text-gray-900!">
                   {currentCard.hanzi}
@@ -312,10 +312,10 @@ const SpacedRepetitionPage = () => {
           withBorder
           bdrs={24}
           p={{ base: 32, sm: 48 }}
-          className="border-gray-200! bg-white! text-center!"
+          className="border-gray-200! bg-surface! text-center!"
         >
           <Stack align="center" gap={10}>
-            <Box className="flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-hongbao-gold-50! text-hongbao-gold-600!">
+            <Box className="flex! items-center! justify-center! w-16! h-16! rounded-2xl! bg-hongbao-gold-50! text-hongbao-gold-600! dark:text-night-gold!">
               <TrophyIcon size={30} weight="fill" />
             </Box>
             <Text fw={700} size="lg">

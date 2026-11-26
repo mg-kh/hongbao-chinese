@@ -16,7 +16,7 @@ interface Props {
 /** One numbered example: Chinese (studied word highlighted) → pinyin → tagged translations. */
 const ExampleSentence: React.FC<Props> = ({ example, word, number }) => (
   <li className="flex! gap-3! py-4! first:pt-1! last:pb-1!">
-    <span className="mt-0.5! flex! h-6! w-6! shrink-0! items-center! justify-center! rounded-full! bg-hongbao-red-50! text-xs! font-bold! text-hongbao-red-600!">
+    <span className="mt-0.5! flex! h-6! w-6! shrink-0! items-center! justify-center! rounded-full! bg-hongbao-red-50! text-xs! font-bold! text-hongbao-red-600! dark:text-night-red!">
       {number}
     </span>
 
@@ -30,7 +30,7 @@ const ExampleSentence: React.FC<Props> = ({ example, word, number }) => (
             part.match ? (
               <mark
                 key={i}
-                className="rounded-md! bg-hongbao-gold-100! px-0.5! font-bold! text-hongbao-red-700!"
+                className="rounded-md! bg-hongbao-gold-100! px-0.5! font-bold! text-hongbao-red-700! dark:text-night-red!"
               >
                 {part.text}
               </mark>

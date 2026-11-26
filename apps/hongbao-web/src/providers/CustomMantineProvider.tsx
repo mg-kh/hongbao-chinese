@@ -1,6 +1,12 @@
 "use client";
 
-import { createTheme, MantineProvider, Text, Title } from "@mantine/core";
+import {
+  createTheme,
+  CSSVariablesResolver,
+  MantineProvider,
+  Text,
+  Title,
+} from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import React from "react";
@@ -9,21 +15,80 @@ interface Props {
   children: React.ReactNode;
 }
 
-// const dark: MantineColorsTuple = [
-//   "#C9D1D9", // 0 text
-//   "#B1BAC4",
-//   "#8B949E",
-//   "#6E7681",
-//   "#484F58",
-//   "#30363D", // borders
-//   "#21262D", // card / paper
-//   "#161B22", // elevated bg
-//   "#0D1117", // app bg ⭐
-//   "#010409",
-// ];
+/**
+ * Dark mode palette ("lantern night") - warm charcoal with a faint red
+ * undertone instead of pure black, off-white text instead of #fff.
+ * Only emitted under [data-mantine-color-scheme="dark"], so light mode keeps
+ * Mantine's defaults.
+ * Mirrors the Tailwind overrides in globals.css.
+ */
+const DARK_SHADES = [
+  "#ECE6E4", // 0 text
+  "#CBC3C2", // 1 secondary text
+  "#9C9293", // 2 dimmed
+  "#7D7374", // 3 placeholder / faint
+  "#3D3536", // 4 borders
+  "#302A2B", // 5 hover
+  "#262122", // 6 inputs / raised
+  "#1D191A", // 7 body / paper / cards
+  "#141112", // 8 page background
+  "#0E0B0C", // 9 deepest (footer)
+];
+
+/** Gray ramp inverted for dark: low shades are backgrounds, high are text. */
+const DARK_GRAYS = [
+  "#141112",
+  "#262122",
+  "#352E2F",
+  "#463D3E",
+  "#7D7374",
+  "#9C9293",
+  "#B5ACAC",
+  "#CBC3C2",
+  "#DDD6D5",
+  "#ECE6E4",
+];
+
+const cssVariablesResolver: CSSVariablesResolver = () => ({
+  variables: {},
+  light: {},
+  dark: {
+    ...Object.fromEntries(
+      DARK_SHADES.map((c, i) => [`--mantine-color-dark-${i}`, c]),
+    ),
+    ...Object.fromEntries(
+      DARK_GRAYS.map((c, i) => [`--mantine-color-gray-${i}`, c]),
+    ),
+    // gray component variants would otherwise resolve to inverted shades
+    "--mantine-color-gray-filled": "#3D3536",
+    "--mantine-color-gray-filled-hover": "#463D3E",
+    "--mantine-color-gray-light": "rgba(236, 230, 228, 0.07)",
+    "--mantine-color-gray-light-hover": "rgba(236, 230, 228, 0.11)",
+    "--mantine-color-gray-light-color": "#CBC3C2",
+    "--mantine-color-gray-outline": "#5A5051",
+    "--mantine-color-gray-outline-hover": "rgba(236, 230, 228, 0.05)",
+    "--mantine-color-gray-text": "#B5ACAC",
+    "--mantine-color-default-color": "var(--mantine-color-dark-0)",
+    "--mantine-color-bright": "#F6F1EF",
+    // pastel brand tints for "light" variants - deep, low-chroma
+    "--mantine-color-hongbao-red-light": "rgba(242, 145, 138, 0.12)",
+    "--mantine-color-hongbao-red-light-hover": "rgba(242, 145, 138, 0.18)",
+    "--mantine-color-hongbao-red-light-color": "#F2918A",
+    "--mantine-color-hongbao-red-text": "#F2918A",
+    "--mantine-color-hongbao-gold-light": "rgba(232, 198, 106, 0.12)",
+    "--mantine-color-hongbao-gold-light-hover": "rgba(232, 198, 106, 0.18)",
+    "--mantine-color-hongbao-gold-light-color": "#E8C66A",
+    "--mantine-color-hongbao-orange-light": "rgba(245, 168, 110, 0.12)",
+    "--mantine-color-hongbao-orange-light-hover": "rgba(245, 168, 110, 0.18)",
+    "--mantine-color-hongbao-orange-light-color": "#F5A86E",
+  },
+});
 
 const theme = createTheme({
   // defaultRadius: 15,
+  // dark: shade 7 (#B71C1C) for filled brand buttons - still vivid, but
+  // without the glare of #F5222D on a near-black page
+  primaryShade: { light: 6, dark: 7 },
   colors: {
     "hongbao-red": [
       "#FFE5E5",
@@ -130,13 +195,14 @@ const theme = createTheme({
     // }),
     Text: Text.extend({
       defaultProps: {
-        c: "dark.9",
+        // dark.9 in light mode, off-white in dark mode (see globals.css)
+        c: "var(--hb-text)",
         // ff: "JetBrains Mono",
       },
     }),
     Title: Title.extend({
       defaultProps: {
-        c: "dark.9",
+        c: "var(--hb-text)",
         // ff: "Playfair Display",
       },
     }),
@@ -145,7 +211,10 @@ const theme = createTheme({
 
 const CustomMantineProvider: React.FC<Props> = ({ children }) => {
   return (
-    <MantineProvider theme={theme}>
+    <MantineProvider
+      theme={theme}
+      cssVariablesResolver={cssVariablesResolver}
+    >
       <ModalsProvider>
         <Notifications position="top-right" />
         {children}

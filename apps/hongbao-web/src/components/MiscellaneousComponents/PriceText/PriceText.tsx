@@ -13,8 +13,8 @@ const PriceText: React.FC<Props> = ({ data, size = "lg" }) => {
   const monthLabel = pluralize(months, "month");
   const priceClassName =
     size === "lg"
-      ? "text-[40px]! text-hongbao-red-600!"
-      : "text-[17px]! text-hongbao-red-600!";
+      ? "text-[40px]! text-hongbao-red-600! dark:text-night-red!"
+      : "text-[17px]! text-hongbao-red-600! dark:text-night-red!";
   const captionSize = size === "lg" ? "sm" : "10px";
 
   if (data?.isFree) {

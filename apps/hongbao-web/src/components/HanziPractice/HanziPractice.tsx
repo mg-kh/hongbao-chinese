@@ -9,6 +9,7 @@ import {
   CheckCircleIcon,
   PlayIcon,
 } from "@phosphor-icons/react";
+import { useComputedColorScheme } from "@mantine/core";
 import HanziWriter from "hanzi-writer";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -35,6 +36,24 @@ type Mode = TPracticeMode;
 
 const MODES: Mode[] = ["watch", "write"];
 
+const LIGHT_INK = {
+  stroke: "#8c1515",
+  outline: "rgba(140,21,21,0.22)",
+  radical: "#b3862b",
+  highlight: "#d91e26",
+  drawing: "#b84f14",
+  grid: "rgba(140,21,21,0.14)",
+};
+
+const DARK_INK = {
+  stroke: "#f2b8b2",
+  outline: "rgba(242,145,138,0.2)",
+  radical: "#e8c66a",
+  highlight: "#ff8a8a",
+  drawing: "#f5a86e",
+  grid: "rgba(242,145,138,0.16)",
+};
+
 /** Writer padding - shared with the stroke-arrow overlay so they line up. */
 const WRITER_PADDING = 6;
 
@@ -49,15 +68,25 @@ const HanziPractice: React.FC<Props> = ({
   text,
   active = true,
   mode: modeProp,
-  // tuned for a light (warm paper) card back - dark strokes on a pale ground
-  // give the high foreground/background contrast that best supports recall
-  strokeColor = "#8c1515",
-  outlineColor = "rgba(140,21,21,0.22)",
-  radicalColor = "#b3862b",
-  highlightColor = "#d91e26",
-  drawingColor = "#b84f14",
+  strokeColor: strokeColorProp,
+  outlineColor: outlineColorProp,
+  radicalColor: radicalColorProp,
+  highlightColor: highlightColorProp,
+  drawingColor: drawingColorProp,
   className,
 }) => {
+  // Light: dark ink on a pale warm-paper ground. Dark: pale ink on charcoal -
+  // either way a high ink/ground contrast, which best supports recall.
+  const isDark =
+    useComputedColorScheme("light", { getInitialValueInEffect: true }) ===
+    "dark";
+  const ink = isDark ? DARK_INK : LIGHT_INK;
+  const strokeColor = strokeColorProp ?? ink.stroke;
+  const outlineColor = outlineColorProp ?? ink.outline;
+  const radicalColor = radicalColorProp ?? ink.radical;
+  const highlightColor = highlightColorProp ?? ink.highlight;
+  const drawingColor = drawingColorProp ?? ink.drawing;
+
   const chars = useMemo(
     () => Array.from(text ?? "").filter((c) => CJK_CHAR.test(c)),
     [text],
@@ -212,7 +241,7 @@ const HanziPractice: React.FC<Props> = ({
     <div className={`flex! h-full! flex-col! gap-3! ${className ?? ""}`}>
       {/* mode toggle */}
       {!modeProp && (
-        <div className="flex! shrink-0! gap-1! rounded-xl! bg-hongbao-brown-900/8! p-1! text-sm! font-bold!">
+        <div className="flex! shrink-0! gap-1! rounded-xl! bg-hongbao-brown-900/8! dark:bg-white/8! p-1! text-sm! font-bold!">
           {MODES.map((m) => (
             <button
               key={m}
@@ -225,7 +254,7 @@ const HanziPractice: React.FC<Props> = ({
               className={`flex-1! rounded-lg! py-2! capitalize! transition-colors! duration-150! ${
                 mode === m
                   ? "bg-hongbao-red-600! text-white! shadow-sm!"
-                  : "text-hongbao-brown-800/60! hover:text-hongbao-brown-800!"
+                  : "text-hongbao-brown-800/60! dark:text-night-brown/60! hover:text-hongbao-brown-800! dark:hover:text-night-brown!"
               }`}
             >
               {m}
@@ -242,16 +271,16 @@ const HanziPractice: React.FC<Props> = ({
         {failed ? (
           <span
             lang="zh"
-            className="text-4xl! font-bold! text-hongbao-brown-800!"
+            className="text-4xl! font-bold! text-hongbao-brown-800! dark:text-night-brown!"
           >
             {char}
           </span>
         ) : (
           <div
             style={{ width: size || undefined, height: size || undefined }}
-            className="relative! shrink-0! overflow-hidden! rounded-2xl! bg-white/60! ring-1! ring-inset! ring-hongbao-brown-900/10!"
+            className="relative! shrink-0! overflow-hidden! rounded-2xl! bg-surface/60! ring-1! ring-inset! ring-hongbao-brown-900/10! dark:ring-white/10!"
           >
-            {size > 0 && <CharacterGrid size={size} />}
+            {size > 0 && <CharacterGrid size={size} color={ink.grid} />}
             {/* hanzi-writer owns this node's children - keep the overlays siblings */}
             <div
               ref={targetRef}
@@ -285,7 +314,7 @@ const HanziPractice: React.FC<Props> = ({
                 className={`relative! flex! h-7! w-7! items-center! justify-center! rounded-lg! text-sm! transition-colors! duration-150! ${
                   i === charIndex
                     ? "bg-hongbao-red-600! text-white!"
-                    : "bg-hongbao-brown-900/8! text-hongbao-brown-800/70! hover:bg-hongbao-brown-900/15!"
+                    : "bg-hongbao-brown-900/8! dark:bg-white/8! text-hongbao-brown-800/70! dark:text-night-brown/70! hover:bg-hongbao-brown-900/15! dark:hover:bg-white/12!"
                 }`}
               >
                 {c}
@@ -293,7 +322,7 @@ const HanziPractice: React.FC<Props> = ({
                   <CheckCircleIcon
                     size={12}
                     weight="fill"
-                    className="absolute! -top-1! -right-1! text-green-600!"
+                    className="absolute! -top-1! -right-1! text-green-600! dark:text-night-green!"
                   />
                 )}
               </button>
@@ -312,7 +341,7 @@ const HanziPractice: React.FC<Props> = ({
               className={`flex! items-center! gap-1! rounded-full! px-2.5! py-1! text-xs! font-bold! transition-colors! duration-150! ${
                 showArrows
                   ? "bg-hongbao-maroon-900! text-white! hover:bg-hongbao-maroon-800!"
-                  : "bg-hongbao-brown-900/8! text-hongbao-brown-800! hover:bg-hongbao-brown-900/15!"
+                  : "bg-hongbao-brown-900/8! dark:bg-white/8! text-hongbao-brown-800! dark:text-night-brown! hover:bg-hongbao-brown-900/15! dark:hover:bg-white/12!"
               }`}
             >
               <ArrowUpRightIcon size={12} weight="bold" />
@@ -321,7 +350,7 @@ const HanziPractice: React.FC<Props> = ({
             <button
               type="button"
               onClick={() => writerRef.current?.animateCharacter()}
-              className="flex! items-center! gap-1! rounded-full! bg-hongbao-brown-900/8! px-2.5! py-1! text-xs! font-bold! text-hongbao-brown-800! transition-colors! duration-150! hover:bg-hongbao-brown-900/15!"
+              className="flex! items-center! gap-1! rounded-full! bg-hongbao-brown-900/8! dark:bg-white/8! px-2.5! py-1! text-xs! font-bold! text-hongbao-brown-800! dark:text-night-brown! transition-colors! duration-150! hover:bg-hongbao-brown-900/15! dark:hover:bg-white/12!"
             >
               <PlayIcon size={12} weight="fill" />
               Replay
@@ -330,7 +359,7 @@ const HanziPractice: React.FC<Props> = ({
         ) : (
           <div className="flex! shrink-0! items-center! gap-2!">
             {displayMistakes > 0 && (
-              <span className="text-xs! font-medium! text-hongbao-brown-800/60!">
+              <span className="text-xs! font-medium! text-hongbao-brown-800/60! dark:text-night-brown/60!">
                 {pluralize(displayMistakes, "miss", "misses")}
               </span>
             )}
@@ -340,7 +369,7 @@ const HanziPractice: React.FC<Props> = ({
                 setMistakes(0);
                 setRestartNonce((n) => n + 1);
               }}
-              className="flex! items-center! gap-1! rounded-full! bg-hongbao-brown-900/8! px-2.5! py-1! text-xs! font-bold! text-hongbao-brown-800! transition-colors! duration-150! hover:bg-hongbao-brown-900/15!"
+              className="flex! items-center! gap-1! rounded-full! bg-hongbao-brown-900/8! dark:bg-white/8! px-2.5! py-1! text-xs! font-bold! text-hongbao-brown-800! dark:text-night-brown! transition-colors! duration-150! hover:bg-hongbao-brown-900/15! dark:hover:bg-white/12!"
             >
               <ArrowClockwiseIcon size={12} weight="bold" />
               Restart

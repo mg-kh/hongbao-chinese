@@ -35,10 +35,10 @@ const PurchaseItemRow: React.FC<Props> = ({
         <div
           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
             isMock
-              ? "bg-hongbao-orange-50 text-hongbao-orange-600"
+              ? "bg-hongbao-orange-50 text-hongbao-orange-600 dark:text-night-orange"
               : isFlashcard
-                ? "bg-hongbao-gold-50 text-hongbao-gold-700"
-                : "bg-hongbao-red-50 text-hongbao-red-600"
+                ? "bg-hongbao-gold-50 text-hongbao-gold-700 dark:text-night-gold"
+                : "bg-hongbao-red-50 text-hongbao-red-600 dark:text-night-red"
           }`}
         >
           {isMock ? (

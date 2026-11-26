@@ -64,7 +64,7 @@ const CourseAccessGate: React.FC<Props> = ({ children }) => {
           <Box
             className={`flex! items-center! justify-center! w-14! h-14! rounded-2xl! ${
               isPending
-                ? "bg-hongbao-orange-50! text-hongbao-orange-600!"
+                ? "bg-hongbao-orange-50! text-hongbao-orange-600! dark:text-night-orange!"
                 : "bg-gray-100! text-gray-500!"
             }`}
           >

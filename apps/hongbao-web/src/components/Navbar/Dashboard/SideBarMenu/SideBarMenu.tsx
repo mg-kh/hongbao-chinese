@@ -22,7 +22,7 @@ const SideBarMenu: React.FC<Props> = ({ onNavigate }) => {
 
   return (
     <nav className="flex h-full w-full overflow-hidden">
-      <div className="flex shrink-0 grow-0 basis-16 flex-col items-center gap-1.5 border-r border-gray-200 bg-white py-2.5">
+      <div className="flex shrink-0 grow-0 basis-16 flex-col items-center gap-1.5 border-r border-gray-200 bg-surface py-2.5">
         <div className="mb-1 flex h-12.5 items-center justify-center">
           <Image
             src="/assets/logo.svg"

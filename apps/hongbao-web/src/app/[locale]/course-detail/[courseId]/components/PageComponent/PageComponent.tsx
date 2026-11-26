@@ -56,8 +56,8 @@ const CurriculumRow: React.FC<{ title?: string; type: "video" | "quiz" }> = ({
       <Box
         className={`flex! items-center! justify-center! w-8! h-8! rounded-lg! shrink-0! ${
           type === "video"
-            ? "bg-hongbao-red-50! text-hongbao-red-600!"
-            : "bg-hongbao-gold-50! text-hongbao-gold-700!"
+            ? "bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!"
+            : "bg-hongbao-gold-50! text-hongbao-gold-700! dark:text-night-gold!"
         }`}
       >
         {type === "video" ? (
@@ -128,8 +128,8 @@ const PageComponent = () => {
                   <Badge
                     size="lg"
                     radius="md"
-                    color="hongbao-red.0"
-                    c="hongbao-red.7"
+                    color="var(--hb-tint-red)"
+                    c="var(--hb-accent-strong)"
                     className="w-fit!"
                     leftSection={<IconSparkles size={14} />}
                   >
@@ -154,14 +154,14 @@ const PageComponent = () => {
                   <Group gap={8}>
                     <BookOpenIcon
                       size={18}
-                      className="text-hongbao-red-600!"
+                      className="text-hongbao-red-600! dark:text-night-red!"
                     />
                     <Text size="sm" fw={600} c={"gray.7"}>
                       {courseDetail?.lessonCount || 0} Lessons
                     </Text>
                   </Group>
                   <Group gap={8}>
-                    <VideoIcon size={18} className="text-hongbao-red-600!" />
+                    <VideoIcon size={18} className="text-hongbao-red-600! dark:text-night-red!" />
                     <Text size="sm" fw={600} c={"gray.7"}>
                       {courseDetail?.videoCount || 0} Videos
                     </Text>
@@ -289,7 +289,7 @@ const PageComponent = () => {
                               <Text
                                 size="10px"
                                 fw={700}
-                                c={"hongbao-red.6"}
+                                c="var(--hb-accent-text)"
                                 className="uppercase! tracking-[0.14em]!"
                               >
                                 Module {index + 1}
@@ -362,7 +362,7 @@ const PageComponent = () => {
                             <Text
                               size="10px"
                               fw={700}
-                              c={"hongbao-gold.8"}
+                              c="var(--hb-gold-text)"
                               className="uppercase! tracking-[0.14em]!"
                             >
                               Assessment
@@ -410,10 +410,10 @@ const PageComponent = () => {
                 <Box className="absolute! inset-0! bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)]! bg-[length:18px_18px]!" />
                 <Box className="absolute! inset-0! flex! items-center! justify-center!">
                   {previewVideo ? (
-                    <Box className="flex! items-center! justify-center! w-16! h-16! rounded-full! bg-white! shadow-xl! transition-transform! duration-200! ease-out! group-hover:scale-110!">
+                    <Box className="flex! items-center! justify-center! w-16! h-16! rounded-full! bg-surface! shadow-xl! transition-transform! duration-200! ease-out! group-hover:scale-110!">
                       <IconPlayerPlayFilled
                         size={26}
-                        className="text-hongbao-red-600! translate-x-[2px]!"
+                        className="text-hongbao-red-600! dark:text-night-red! translate-x-[2px]!"
                       />
                     </Box>
                   ) : (
@@ -438,7 +438,7 @@ const PageComponent = () => {
                   <Badge
                     size="lg"
                     radius="md"
-                    className="absolute! top-3! left-3! bg-white/95! text-hongbao-red-700!"
+                    className="absolute! top-3! left-3! bg-surface/95! text-hongbao-red-700! dark:text-night-red!"
                   >
                     {courseDetail.level}
                   </Badge>
@@ -493,7 +493,7 @@ const PageComponent = () => {
                   <Stack gap={10}>
                     {courseDetail?.includedAssets?.map((asset) => (
                       <Group key={asset} gap={10} wrap="nowrap">
-                        <Box className="flex! items-center! justify-center! w-5! h-5! rounded-full! bg-hongbao-red-50! text-hongbao-red-600! shrink-0!">
+                        <Box className="flex! items-center! justify-center! w-5! h-5! rounded-full! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red! shrink-0!">
                           <IconCheck size={12} stroke={3} />
                         </Box>
                         <Text size="sm" c={"gray.7"}>
@@ -506,7 +506,7 @@ const PageComponent = () => {
 
                 <Divider />
 
-                <button className="flex! items-center! justify-center! gap-2! text-gray-500! hover:text-hongbao-red-600! transition-colors! duration-200! cursor-pointer!">
+                <button className="flex! items-center! justify-center! gap-2! text-gray-500! hover:text-hongbao-red-600! dark:hover:text-night-red! transition-colors! duration-200! cursor-pointer!">
                   <IconShare size={14} />
                   <Text size="xs" fw={600}>
                     Share this course

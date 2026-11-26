@@ -64,7 +64,7 @@ const QuizListPage = () => {
               {quizzes?.map((q) => {
                 return (
                   <Accordion.Item key={q.id} value={q.id}>
-                    <Accordion.Control component={Box} bg={"white"} bdrs={15}>
+                    <Accordion.Control component={Box} bg="var(--hb-surface)" bdrs={15}>
                       <Flex justify="space-between" align="center">
                         <Text fw="bold">{q.title}</Text>
                         <ActionIcon

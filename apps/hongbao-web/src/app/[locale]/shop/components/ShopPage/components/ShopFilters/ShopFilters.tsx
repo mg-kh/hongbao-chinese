@@ -77,7 +77,7 @@ const ShopFilters: React.FC<Props> = ({
           <button
             type="button"
             onClick={clearFilters}
-            className="text-xs! font-semibold! text-hongbao-red-600! underline-offset-2! hover:underline! cursor-pointer!"
+            className="text-xs! font-semibold! text-hongbao-red-600! dark:text-night-red! underline-offset-2! hover:underline! cursor-pointer!"
           >
             Clear all
           </button>

@@ -155,7 +155,7 @@ const CourseNavigator = () => {
                   <Box
                     className={`flex! items-center! justify-center! shrink-0! w-9! h-9! rounded-xl! text-sm! font-bold! ${
                       isLessonDone
-                        ? "bg-green-100! text-green-600!"
+                        ? "bg-green-100! text-green-600! dark:text-night-green!"
                         : "bg-gradient-to-br! from-hongbao-red-500! to-hongbao-maroon-600! text-white! shadow-sm! shadow-hongbao-red-500/30!"
                     }`}
                   >

@@ -50,7 +50,7 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
       withBorder
       bdrs={20}
       p={{ base: 18, sm: 28 }}
-      className="border-gray-200! bg-white! shadow-sm!"
+      className="border-gray-200! bg-surface! shadow-sm!"
     >
       <Stack gap={18}>
         <Group gap={10} wrap="wrap">
@@ -112,7 +112,7 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
                     key={word.value}
                     type="button"
                     onClick={() => onPushWord(word.value)}
-                    className="rounded-xl! border! border-gray-200! bg-white! px-3.5! py-2! text-sm! font-semibold! text-gray-700! cursor-pointer! transition-all! duration-150! hover:border-hongbao-red-300! hover:text-hongbao-red-600! active:scale-95!"
+                    className="rounded-xl! border! border-gray-200! bg-surface! px-3.5! py-2! text-sm! font-semibold! text-gray-700! cursor-pointer! transition-all! duration-150! hover:border-hongbao-red-300! hover:text-hongbao-red-600! dark:hover:text-night-red! active:scale-95!"
                   >
                     {word.label}
                   </button>
@@ -124,7 +124,7 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
               <button
                 type="button"
                 onClick={() => onPopWordAt(picked.length - 1)}
-                className="flex! items-center! gap-1.5! w-fit! text-xs! font-semibold! text-gray-500! cursor-pointer! transition-colors! duration-150! hover:text-hongbao-red-600!"
+                className="flex! items-center! gap-1.5! w-fit! text-xs! font-semibold! text-gray-500! cursor-pointer! transition-colors! duration-150! hover:text-hongbao-red-600! dark:hover:text-night-red!"
               >
                 <ArrowCounterClockwiseIcon size={13} weight="bold" />
                 Undo last word
@@ -144,7 +144,7 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
                   className={`flex! items-center! gap-3! w-full! appearance-none! overflow-visible! text-left! rounded-2xl! border! px-4! py-3.5! cursor-pointer! transition-all! duration-200! ease-out! ${
                     selected
                       ? "border-hongbao-red-500! bg-hongbao-cream-50! ring-1! ring-hongbao-red-300!"
-                      : "border-gray-200! bg-white! hover:border-hongbao-red-200! hover:bg-gray-50!"
+                      : "border-gray-200! bg-surface! hover:border-hongbao-red-200! hover:bg-gray-50!"
                   }`}
                 >
                   <Box

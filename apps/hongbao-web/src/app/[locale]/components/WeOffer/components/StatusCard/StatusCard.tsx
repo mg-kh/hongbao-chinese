@@ -19,42 +19,42 @@ const accents: Record<
     tile: "from-hongbao-red-500! to-hongbao-maroon-600!",
     glow: "hover:shadow-[0_20px_45px_-20px_rgba(245,34,45,0.55)]!",
     border: "hover:border-hongbao-red-200!",
-    count: "text-hongbao-red-600!",
+    count: "text-hongbao-red-600! dark:text-night-red!",
     blob: "bg-hongbao-red-200/40!",
   },
   gold: {
     tile: "from-hongbao-gold-500! to-hongbao-orange-600!",
     glow: "hover:shadow-[0_20px_45px_-20px_rgba(230,185,60,0.6)]!",
     border: "hover:border-hongbao-gold-300!",
-    count: "text-hongbao-gold-800!",
+    count: "text-hongbao-gold-800! dark:text-night-gold!",
     blob: "bg-hongbao-gold-200/50!",
   },
   orange: {
     tile: "from-hongbao-orange-500! to-hongbao-red-600!",
     glow: "hover:shadow-[0_20px_45px_-20px_rgba(242,106,27,0.55)]!",
     border: "hover:border-hongbao-orange-200!",
-    count: "text-hongbao-orange-600!",
+    count: "text-hongbao-orange-600! dark:text-night-orange!",
     blob: "bg-hongbao-orange-200/40!",
   },
   maroon: {
     tile: "from-hongbao-maroon-500! to-hongbao-brown-700!",
     glow: "hover:shadow-[0_20px_45px_-20px_rgba(122,31,31,0.5)]!",
     border: "hover:border-hongbao-maroon-200!",
-    count: "text-hongbao-maroon-600!",
+    count: "text-hongbao-maroon-600! dark:text-night-maroon!",
     blob: "bg-hongbao-maroon-200/40!",
   },
   brown: {
     tile: "from-hongbao-brown-500! to-hongbao-maroon-700!",
     glow: "hover:shadow-[0_20px_45px_-20px_rgba(115,61,34,0.5)]!",
     border: "hover:border-hongbao-brown-200!",
-    count: "text-hongbao-brown-600!",
+    count: "text-hongbao-brown-600! dark:text-night-brown!",
     blob: "bg-hongbao-brown-200/40!",
   },
   cream: {
     tile: "from-hongbao-cream-600! to-hongbao-brown-500!",
     glow: "hover:shadow-[0_20px_45px_-20px_rgba(191,133,94,0.55)]!",
     border: "hover:border-hongbao-cream-500!",
-    count: "text-hongbao-cream-900!",
+    count: "text-hongbao-cream-900! dark:text-night-brown!",
     blob: "bg-hongbao-cream-400/40!",
   },
 };
@@ -72,7 +72,7 @@ const StatusCard: React.FC<Props> = ({
       p={{ base: 18, sm: 28, md: 32 }}
       bdrs={20}
       withBorder
-      className={`group! relative! overflow-hidden! h-full! text-center! bg-white! border-gray-200! transition-all! duration-300! ease-out! hover:-translate-y-1.5! ${accent.border} ${accent.glow}`}
+      className={`group! relative! overflow-hidden! h-full! text-center! bg-surface! border-gray-200! transition-all! duration-300! ease-out! hover:-translate-y-1.5! ${accent.border} ${accent.glow}`}
     >
       {/* colour wash that blooms on hover */}
       <Box

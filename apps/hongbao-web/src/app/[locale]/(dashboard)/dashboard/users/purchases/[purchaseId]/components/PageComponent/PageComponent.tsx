@@ -99,10 +99,10 @@ const PageComponent = () => {
           <XCircleIcon
             size={18}
             weight="fill"
-            className="mt-0.5! shrink-0! text-red-500!"
+            className="mt-0.5! shrink-0! text-red-500! dark:text-night-red!"
           />
           <div className="min-w-0">
-            <Text size="sm" fw={700} c="red.8">
+            <Text size="sm" fw={700} c="var(--hb-danger-text)">
               Rejected
             </Text>
             <Text
@@ -151,7 +151,7 @@ const PageComponent = () => {
                     <Text size="sm" c="gray.6">
                       Discount
                     </Text>
-                    <Text size="sm" fw={600} c="hongbao-red.6">
+                    <Text size="sm" fw={600} c="var(--hb-accent-text)">
                       {totals.discount}
                     </Text>
                   </div>
@@ -161,7 +161,7 @@ const PageComponent = () => {
                 <Text size="sm" fw={700} c="gray.8">
                   Total
                 </Text>
-                <Text size="sm" fw={800} c="hongbao-red.7">
+                <Text size="sm" fw={800} c="var(--hb-accent-strong)">
                   {totals.total}
                 </Text>
               </div>
@@ -189,7 +189,7 @@ const PageComponent = () => {
                 <Text size="10px" fw={700} c="gray.5" tt="uppercase">
                   Total
                 </Text>
-                <Text size="lg" fw={800} c="hongbao-red.7" lh={1.2}>
+                <Text size="lg" fw={800} c="var(--hb-accent-strong)" lh={1.2}>
                   {totals.total}
                 </Text>
               </div>

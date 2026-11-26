@@ -46,7 +46,7 @@ const AccountLinks = () => {
               i > 0 ? "border-t! border-gray-100!" : ""
             }`}
           >
-            <Box className="flex! items-center! justify-center! shrink-0! w-9! h-9! rounded-lg! bg-gray-100! text-gray-500! transition-colors! duration-200! group-hover:bg-hongbao-red-50! group-hover:text-hongbao-red-600!">
+            <Box className="flex! items-center! justify-center! shrink-0! w-9! h-9! rounded-lg! bg-gray-100! text-gray-500! transition-colors! duration-200! group-hover:bg-hongbao-red-50! group-hover:text-hongbao-red-600! dark:group-hover:text-night-red!">
               {row.icon}
             </Box>
             <Box className="flex-1! min-w-0!">

@@ -90,7 +90,7 @@ const Profile = () => {
             href={`/profile/${userId}/my-courses`}
             size="xs"
             fw={600}
-            c="hongbao-red.6"
+            c="var(--hb-accent-text)"
             className="no-underline! hover:underline!"
           >
             View all

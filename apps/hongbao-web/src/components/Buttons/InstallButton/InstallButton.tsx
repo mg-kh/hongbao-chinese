@@ -20,12 +20,12 @@ const InstallButton: React.FC<Props> = ({ label, onClick }) => {
       onClick={onClick}
       className="group! relative! rounded-full! p-[1.5px]! bg-gradient-to-r! from-hongbao-red-500! via-hongbao-orange-500! to-hongbao-gold-500! shadow-sm! cursor-pointer! transition-all! duration-200! ease-out! hover:shadow-md! hover:shadow-hongbao-red-500/25! active:scale-95!"
     >
-      <span className="flex! items-center! justify-center! gap-2! rounded-full! bg-white! px-4! py-2! transition-colors! duration-200! ease-out! group-hover:bg-hongbao-cream-50!">
+      <span className="flex! items-center! justify-center! gap-2! rounded-full! bg-surface! px-4! py-2! transition-colors! duration-200! ease-out! group-hover:bg-hongbao-cream-50!">
         <IconDownload
           size={18}
-          className="text-hongbao-red-600! transition-transform! duration-200! ease-out! group-hover:translate-y-[2px]!"
+          className="text-hongbao-red-600! dark:text-night-red! transition-transform! duration-200! ease-out! group-hover:translate-y-[2px]!"
         />
-        <span className="text-sm! font-semibold! text-hongbao-red-700! whitespace-nowrap!">
+        <span className="text-sm! font-semibold! text-hongbao-red-700! dark:text-night-red! whitespace-nowrap!">
           {label}
         </span>
       </span>

@@ -75,7 +75,7 @@ const PurchaseOrderList: React.FC<Props> = ({
         <Text
           size="sm"
           fw={800}
-          c="hongbao-red.7"
+          c="var(--hb-accent-strong)"
           className="whitespace-nowrap! tabular-nums!"
         >
           {formatTotal(p)}

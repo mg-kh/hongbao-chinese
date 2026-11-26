@@ -138,7 +138,7 @@ const StudentReview = () => {
       {/* full-bleed backdrop - spans the viewport edge to edge, distinct from
           the plain-white bands around it, giving the white testimonial cards
           a tinted backdrop to pop against */}
-      <Box className="relative! overflow-hidden! bg-gradient-to-b! from-hongbao-cream-50! via-[#fffaf5]! to-white!">
+      <Box className="relative! overflow-hidden! bg-gradient-to-b! from-hongbao-cream-50! via-[#fffaf5]! dark:via-surface! to-surface!">
         <Box className="pointer-events-none absolute inset-0 opacity-90! bg-[radial-gradient(circle_at_1px_1px,rgba(140,21,21,0.055)_1px,transparent_0)]! bg-[length:28px_28px]!" />
         <Box className="pointer-events-none absolute top-0 left-[10%] w-[420px] h-[420px] rounded-full bg-hongbao-gold-200/25 blur-[110px]!" />
         <Box className="pointer-events-none absolute top-1/3 right-[4%] w-[360px] h-[360px] rounded-full bg-hongbao-orange-200/20 blur-[110px]!" />
@@ -161,7 +161,7 @@ const StudentReview = () => {
 
             {/* trust bar */}
             <div className="flex! justify-center!">
-              <div className="flex! flex-col! sm:flex-row! items-center! gap-3! sm:gap-4! max-w-full! rounded-2xl! sm:rounded-full! border! border-gray-200! bg-white! px-5! sm:px-6! py-4! sm:py-3! shadow-sm!">
+              <div className="flex! flex-col! sm:flex-row! items-center! gap-3! sm:gap-4! max-w-full! rounded-2xl! sm:rounded-full! border! border-gray-200! bg-surface! px-5! sm:px-6! py-4! sm:py-3! shadow-sm!">
                 <div className="flex! shrink-0!">
                   {feedbacks.slice(0, 5).map((item, index) => (
                     <Avatar
@@ -169,9 +169,9 @@ const StudentReview = () => {
                       src="./assets/logo-head.svg"
                       size={34}
                       radius="xl"
-                      bg={"hongbao-red.0"}
+                      bg="var(--hb-tint-red)"
                       p={5}
-                      className={`ring-2! ring-white! ${index === 0 ? "" : "-ml-2.5!"}`}
+                      className={`ring-2! ring-surface! ${index === 0 ? "" : "-ml-2.5!"}`}
                       style={{ zIndex: 5 - index }}
                     />
                   ))}
@@ -211,7 +211,7 @@ const StudentReview = () => {
                   <Box
                     key={item.id}
                     style={{ animationDelay: `${localIndex * 70}ms` }}
-                    className={`group relative! flex! flex-col! h-full! overflow-hidden! rounded-3xl! border! border-gray-200! bg-white! p-6! sm:p-7! shadow-sm! ${accent.border} ${accent.glow} transition-all! duration-300! ease-out! hover:-translate-y-1.5! [animation:fade-up_0.55s_ease-out_both]`}
+                    className={`group relative! flex! flex-col! h-full! overflow-hidden! rounded-3xl! border! border-gray-200! bg-surface! p-6! sm:p-7! shadow-sm! ${accent.border} ${accent.glow} transition-all! duration-300! ease-out! hover:-translate-y-1.5! [animation:fade-up_0.55s_ease-out_both]`}
                   >
                     {/* accent top edge */}
                     <Box
@@ -271,7 +271,7 @@ const StudentReview = () => {
                   aria-label="Previous feedbacks"
                   disabled={page === 0}
                   onClick={() => setPage((p) => Math.max(0, p - 1))}
-                  className="flex! items-center! justify-center! w-11! h-11! rounded-full! border! border-gray-300! bg-white! text-gray-700! transition-all! duration-200! ease-out! hover:border-hongbao-red-300! hover:text-hongbao-red-600! hover:-translate-x-0.5! disabled:opacity-40! disabled:hover:border-gray-300! disabled:hover:text-gray-700! disabled:hover:translate-x-0! disabled:cursor-not-allowed! cursor-pointer!"
+                  className="flex! items-center! justify-center! w-11! h-11! rounded-full! border! border-gray-300! bg-surface! text-gray-700! transition-all! duration-200! ease-out! hover:border-hongbao-red-300! hover:text-hongbao-red-600! dark:hover:text-night-red! hover:-translate-x-0.5! disabled:opacity-40! disabled:hover:border-gray-300! disabled:hover:text-gray-700! disabled:hover:translate-x-0! disabled:cursor-not-allowed! cursor-pointer!"
                 >
                   <CaretLeftIcon size={16} weight="bold" />
                 </button>
@@ -300,7 +300,7 @@ const StudentReview = () => {
                   onClick={() =>
                     setPage((p) => Math.min(totalPages - 1, p + 1))
                   }
-                  className="flex! items-center! justify-center! w-11! h-11! rounded-full! border! border-gray-300! bg-white! text-gray-700! transition-all! duration-200! ease-out! hover:border-hongbao-red-300! hover:text-hongbao-red-600! hover:translate-x-0.5! disabled:opacity-40! disabled:hover:border-gray-300! disabled:hover:text-gray-700! disabled:hover:translate-x-0! disabled:cursor-not-allowed! cursor-pointer!"
+                  className="flex! items-center! justify-center! w-11! h-11! rounded-full! border! border-gray-300! bg-surface! text-gray-700! transition-all! duration-200! ease-out! hover:border-hongbao-red-300! hover:text-hongbao-red-600! dark:hover:text-night-red! hover:translate-x-0.5! disabled:opacity-40! disabled:hover:border-gray-300! disabled:hover:text-gray-700! disabled:hover:translate-x-0! disabled:cursor-not-allowed! cursor-pointer!"
                 >
                   <CaretRightIcon size={16} weight="bold" />
                 </button>

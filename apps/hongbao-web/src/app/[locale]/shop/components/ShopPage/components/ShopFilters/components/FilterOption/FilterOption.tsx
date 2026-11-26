@@ -43,14 +43,14 @@ const FilterOption: React.FC<Props> = ({
         <Icon
           size={16}
           weight={active ? "fill" : "regular"}
-          className={active ? "text-hongbao-red-600!" : "text-gray-400!"}
+          className={active ? "text-hongbao-red-600! dark:text-night-red!" : "text-gray-400!"}
         />
       )}
 
       <span
         className={`flex-1! truncate! ${
           active
-            ? "font-semibold! text-hongbao-red-700!"
+            ? "font-semibold! text-hongbao-red-700! dark:text-night-red!"
             : "font-medium! text-gray-700!"
         }`}
       >

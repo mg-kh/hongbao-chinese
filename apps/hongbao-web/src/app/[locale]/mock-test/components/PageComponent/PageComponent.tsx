@@ -41,7 +41,7 @@ const PageComponent = () => {
         <Stack gap={0} className="py-10! sm:py-16! md:py-20!">
           <Link
             href="/"
-            className="flex! w-fit! items-center! gap-1.5! no-underline! text-gray-500! transition-colors! duration-200! hover:text-hongbao-red-600!"
+            className="flex! w-fit! items-center! gap-1.5! no-underline! text-gray-500! transition-colors! duration-200! hover:text-hongbao-red-600! dark:hover:text-night-red!"
           >
             <ArrowLeftIcon size={14} weight="bold" />
             <Text size="xs" fw={600}>
@@ -50,7 +50,7 @@ const PageComponent = () => {
           </Link>
 
           <Box className="mt-8!">
-            <span className="inline-flex! items-center! gap-1.5! rounded-full! bg-hongbao-gold-50! px-3! py-1! text-[11px]! font-bold! uppercase! tracking-[0.12em]! text-hongbao-gold-800!">
+            <span className="inline-flex! items-center! gap-1.5! rounded-full! bg-hongbao-gold-50! px-3! py-1! text-[11px]! font-bold! uppercase! tracking-[0.12em]! text-hongbao-gold-800! dark:text-night-gold!">
               <ClockIcon size={12} weight="fill" />
               Coming soon
             </span>
@@ -80,13 +80,13 @@ const PageComponent = () => {
             What it will do
           </Text>
 
-          <Box className="mt-3! rounded-2xl! bg-white! px-4! ring-1! ring-gray-200! sm:px-5!">
+          <Box className="mt-3! rounded-2xl! bg-surface! px-4! ring-1! ring-gray-200! sm:px-5!">
             {planned.map((p) => (
               <div
                 key={p.title}
                 className="flex! gap-3.5! border-b! border-gray-100! py-4! last:border-b-0! sm:gap-4!"
               >
-                <span className="flex! h-9! w-9! shrink-0! items-center! justify-center! rounded-xl! bg-hongbao-red-50! text-hongbao-red-600!">
+                <span className="flex! h-9! w-9! shrink-0! items-center! justify-center! rounded-xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
                   {p.icon}
                 </span>
                 <div>

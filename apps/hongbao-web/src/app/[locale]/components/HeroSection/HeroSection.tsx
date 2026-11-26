@@ -15,7 +15,7 @@ import ToolsPreviewSection from "../ToolsPreviewSection/ToolsPreviewSection";
 const HeroSection = () => {
   return (
     <Box
-      bg={"#fff8f2"}
+      bg="var(--hb-hero-bg)"
       className="relative overflow-hidden bg-[radial-gradient(circle_at_1px_1px,rgba(140,21,21,0.07)_1px,transparent_0)] bg-[length:28px_28px]"
     >
       <Box className="pointer-events-none absolute -top-32 -right-32 w-[420px] h-[420px] rounded-full bg-hongbao-gold-200/50 blur-3xl" />
@@ -30,7 +30,7 @@ const HeroSection = () => {
         >
           <Stack className="w-full lg:w-6/12 lg:shrink-0!" gap={20}>
             <Badge
-              color="hongbao-red.0"
+              color="var(--hb-tint-red)"
               c={"hongbao-red"}
               mb={5}
               size="lg"
@@ -84,7 +84,7 @@ const HeroSection = () => {
                   size="xl"
                   variant="outline"
                   color="hongbao-red"
-                  className="w-full! sm:w-auto! max-sm:h-auto! max-sm:px-3! max-sm:py-2! max-sm:text-sm! bg-white/70! backdrop-blur-sm! transition-colors! duration-200!"
+                  className="w-full! sm:w-auto! max-sm:h-auto! max-sm:px-3! max-sm:py-2! max-sm:text-sm! bg-surface/70! backdrop-blur-sm! transition-colors! duration-200!"
                   styles={{
                     label: {
                       whiteSpace: "normal",

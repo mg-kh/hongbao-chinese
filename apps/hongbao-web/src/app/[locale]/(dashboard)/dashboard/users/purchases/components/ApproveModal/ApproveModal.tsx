@@ -30,7 +30,7 @@ const ApproveModal: React.FC<Props> = ({ purchase, onConfirm, onCancel }) => {
     <div className="flex flex-col gap-4">
       {/* who / which order */}
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600 dark:text-night-green">
           <CheckCircleIcon size={22} weight="fill" />
         </div>
         <div className="min-w-0">
@@ -64,10 +64,10 @@ const ApproveModal: React.FC<Props> = ({ purchase, onConfirm, onCancel }) => {
                 <div
                   className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
                     item.type === "mock-test"
-                      ? "bg-hongbao-orange-50 text-hongbao-orange-600"
+                      ? "bg-hongbao-orange-50 text-hongbao-orange-600 dark:text-night-orange"
                       : item.type === "flashcard"
-                        ? "bg-hongbao-gold-50 text-hongbao-gold-700"
-                        : "bg-hongbao-red-50 text-hongbao-red-600"
+                        ? "bg-hongbao-gold-50 text-hongbao-gold-700 dark:text-night-gold"
+                        : "bg-hongbao-red-50 text-hongbao-red-600 dark:text-night-red"
                   }`}
                 >
                   {item.type === "mock-test" ? (
@@ -97,7 +97,7 @@ const ApproveModal: React.FC<Props> = ({ purchase, onConfirm, onCancel }) => {
           <Text size="xs" fw={700} c="gray.6" tt="uppercase">
             Total
           </Text>
-          <Text size="md" fw={800} c="hongbao-red.7">
+          <Text size="md" fw={800} c="var(--hb-accent-strong)">
             {total}
           </Text>
         </div>

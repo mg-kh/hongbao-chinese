@@ -5,6 +5,10 @@
 @import "@mantine/dropzone/styles.css";
 @import "@mantine/charts/styles.css";
 
+/* `dark:` follows Mantine's color scheme attribute (set on <html>), so
+   Tailwind and Mantine always agree on the active scheme. */
+@custom-variant dark (&:where([data-mantine-color-scheme="dark"], [data-mantine-color-scheme="dark"] *));
+
 /* BeginYourJourneyBanner - slow drifting gradient background */
 @keyframes journey-gradient-pan {
   0% {
@@ -110,6 +114,117 @@
   --color-hongbao-cream-700: #d99d73;
   --color-hongbao-cream-800: #bf855e;
   --color-hongbao-cream-900: #a66d49;
+
+  /* Softened accents for text on dark surfaces (used only via `dark:`).
+     Fully saturated brand reds vibrate on near-black; these keep the hue
+     but lift lightness / drop chroma to ~AA contrast without glare. */
+  --color-night-red: #f2918a;
+  --color-night-orange: #f5a86e;
+  --color-night-gold: #e8c66a;
+  --color-night-brown: #d6bba9;
+  --color-night-maroon: #e4a7a7;
+  --color-night-green: #86d19e;
+  --color-night-blue: #93b8ef;
+  --color-night-teal: #7fd1c7;
+  --color-night-violet: #b9a6f0;
+}
+
+/* Semantic surface/text tokens - resolve per color scheme. */
+@theme inline {
+  --color-surface: var(--hb-surface);
+}
+
+:root {
+  --hb-surface: #ffffff;
+  --hb-text: #141414; /* = Mantine dark.9, the previous Text/Title default */
+  --hb-text-soft: #424242; /* = Mantine dark.4 */
+  --hb-hero-bg: #fff8f2;
+  --hb-accent-text: var(--mantine-color-hongbao-red-6);
+  --hb-accent-strong: var(--mantine-color-hongbao-red-7);
+  --hb-success-text: var(--mantine-color-green-7);
+  --hb-danger-text: var(--mantine-color-red-7);
+  --hb-gold-text: var(--mantine-color-hongbao-gold-8);
+  --hb-tint-red: var(--mantine-color-hongbao-red-0);
+  --hb-tint-cream: var(--mantine-color-hongbao-cream-0);
+}
+
+/* ------------------------------------------------------------------
+   Dark mode - "lantern night"
+   Warm charcoal (a faint red undertone that matches the brand) instead
+   of pure black, off-white text instead of #fff, and low-chroma tints
+   for the pastel brand fills. Layering: page bg < card < raised.
+     page  #141112   card  #1d191a   raised #262122   border #352e2f
+   Light-mode values are untouched - every override lives in this scope.
+   Applies site-wide, dashboard included.
+   ------------------------------------------------------------------ */
+[data-mantine-color-scheme="dark"] {
+  color-scheme: dark;
+
+  --hb-surface: #1d191a;
+  --hb-text: #ece6e4;
+  --hb-text-soft: #b5acac;
+  --hb-hero-bg: #1a1516;
+  --hb-accent-text: var(--color-night-red);
+  --hb-accent-strong: var(--color-night-red);
+  --hb-success-text: var(--color-night-green);
+  --hb-danger-text: var(--color-night-red);
+  --hb-gold-text: var(--color-night-gold);
+  --hb-tint-red: #2a1a1b;
+  --hb-tint-cream: #231d1b;
+
+  /* Neutral ramp, inverted: low numbers = backgrounds, high = text.
+     Covers bg-gray-50 / border-gray-200 / text-gray-900 etc. */
+  --color-gray-50: #141112;
+  --color-gray-100: #262122;
+  --color-gray-200: #352e2f;
+  --color-gray-300: #463d3e;
+  --color-gray-400: #7d7374;
+  --color-gray-500: #9c9293;
+  --color-gray-600: #b5acac;
+  --color-gray-700: #cbc3c2;
+  --color-gray-800: #ddd6d5;
+  --color-gray-900: #ece6e4;
+  --color-gray-950: #f6f1ef;
+
+  /* Pastel brand fills (50-200) become deep, desaturated tints. 300+ stay
+     as-is so solid buttons, gradients and banners keep their identity. */
+  --color-hongbao-red-50: #2a1a1b;
+  --color-hongbao-red-100: #3a1f21;
+  --color-hongbao-red-200: #5a2a2c;
+  --color-hongbao-maroon-50: #261a1a;
+  --color-hongbao-maroon-100: #352020;
+  --color-hongbao-maroon-200: #4f2b2b;
+  --color-hongbao-gold-50: #2a2418;
+  --color-hongbao-gold-100: #3a311c;
+  --color-hongbao-gold-200: #574823;
+  --color-hongbao-orange-50: #2b1e16;
+  --color-hongbao-orange-100: #3c281a;
+  --color-hongbao-orange-200: #5a3820;
+  --color-hongbao-brown-50: #241d1a;
+  --color-hongbao-brown-100: #33281f;
+  --color-hongbao-brown-200: #4a3a2e;
+  --color-hongbao-cream-50: #231d1b;
+  --color-hongbao-cream-100: #2c2421;
+  --color-hongbao-cream-200: #3a302b;
+
+  /* Status tints */
+  --color-green-50: #172219;
+  --color-green-100: #1c2e21;
+  --color-green-200: #24412c;
+  --color-green-300: #2f5a3b;
+  --color-red-50: #2a1718;
+  --color-red-100: #3a1d1f;
+  --color-red-200: #5a2729;
+  --color-blue-50: #161c27;
+  --color-blue-100: #1b2536;
+  --color-blue-200: #24344d;
+  --color-blue-300: #2f4566;
+  --color-amber-50: #2a2316;
+}
+
+[data-mantine-color-scheme="dark"] ::selection {
+  background-color: rgba(242, 145, 138, 0.3);
+  color: #fff;
 }
 
 /* CustomRichTextEditor - draggable resize handles for inline images */
@@ -328,4 +443,41 @@ a[data-type="pdf-attachment"]:hover {
 
 .rte-pdf-chip-name {
   font-weight: 500;
+}
+
+/* Rich text (editor + rendered lesson/blog HTML) in dark mode - lift the
+   saturated reds/browns to the softened night palette for readable ink. */
+:where([data-mantine-color-scheme="dark"]) ruby[data-rt]::after {
+  color: var(--color-night-red);
+}
+
+:where([data-mantine-color-scheme="dark"]) .ProseMirror blockquote {
+  border-inline-start-color: #5a2a2c;
+  color: var(--color-night-brown);
+}
+
+:where([data-mantine-color-scheme="dark"]) a[data-type="pdf-attachment"] {
+  border-color: var(--mantine-color-dark-4);
+  background-color: var(--mantine-color-dark-6);
+  color: var(--color-night-brown);
+}
+
+:where([data-mantine-color-scheme="dark"]) a[data-type="pdf-attachment"]:hover {
+  border-color: var(--color-night-red);
+  background-color: var(--mantine-color-dark-5);
+}
+
+:where([data-mantine-color-scheme="dark"]) [data-resize-handle] {
+  border-color: var(--hb-surface);
+}
+
+/* Tooltip - Mantine's dark style paints it with gray-2 + black text. gray is
+   inverted in dark mode (see CustomMantineProvider), which made tooltips a
+   dark box with black text. Give them a light chip with dark ink instead and
+   reset --hb-text so <Text> inside a label stays readable too. A `color`
+   prop on a Tooltip still wins (it sets --tooltip-bg inline). */
+:where([data-mantine-color-scheme="dark"]) .mantine-Tooltip-tooltip {
+  --tooltip-bg: #e6dfdc;
+  --tooltip-color: #1d191a;
+  --hb-text: #1d191a;
 }

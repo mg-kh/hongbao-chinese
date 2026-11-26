@@ -36,6 +36,7 @@ import {
   CourseTypeIcon,
   MockTestTypeIcon,
 } from "@/components/icons/productTypeIcons";
+import ColorSchemeToggle from "@/components/ColorSchemeToggle/ColorSchemeToggle";
 import Image from "next/image";
 import CartButton from "./components/CartButton/CartButton";
 
@@ -62,8 +63,8 @@ const DrawerRow: React.FC<{
       <Box
         className={`flex! items-center! justify-center! w-9! h-9! rounded-lg! shrink-0! ${
           danger
-            ? "bg-red-50! text-red-600!"
-            : "bg-hongbao-red-50! text-hongbao-red-600!"
+            ? "bg-red-50! text-red-600! dark:text-night-red!"
+            : "bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!"
         }`}
       >
         {icon}
@@ -174,8 +175,8 @@ const ClientNavbar = () => {
                       py={8}
                       className={`rounded-full! whitespace-nowrap! transition-colors! duration-200! ease-out! ${
                         active
-                          ? "bg-hongbao-red-50! text-hongbao-red-700!"
-                          : "text-gray-600! hover:bg-gray-50! hover:text-hongbao-red-600!"
+                          ? "bg-hongbao-red-50! text-hongbao-red-700! dark:text-night-red!"
+                          : "text-gray-600! hover:bg-gray-50! hover:text-hongbao-red-600! dark:hover:text-night-red!"
                       }`}
                     >
                       {item.label}
@@ -188,6 +189,7 @@ const ClientNavbar = () => {
 
           {/* ---------- desktop actions ---------- */}
           <Group className="hidden! md:flex!" wrap="nowrap">
+            <ColorSchemeToggle />
             <CartButton />
             <Show when="signed-in">
               <Menu
@@ -210,7 +212,7 @@ const ClientNavbar = () => {
                     pl={4}
                     pr={10}
                     py={4}
-                    className="cursor-pointer! rounded-full! border! border-gray-200! bg-white! transition-colors! duration-200! ease-out! hover:border-hongbao-red-200! hover:bg-hongbao-cream-50!"
+                    className="cursor-pointer! rounded-full! border! border-gray-200! bg-surface! transition-colors! duration-200! ease-out! hover:border-hongbao-red-200! hover:bg-hongbao-cream-50!"
                   >
                     <Avatar
                       src={user?.imageUrl || "/assets/logo-head.svg"}
@@ -250,7 +252,7 @@ const ClientNavbar = () => {
                         size={42}
                         p={user?.imageUrl ? 0 : 7}
                         bg="hongbao-gold.3"
-                        className="ring-2! ring-white!"
+                        className="ring-2! ring-surface!"
                       />
                       <Stack gap={2} className="min-w-0!">
                         <Text fw={700} size="sm" lineClamp={1}>
@@ -279,7 +281,7 @@ const ClientNavbar = () => {
                     href={`/profile/${user?.id}`}
                     component={Link}
                     leftSection={
-                      <Box className="flex! items-center! justify-center! w-8! h-8! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600!">
+                      <Box className="flex! items-center! justify-center! w-8! h-8! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
                         <IconUser size={15} />
                       </Box>
                     }
@@ -292,7 +294,7 @@ const ClientNavbar = () => {
                     href={`/profile/${user?.id}/my-courses`}
                     component={Link}
                     leftSection={
-                      <Box className="flex! items-center! justify-center! w-8! h-8! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600!">
+                      <Box className="flex! items-center! justify-center! w-8! h-8! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
                         <CourseTypeIcon size={15} />
                       </Box>
                     }
@@ -306,7 +308,7 @@ const ClientNavbar = () => {
                       component={Link}
                       href="/dashboard"
                       leftSection={
-                        <Box className="flex! items-center! justify-center! w-8! h-8! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600!">
+                        <Box className="flex! items-center! justify-center! w-8! h-8! rounded-lg! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
                           <IconDashboard size={15} />
                         </Box>
                       }
@@ -324,12 +326,12 @@ const ClientNavbar = () => {
                     <Menu.Item
                       className="hover:bg-red-50!"
                       leftSection={
-                        <Box className="flex! items-center! justify-center! w-8! h-8! rounded-lg! bg-red-50! text-red-600!">
+                        <Box className="flex! items-center! justify-center! w-8! h-8! rounded-lg! bg-red-50! text-red-600! dark:text-night-red!">
                           <IconLogout size={15} />
                         </Box>
                       }
                     >
-                      <Text size="sm" fw={600} c="red.7">
+                      <Text size="sm" fw={600} c="var(--hb-danger-text)">
                         Sign out
                       </Text>
                     </Menu.Item>
@@ -353,14 +355,16 @@ const ClientNavbar = () => {
             </Show>
           </Group>
 
-          {/* ---------- mobile burger ---------- */}
-          <Burger
-            opened={menuOpened}
-            onClick={openMenu}
-            size="md"
-            aria-label="Open menu"
-            className="md:hidden! shrink-0!"
-          />
+          {/* ---------- mobile: theme switch + burger ---------- */}
+          <Group gap={6} wrap="nowrap" className="md:hidden! shrink-0!">
+            <ColorSchemeToggle />
+            <Burger
+              opened={menuOpened}
+              onClick={openMenu}
+              size="md"
+              aria-label="Open menu"
+            />
+          </Group>
         </Group>
       </Container>
 
@@ -526,7 +530,7 @@ const ClientNavbar = () => {
             </Box>
 
             <Group gap={8} justify="center">
-              <IconSparkles size={14} className="text-hongbao-red-500!" />
+              <IconSparkles size={14} className="text-hongbao-red-500! dark:text-night-red!" />
               <Text size="xs" fw={600} c="gray.6">
                 Trusted by 248,000+ learners worldwide
               </Text>

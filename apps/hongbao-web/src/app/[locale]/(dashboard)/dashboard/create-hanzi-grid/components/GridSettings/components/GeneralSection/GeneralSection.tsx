@@ -8,7 +8,7 @@ const GeneralSection = () => {
     <Accordion defaultValue="general" p={0} variant="filled">
       <Accordion.Item value="general" p={0}>
         <Accordion.Control p={0}>General</Accordion.Control>
-        <Accordion.Panel bg="white" px={0}>
+        <Accordion.Panel bg="var(--hb-surface)" px={0}>
           <Stack gap={1}>
             <CustomTextInput
               control={control}

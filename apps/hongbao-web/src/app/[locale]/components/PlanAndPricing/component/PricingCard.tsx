@@ -33,32 +33,32 @@ const accentStyles: Record<
   red: {
     gradient: "from-hongbao-red-500! to-hongbao-maroon-600!",
     checkBg: "bg-hongbao-red-50!",
-    checkColor: "text-hongbao-red-600!",
-    levelBadge: "text-hongbao-red-700!",
+    checkColor: "text-hongbao-red-600! dark:text-night-red!",
+    levelBadge: "text-hongbao-red-700! dark:text-night-red!",
   },
   gold: {
     gradient: "from-hongbao-gold-500! to-hongbao-orange-600!",
     checkBg: "bg-hongbao-gold-50!",
-    checkColor: "text-hongbao-gold-700!",
-    levelBadge: "text-hongbao-gold-800!",
+    checkColor: "text-hongbao-gold-700! dark:text-night-gold!",
+    levelBadge: "text-hongbao-gold-800! dark:text-night-gold!",
   },
   orange: {
     gradient: "from-hongbao-orange-500! to-hongbao-red-600!",
     checkBg: "bg-hongbao-orange-50!",
-    checkColor: "text-hongbao-orange-600!",
-    levelBadge: "text-hongbao-orange-700!",
+    checkColor: "text-hongbao-orange-600! dark:text-night-orange!",
+    levelBadge: "text-hongbao-orange-700! dark:text-night-orange!",
   },
   maroon: {
     gradient: "from-hongbao-maroon-500! to-hongbao-brown-700!",
     checkBg: "bg-hongbao-maroon-50!",
-    checkColor: "text-hongbao-maroon-600!",
-    levelBadge: "text-hongbao-maroon-700!",
+    checkColor: "text-hongbao-maroon-600! dark:text-night-maroon!",
+    levelBadge: "text-hongbao-maroon-700! dark:text-night-maroon!",
   },
   brown: {
     gradient: "from-hongbao-brown-500! to-hongbao-maroon-700!",
     checkBg: "bg-hongbao-brown-50!",
-    checkColor: "text-hongbao-brown-600!",
-    levelBadge: "text-hongbao-brown-700!",
+    checkColor: "text-hongbao-brown-600! dark:text-night-brown!",
+    levelBadge: "text-hongbao-brown-700! dark:text-night-brown!",
   },
 };
 
@@ -116,7 +116,7 @@ const PricingCard: React.FC<Props> = ({ data, accent = "red" }) => {
             <Badge
               size="lg"
               radius="md"
-              className={`absolute! top-3! left-3! bg-white/95! ${styles.levelBadge}`}
+              className={`absolute! top-3! left-3! bg-surface/95! ${styles.levelBadge}`}
             >
               {data.category.name}
             </Badge>
