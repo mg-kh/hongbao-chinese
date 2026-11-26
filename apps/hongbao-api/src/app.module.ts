@@ -37,6 +37,7 @@ import { MockTestsModule } from './mock-tests/mock-tests.module';
 import { ClientMockTestModule } from './client/client-mock-test/client-mock-test.module';
 import { ShopModule } from './client/shop/shop.module';
 import { ClientPurchaseModule } from './client/client-purchase/client-purchase.module';
+import { ClientFeedbackModule } from './client/client-feedback/client-feedback.module';
 import { LoggerModule } from './logger/logger.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TelegramModule } from './telegram/telegram.module';
@@ -98,6 +99,7 @@ import { TelegramModule } from './telegram/telegram.module';
     ClientMockTestModule,
     ShopModule,
     ClientPurchaseModule,
+    ClientFeedbackModule,
   ],
   controllers: [AppController],
   providers: [

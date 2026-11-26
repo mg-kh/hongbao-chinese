@@ -15,10 +15,12 @@ const CustomTextArea = <T extends FieldValues>({
     <Controller
       control={control}
       name={name}
-      render={({ field }) => {
+      render={({ field, fieldState }) => {
         return (
           <Textarea
             {...field}
+            value={field.value ?? ""}
+            error={fieldState.error?.message}
             placeholder={`Please Enter ${props.label || ""} here...`}
             rows={5}
             {...props}
