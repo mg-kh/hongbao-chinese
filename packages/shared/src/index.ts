@@ -15,3 +15,4 @@ export * from "./schemas/question.js";
 export * from "./schemas/quiz.js";
 export * from "./schemas/shop.js";
 export * from "./schemas/video.js";
+export * from "./schemas/revenue.js";

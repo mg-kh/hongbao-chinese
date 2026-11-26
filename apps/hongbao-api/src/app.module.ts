@@ -16,6 +16,7 @@ import { LessonModule } from './lesson/lesson.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PurchasesModule } from './purchases/purchases.module';
+import { RevenueModule } from './revenue/revenue.module';
 import { QuestionModule } from './question/question.module';
 import { QuizSectionModule } from './quiz-section/quiz-section.module';
 import { QuizModule } from './quiz/quiz.module';
@@ -80,6 +81,7 @@ import { TelegramModule } from './telegram/telegram.module';
     VideoModule,
     ClientCourseModule,
     PurchasesModule,
+    RevenueModule,
     FeedbackModule,
     QuizSectionModule,
     R2Module,

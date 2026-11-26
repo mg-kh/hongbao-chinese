@@ -1,27 +1,22 @@
 import { currencyFormatter } from "@/utils/currencyFormatter";
 import { AreaChart } from "@mantine/charts";
 import { Paper, Skeleton, Stack, Text } from "@mantine/core";
-import { TRevenueTrendPoint } from "../../../../../types/revenue.type";
+import { TRevenueTrendPoint } from "@/app/[locale]/(dashboard)/dashboard/types/revenue.type";
+import { formatCompactAmount } from "@/utils/formatCompactAmount";
 
 interface Props {
   data: TRevenueTrendPoint[];
   isLoading?: boolean;
 }
 
-/**
- * The y-axis has little horizontal room, so ticks get an abbreviated
- * "18.4M" form instead of the full "18,420,000 MMK" string - which overflows
- * the chart's left edge. The full formatted amount still shows in the
- * tooltip via `valueFormatter` below.
- */
-const formatCompactAmount = (value: number) => {
-  const abs = Math.abs(value);
-  if (abs >= 1_000_000) return `${(value / 1_000_000).toFixed(abs % 1_000_000 === 0 ? 0 : 1)}M`;
-  if (abs >= 1_000) return `${(value / 1_000).toFixed(abs % 1_000 === 0 ? 0 : 1)}K`;
-  return `${value}`;
-};
+// Y-axis ticks use the compact "18.4M" form so they fit the narrow axis; the
+// tooltip still shows the full amount via `valueFormatter`.
+// Month buckets arrive as "Nov 2026"; on the axis "Nov '26" is enough (the
+// tooltip keeps the full label). Day/week labels ("Nov 21") pass through.
+const formatXTick = (label: string) => label.replace(/ \d{2}(\d{2})$/, " '$1");
 
 const RevenueTrendChart: React.FC<Props> = ({ data, isLoading }) => {
+  const totalOrders = data.reduce((sum, p) => sum + p.orders, 0);
   const totalEnrollments = data.reduce((sum, p) => sum + p.enrollments, 0);
 
   return (
@@ -30,7 +25,8 @@ const RevenueTrendChart: React.FC<Props> = ({ data, isLoading }) => {
         <div>
           <Text fw={700}>Revenue Trend</Text>
           <Text size="xs" c="dimmed">
-            {totalEnrollments.toLocaleString()} enrollments in this period
+            {totalOrders.toLocaleString()} orders ·{" "}
+            {totalEnrollments.toLocaleString()} items sold in this period
           </Text>
         </div>
 
@@ -47,6 +43,14 @@ const RevenueTrendChart: React.FC<Props> = ({ data, isLoading }) => {
             gridAxis="y"
             valueFormatter={(value) => currencyFormatter({ value })}
             yAxisProps={{ tickFormatter: formatCompactAmount, width: 56 }}
+            // minTickGap lets recharts drop ticks that would collide instead
+            // of cramming every bucket label onto a narrow axis.
+            xAxisProps={{
+              tickFormatter: formatXTick,
+              minTickGap: 24,
+              interval: "preserveStartEnd",
+              tickMargin: 8,
+            }}
             tooltipAnimationDuration={150}
           />
         )}
