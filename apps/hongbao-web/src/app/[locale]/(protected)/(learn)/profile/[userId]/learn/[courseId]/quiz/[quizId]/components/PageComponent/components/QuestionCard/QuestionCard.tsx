@@ -1,5 +1,6 @@
 import { Box, Group, Paper, Stack, Text } from "@mantine/core";
 import { ArrowCounterClockwiseIcon, CheckIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import { useFormContext, useWatch } from "react-hook-form";
 import QuestionTypeBadge from "@/components/MiscellaneousComponents/QuestionTypeBadge/QuestionTypeBadge";
 import { decodeEscapedHtml } from "@/utils/decodeEscapedHtml";
@@ -15,6 +16,7 @@ interface Props {
 const optionLetter = (i: number) => String.fromCharCode(65 + i);
 
 const QuestionCard: React.FC<Props> = ({ question }) => {
+  const t = useTranslations("Learn.QuestionCard");
   const { control, setValue } = useFormContext<QuizAnswersFormField>();
   const answer = useWatch({
     control,
@@ -87,7 +89,7 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
             >
               {picked.length === 0 ? (
                 <Text size="sm" c="gray.5" className="p-2!">
-                  Tap the words below to build your sentence.
+                  {t("rearrange_hint")}
                 </Text>
               ) : (
                 <Group gap={8} wrap="wrap">
@@ -127,7 +129,7 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
                 className="flex! items-center! gap-1.5! w-fit! text-xs! font-semibold! text-gray-500! cursor-pointer! transition-colors! duration-150! hover:text-hongbao-red-600! dark:hover:text-night-red!"
               >
                 <ArrowCounterClockwiseIcon size={13} weight="bold" />
-                Undo last word
+                {t("undo_last_word")}
               </button>
             )}
           </Stack>

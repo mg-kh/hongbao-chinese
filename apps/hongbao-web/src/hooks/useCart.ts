@@ -22,6 +22,7 @@ import calculateDiscountPrice from "@/utils/calculateDiscountPrice";
 import { showErrorNoti } from "@/utils/notifications-helper";
 import { AxiosError } from "axios";
 import { useAtom, useAtomValue } from "jotai";
+import { useTranslations } from "next-intl";
 import { useCallback, useMemo } from "react";
 
 /** Lifetime products (flashcard decks) are a single unit, never months. */
@@ -38,6 +39,7 @@ type TApplyCouponResponse = { data: TAppliedCoupon };
  * `src/store/cart.store.ts` so components never touch storage directly.
  */
 const useCart = () => {
+  const t = useTranslations("Cart.Promo");
   const [items, setItems] = useAtom(cartAtom);
   const [appliedCoupons, setAppliedCoupons] = useAtom(appliedCouponsAtom);
   const subtotal = useAtomValue(cartSubtotalAtom);
@@ -151,7 +153,7 @@ const useCart = () => {
     async (id: string, input: string) => {
       const code = input.trim();
       if (!code) {
-        return { ok: false as const, error: "Enter a promo code." };
+        return { ok: false as const, error: t("enter_code") };
       }
       try {
         const res = await applyCoupon({ code, courseId: id });
@@ -161,11 +163,11 @@ const useCart = () => {
         const apiError = e as AxiosError<TErrorOptions>;
         return {
           ok: false as const,
-          error: apiError.response?.data?.message || "That code isn't valid.",
+          error: apiError.response?.data?.message || t("invalid_code"),
         };
       }
     },
-    [applyCoupon, setAppliedCoupons],
+    [applyCoupon, setAppliedCoupons, t],
   );
 
   /**

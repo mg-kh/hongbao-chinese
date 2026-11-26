@@ -3,9 +3,11 @@
 import useAllCategoryList from "@/hooks/global-data-fetching/useAllCategoryList";
 import calculateDiscountPrice from "@/utils/calculateDiscountPrice";
 import { useDisclosure } from "@mantine/hooks";
+import { useTranslations } from "next-intl";
 import { useDeferredValue, useMemo, useState } from "react";
 import useShopProducts from "@/app/[locale]/shop/hooks/useShopProducts";
 import {
+  SHOP_TYPE_META,
   ShopProductType,
   TShopProduct,
 } from "@/app/[locale]/shop/types/shop.type";
@@ -17,18 +19,16 @@ import {
 export type ShopTypeFilter = "all" | ShopProductType;
 export type ShopSort = "relevance" | "top-sales" | "price-low" | "price-high";
 
-export const SHOP_SORT_OPTIONS: { value: ShopSort; label: string }[] = [
-  { value: "relevance", label: "Recommended" },
-  { value: "top-sales", label: "Best selling" },
-  { value: "price-low", label: "Price: low to high" },
-  { value: "price-high", label: "Price: high to low" },
+/** `labelKey` is a translation key under `Shop.SortMenu.options`. */
+export const SHOP_SORT_OPTIONS: {
+  value: ShopSort;
+  labelKey: "relevance" | "top_sales" | "price_low" | "price_high";
+}[] = [
+  { value: "relevance", labelKey: "relevance" },
+  { value: "top-sales", labelKey: "top_sales" },
+  { value: "price-low", labelKey: "price_low" },
+  { value: "price-high", labelKey: "price_high" },
 ];
-
-const TYPE_LABELS: Record<ShopProductType, string> = {
-  course: "Courses",
-  "mock-test": "Mock Tests",
-  flashcard: "Flashcards",
-};
 
 /** A removable chip shown above the results for each active filter. */
 export type TAppliedFilter = { key: string; label: string; remove: () => void };
@@ -39,6 +39,7 @@ const priceOf = (p: TShopProduct) =>
   p.isFree ? 0 : calculateDiscountPrice(p.price, p.discount);
 
 const useContainer = (initialType: ShopTypeFilter) => {
+  const t = useTranslations("Shop");
   const [search, setSearch] = useState("");
   const deferredSearch = useDeferredValue(search);
   // `initialType` comes from `?type=` (the homepage "See all courses" link).
@@ -101,20 +102,20 @@ const useContainer = (initialType: ShopTypeFilter) => {
   if (type !== "all")
     appliedFilters.push({
       key: "type",
-      label: TYPE_LABELS[type],
+      label: t(`Types.${SHOP_TYPE_META[type as ShopProductType].pluralKey}`),
       remove: () => setType("all"),
     });
   if (categoryId)
     appliedFilters.push({
       key: "category",
       label:
-        categoryOptions.find((o) => o.value === categoryId)?.label ?? "Level",
+        categoryOptions.find((o) => o.value === categoryId)?.label ?? t("Filters.level"),
       remove: () => setCategoryId(null),
     });
   if (onSaleOnly)
     appliedFilters.push({
       key: "sale",
-      label: "On sale",
+      label: t("Filters.on_sale"),
       remove: () => setOnSaleOnly(false),
     });
 

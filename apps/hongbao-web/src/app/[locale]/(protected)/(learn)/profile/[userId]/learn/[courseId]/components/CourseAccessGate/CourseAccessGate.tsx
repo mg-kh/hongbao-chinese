@@ -7,6 +7,7 @@ import {
   HourglassHighIcon,
   LockSimpleIcon,
 } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import React from "react";
 import useContainer from "./useContainer";
@@ -29,6 +30,7 @@ const CourseAccessGate: React.FC<Props> = ({ children }) => {
     myCoursesHref,
     renewHref,
   } = useContainer();
+  const t = useTranslations("Learn.AccessGate");
 
   if (isLoading) {
     return (
@@ -41,16 +43,18 @@ const CourseAccessGate: React.FC<Props> = ({ children }) => {
   if (!accessError) return <>{children}</>;
 
   const title = isExpired
-    ? "သက်တမ်းကုန်သွားပါပြီ"
+    ? t("expired_title")
     : isPending
-      ? "Waiting for admin approval"
-      : "You don't have access to this course";
+      ? t("pending_title")
+      : t("no_access_title");
 
   const description = isExpired
-    ? `Your access${expiredOn ? ` ended on ${expiredOn}` : " has ended"}. Renew to keep learning - your progress is saved.`
+    ? expiredOn
+      ? t("expired_description_on", { date: expiredOn })
+      : t("expired_description")
     : isPending
-      ? "Your purchase is being reviewed. You can start learning once it's approved."
-      : "Purchase this course to start learning.";
+      ? t("pending_description")
+      : t("no_access_description");
 
   return (
     <Center py={{ base: 40, sm: 80 }} className="w-full!">
@@ -92,7 +96,7 @@ const CourseAccessGate: React.FC<Props> = ({ children }) => {
                 fullWidth
                 rightSection={<ArrowRightIcon size={14} />}
               >
-                {isExpired ? "သက်တမ်းတိုးရန်" : "Go to shop"}
+                {isExpired ? t("renew") : t("go_to_shop")}
               </Button>
             )}
             <Button
@@ -104,7 +108,7 @@ const CourseAccessGate: React.FC<Props> = ({ children }) => {
               fullWidth
               leftSection={<ArrowLeftIcon size={14} />}
             >
-              Back to my courses
+              {t("back_to_my_courses")}
             </Button>
           </Stack>
         </Stack>

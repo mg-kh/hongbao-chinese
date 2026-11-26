@@ -4,13 +4,20 @@ import { formatBlogDate } from "@/utils/formatBlogDate";
 import { Badge, Box, Group, Paper, Stack, Text } from "@mantine/core";
 import { ClockIcon } from "@phosphor-icons/react";
 import React from "react";
-import { categoryBadge, categoryCover } from "../../../../blogs.data";
+import { useTranslations } from "next-intl";
+import {
+  categoryBadge,
+  categoryCover,
+  categoryLabelKey,
+} from "../../../../blogs.data";
 
 interface Props {
   blog: TBlog;
 }
 
 const BlogCard: React.FC<Props> = ({ blog }) => {
+  const t = useTranslations("Blogs.BlogCard");
+  const tCategory = useTranslations("Blogs.categories");
   return (
     <Paper
       component={Link}
@@ -33,7 +40,7 @@ const BlogCard: React.FC<Props> = ({ blog }) => {
           color={categoryBadge[blog.category]}
           className="absolute! top-3! left-3! shadow-sm!"
         >
-          {blog.category}
+          {tCategory(categoryLabelKey[blog.category])}
         </Badge>
       </Box>
 
@@ -46,7 +53,12 @@ const BlogCard: React.FC<Props> = ({ blog }) => {
           {blog.title}
         </Text>
 
-        <Text size="sm" c="gray.6" lineClamp={3} className="flex-1! leading-relaxed!">
+        <Text
+          size="sm"
+          c="gray.6"
+          lineClamp={3}
+          className="flex-1! leading-relaxed!"
+        >
           {blog.excerpt}
         </Text>
 
@@ -57,7 +69,7 @@ const BlogCard: React.FC<Props> = ({ blog }) => {
           <Group gap={4} wrap="nowrap" className="shrink-0!">
             <ClockIcon size={13} className="text-gray-400!" />
             <Text size="xs" c="gray.5">
-              {blog.readMinutes} min
+              {t("min", { minutes: blog.readMinutes })}
             </Text>
           </Group>
         </Group>

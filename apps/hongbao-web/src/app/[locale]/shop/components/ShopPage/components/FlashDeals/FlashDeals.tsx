@@ -2,6 +2,7 @@
 
 import { Text } from "@mantine/core";
 import { LightningIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import { TShopProduct } from "../../../../types/shop.type";
 import FlashDealCard from "./components/FlashDealCard/FlashDealCard";
 import useContainer from "./useContainer";
@@ -17,6 +18,7 @@ const TimeBox: React.FC<{ value: string }> = ({ value }) => (
 );
 
 const FlashDeals: React.FC<Props> = ({ deals }) => {
+  const t = useTranslations("Shop.FlashDeals");
   const { parts } = useContainer();
 
   if (deals.length === 0) return null;
@@ -29,13 +31,13 @@ const FlashDeals: React.FC<Props> = ({ deals }) => {
             <LightningIcon size={18} weight="fill" />
           </span>
           <Text fw={800} className="text-[17px]!" c="var(--hb-accent-strong)">
-            Flash Deals
+            {t("title")}
           </Text>
         </div>
 
         <div className="flex! items-center! gap-1.5!">
           <Text size="11px" fw={700} c="gray.6" className="hidden! sm:block!">
-            Ends in
+            {t("ends_in")}
           </Text>
           {parts ? (
             <div className="flex! items-center! gap-1!">

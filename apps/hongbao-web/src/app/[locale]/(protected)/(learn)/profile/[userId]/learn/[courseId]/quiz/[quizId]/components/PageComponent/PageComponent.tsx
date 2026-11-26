@@ -19,6 +19,7 @@ import {
 import { FormProvider } from "react-hook-form";
 import QuestionCard from "./components/QuestionCard/QuestionCard";
 import QuizResult from "./components/QuizResult/QuizResult";
+import { useTranslations } from "next-intl";
 import useContainer from "./useContainer";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb/CustomBreadCrumb";
 
@@ -54,6 +55,8 @@ const PageComponent = () => {
     quizTitle,
     nextHref,
   } = useContainer();
+  const t = useTranslations("Learn.Quiz");
+  const tc = useTranslations("Learn.Common");
 
   if (isLoading) {
     return <LoaderComponent h={320} />;
@@ -66,9 +69,9 @@ const PageComponent = () => {
           <Box className="flex! items-center! justify-center! w-14! h-14! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
             <SealQuestionIcon size={26} weight="fill" />
           </Box>
-          <Text fw={700}>No questions yet</Text>
+          <Text fw={700}>{t("no_questions_title")}</Text>
           <Text size="sm" c="gray.6" ta="center">
-            This quiz doesn&apos;t have any questions added to it.
+            {t("no_questions_description")}
           </Text>
         </Stack>
       </Paper>
@@ -83,13 +86,13 @@ const PageComponent = () => {
       <Stack gap={18} className="flex-1! w-full!">
         <CustomBreadCrumb
           links={[
-            { label: "My courses", href: myCoursesHref, isActive: true },
+            { label: tc("my_courses"), href: myCoursesHref, isActive: true },
             {
-              label: courseTitle || "Course",
+              label: courseTitle || tc("course"),
               href: courseHref,
               isActive: true,
             },
-            { label: quizTitle || "Quiz", href: "", isActive: false },
+            { label: quizTitle || tc("quiz"), href: "", isActive: false },
           ]}
         />
 
@@ -117,13 +120,13 @@ const PageComponent = () => {
               <Stack gap={8}>
                 <Group justify="space-between" gap={8} wrap="nowrap">
                   <Text size="sm" fw={700} c="gray.8">
-                    Question {index + 1}{" "}
+                    {t("question_number", { number: index + 1 })}{" "}
                     <Text span size="sm" fw={500} c="gray.5">
-                      of {total}
+                      {t("of_total", { total })}
                     </Text>
                   </Text>
                   <Text size="xs" fw={600} c="gray.5">
-                    {answeredCount}/{total} answered
+                    {t("answered_count", { answered: answeredCount, total })}
                   </Text>
                 </Group>
                 <Progress
@@ -148,7 +151,7 @@ const PageComponent = () => {
                       key={q.id}
                       type="button"
                       onClick={() => goTo(i)}
-                      aria-label={`Go to question ${i + 1}`}
+                      aria-label={t("go_to_question", { number: i + 1 })}
                       aria-current={isCurrent ? "true" : undefined}
                       className={`w-8! h-8! rounded-lg! text-xs! font-bold! cursor-pointer! transition-all! duration-200! ${
                         isCurrent
@@ -180,7 +183,7 @@ const PageComponent = () => {
                   leftSection={<ArrowLeftIcon size={16} />}
                   className="w-full! sm:w-auto!"
                 >
-                  နောက်သို့
+                  {tc("previous")}
                 </Button>
 
                 {/* distinct keys stop React reusing one <button> node: otherwise
@@ -197,7 +200,7 @@ const PageComponent = () => {
                     }
                     className="w-full! sm:w-auto!"
                   >
-                    Submit quiz
+                    {t("submit_quiz")}
                   </Button>
                 ) : (
                   <Button
@@ -210,7 +213,7 @@ const PageComponent = () => {
                     rightSection={<ArrowRightIcon size={16} />}
                     className="w-full! sm:w-auto!"
                   >
-                    နောက်ထပ်
+                    {tc("next")}
                   </Button>
                 )}
               </Group>

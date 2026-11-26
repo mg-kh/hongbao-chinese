@@ -6,13 +6,16 @@ import ClientLayout from "@/layouts/ClientLayout/ClientLayout";
 import { TBlogCategory } from "@/types/blog.type";
 import { Box, Container, Stack, Text, TextInput } from "@mantine/core";
 import { ArticleIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
-import { blogCategories } from "../../blogs.data";
+import { useTranslations } from "next-intl";
+import { blogCategories, categoryLabelKey } from "../../blogs.data";
 import ArticleRow from "./components/ArticleRow/ArticleRow";
 import useContainer from "./useContainer";
 
 const PageComponent = () => {
   const { search, setSearch, category, setCategory, results, total } =
     useContainer();
+  const t = useTranslations("Blogs.ListPage");
+  const tCategory = useTranslations("Blogs.categories");
 
   const filters: (TBlogCategory | "All")[] = ["All", ...blogCategories];
 
@@ -26,11 +29,10 @@ const PageComponent = () => {
             fw={800}
             className="text-[1.9rem]! leading-[1.1]! tracking-tight! text-gray-900! sm:text-[2.4rem]!"
           >
-            Hong Bao Journal
+            {t("title")}
           </Text>
           <Text c="gray.6" className="mt-2! leading-relaxed!">
-            Grammar breakdowns, exam strategy, and culture notes from our
-            teaching team.
+            {t("subtitle")}
           </Text>
 
           {/* sticky topic bar */}
@@ -38,10 +40,10 @@ const PageComponent = () => {
             <TextInput
               value={search}
               onChange={(e) => setSearch(e.currentTarget.value)}
-              placeholder="Search articles..."
+              placeholder={t("search_placeholder")}
               size="sm"
               radius="xl"
-              aria-label="Search articles"
+              aria-label={t("search_aria")}
               leftSection={<MagnifyingGlassIcon size={16} />}
               classNames={{
                 input:
@@ -63,7 +65,7 @@ const PageComponent = () => {
                         : "bg-gray-100! text-gray-600! hover:bg-gray-200!"
                     }`}
                   >
-                    {f}
+                    {f === "All" ? t("all") : tCategory(categoryLabelKey[f])}
                   </button>
                 );
               })}
@@ -76,9 +78,9 @@ const PageComponent = () => {
               <Box className="flex! h-14! w-14! items-center! justify-center! rounded-2xl! bg-hongbao-red-50! text-hongbao-red-600! dark:text-night-red!">
                 <ArticleIcon size={26} />
               </Box>
-              <Text fw={700}>No articles found</Text>
+              <Text fw={700}>{t("empty_title")}</Text>
               <Text size="sm" c="gray.6" ta="center" className="max-w-[360px]!">
-                Try a different search term or category.
+                {t("empty_body")}
               </Text>
             </Stack>
           ) : (

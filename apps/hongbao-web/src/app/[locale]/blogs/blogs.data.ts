@@ -149,6 +149,18 @@ export const categoryCover: Record<TBlogCategory, string> = {
   "Study Tips": "from-hongbao-brown-500 to-hongbao-maroon-700",
 };
 
+/** Translation key (under `Blogs.categories`) for each category's label. */
+export const categoryLabelKey: Record<
+  TBlogCategory,
+  "grammar" | "vocabulary" | "culture" | "hsk_exam" | "study_tips"
+> = {
+  Grammar: "grammar",
+  Vocabulary: "vocabulary",
+  Culture: "culture",
+  "HSK Exam": "hsk_exam",
+  "Study Tips": "study_tips",
+};
+
 export const categoryBadge: Record<TBlogCategory, string> = {
   Grammar: "hongbao-red",
   Vocabulary: "hongbao-orange",

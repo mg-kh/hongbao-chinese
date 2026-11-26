@@ -23,6 +23,7 @@ import {
   IdentificationCardIcon,
   SparkleIcon,
 } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import { memo } from "react";
 import useContainer, { TRole } from "./useContainer";
 
@@ -49,6 +50,7 @@ const elideMiddle = (value: string, head = 6, tail = 4) =>
 const UserInfo = () => {
   const { user, isLoading, role, joinedLabel, daysSinceJoin, settingsHref } =
     useContainer();
+  const t = useTranslations("Profile.UserInfo");
 
   return (
     <article className="group overflow-hidden rounded-3xl border border-gray-200 bg-surface shadow-sm">
@@ -79,7 +81,10 @@ const UserInfo = () => {
               className="ring-4! ring-surface! shadow-md!"
             />
             {daysSinceJoin !== null && daysSinceJoin >= 30 && (
-              <Tooltip label={`Learning for ${daysSinceJoin} days`} withArrow>
+              <Tooltip
+                label={t("learning_for", { days: daysSinceJoin })}
+                withArrow
+              >
                 <div className="absolute -bottom-1 -right-1 flex items-center justify-center w-7 h-7 rounded-full bg-hongbao-gold-500 text-white ring-2 ring-surface shadow-sm">
                   <SparkleIcon size={14} weight="fill" />
                 </div>
@@ -107,11 +112,11 @@ const UserInfo = () => {
                     {user?.name || ""}
                   </Text>
                   <Badge color={roleColor[role]} radius="sm" variant="light">
-                    {role}
+                    {t(`roles.${role}`)}
                   </Badge>
                 </div>
                 <Text size="sm" c="gray.6" mt={4}>
-                  မင်္ဂလာပါ။ HongBao Chinese မှကြိုဆိုပါတယ်။
+                  {t("greeting")}
                 </Text>
               </>
             )}
@@ -119,24 +124,32 @@ const UserInfo = () => {
             {/* meta row - wraps on narrow screens */}
             <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 mt-3">
               {user?.email && (
-                <MetaItem icon={<EnvelopeIcon size={16} />} label="Email">
+                <MetaItem icon={<EnvelopeIcon size={16} />} label={t("email")}>
                   <span title={user.email}>{user.email}</span>
                 </MetaItem>
               )}
               {joinedLabel && (
-                <MetaItem icon={<CalendarIcon size={16} />} label="Joined">
-                  Joined <time dateTime={user?.createdAt}>{joinedLabel}</time>
+                <MetaItem
+                  icon={<CalendarIcon size={16} />}
+                  label={t("joined_label")}
+                >
+                  {t.rich("joined", {
+                    date: joinedLabel,
+                    time: (chunks) => (
+                      <time dateTime={user?.createdAt}>{chunks}</time>
+                    ),
+                  })}
                 </MetaItem>
               )}
               {user?.id && (
                 <MetaItem
                   icon={<IdentificationCardIcon size={16} />}
-                  label="User ID"
+                  label={t("user_id")}
                   action={
                     <CopyButton value={user.id}>
                       {({ copied, copy }) => (
                         <Tooltip
-                          label={copied ? "ID copied" : "Copy ID"}
+                          label={copied ? t("id_copied") : t("copy_id")}
                           withArrow
                         >
                           <ActionIcon
@@ -145,7 +158,7 @@ const UserInfo = () => {
                             variant="subtle"
                             size="sm"
                             radius="md"
-                            aria-label="Copy user ID"
+                            aria-label={t("copy_user_id")}
                           >
                             {copied ? (
                               <CheckIcon size={14} />
@@ -176,7 +189,7 @@ const UserInfo = () => {
             leftSection={<GearSixIcon size={14} />}
             className="absolute! top-0! right-0! sm:static! sm:self-start! shrink-0!"
           >
-            Settings
+            {t("settings")}
           </Button>
         </div>
       </div>

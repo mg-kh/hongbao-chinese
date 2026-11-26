@@ -5,12 +5,14 @@ import {
   HourglassMediumIcon,
   XCircleIcon,
 } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import { TOrderStatus } from "../../../types/purchase-history.type";
 
 const statusMeta: Record<
   TOrderStatus,
   {
-    label: string;
+    /** Message key under `Profile.PurchaseHistory.status`. */
+    labelKey: "pending" | "approved" | "cancelled" | "expired";
     color: string;
     icon: React.ReactNode;
     /** Light card background + border for an order in this status. */
@@ -18,25 +20,25 @@ const statusMeta: Record<
   }
 > = {
   PENDING: {
-    label: "Under review",
+    labelKey: "pending",
     color: "hongbao-gold",
     icon: <HourglassMediumIcon size={12} weight="fill" />,
     surface: "bg-hongbao-gold-50/30! border-hongbao-gold-200/50!",
   },
   APPROVED: {
-    label: "Active",
+    labelKey: "approved",
     color: "green",
     icon: <CheckCircleIcon size={12} weight="fill" />,
     surface: "bg-green-50/50! border-green-200/50!",
   },
   CANCELLED: {
-    label: "Declined",
+    labelKey: "cancelled",
     color: "gray",
     icon: <XCircleIcon size={12} weight="fill" />,
     surface: "bg-gray-50/60! border-gray-200/50!",
   },
   EXPIRED: {
-    label: "Expired",
+    labelKey: "expired",
     color: "hongbao-red",
     icon: <ClockCountdownIcon size={12} weight="fill" />,
     surface: "bg-hongbao-red-50/25! border-hongbao-red-200/50!",
@@ -49,6 +51,7 @@ interface Props extends Omit<BadgeProps, "color" | "leftSection"> {
 
 /** Single source of truth for how each order status looks and reads. */
 const OrderStatusBadge: React.FC<Props> = ({ status, ...props }) => {
+  const t = useTranslations("Profile.PurchaseHistory.status");
   // Fall back rather than crash if the API ever sends an unmapped status.
   const meta = statusMeta[status] ?? statusMeta.PENDING;
   return (
@@ -59,7 +62,7 @@ const OrderStatusBadge: React.FC<Props> = ({ status, ...props }) => {
       leftSection={meta.icon}
       {...props}
     >
-      {meta.label}
+      {t(meta.labelKey)}
     </Badge>
   );
 };

@@ -13,9 +13,11 @@ import {
   Text,
 } from "@mantine/core";
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import useContainer from "./useContainer";
 
 const StudentReview = () => {
+  const t = useTranslations("Home.StudentReview");
   const {
     page,
     setPage,
@@ -42,9 +44,9 @@ const StudentReview = () => {
         <Container size={"xl"} px={{ base: 16, sm: 24 }} className="relative!">
           <Box className="py-14! sm:py-20! md:py-24!">
             <SectionTitle
-              eyebrow="Testimonials"
-              title="Our Student Feedbacks"
-              subtitle="Real stories from learners who went from their first character to real confidence with Hong Bao."
+              eyebrow={t("eyebrow")}
+              title={t("title")}
+              subtitle={t("subtitle")}
               align="center"
             />
 
@@ -87,9 +89,8 @@ const StudentReview = () => {
                     ta="center"
                     className="text-balance!"
                   >
-                    <span className="hidden! sm:inline!">· </span>Loved by{" "}
-                    {feedbacks.length.toLocaleString("en-US")}{" "}
-                    {feedbacks.length === 1 ? "learner" : "learners"}
+                    <span className="hidden! sm:inline!">· </span>
+                    {t("loved_by", { count: feedbacks.length })}
                   </Text>
                 </div>
               </div>
@@ -110,7 +111,7 @@ const StudentReview = () => {
               <div className="flex! items-center! justify-center! gap-5! pt-12!">
                 <button
                   type="button"
-                  aria-label="Previous feedbacks"
+                  aria-label={t("previous_aria")}
                   disabled={page === 0}
                   onClick={() => setPage((p) => Math.max(0, p - 1))}
                   className="flex! items-center! justify-center! w-11! h-11! rounded-full! border! border-gray-300! bg-surface! text-gray-700! transition-all! duration-200! ease-out! hover:border-hongbao-red-300! hover:text-hongbao-red-600! dark:hover:text-night-red! hover:-translate-x-0.5! disabled:opacity-40! disabled:hover:border-gray-300! disabled:hover:text-gray-700! disabled:hover:translate-x-0! disabled:cursor-not-allowed! cursor-pointer!"
@@ -123,7 +124,7 @@ const StudentReview = () => {
                     <button
                       key={i}
                       type="button"
-                      aria-label={`Go to page ${i + 1}`}
+                      aria-label={t("go_to_page_aria", { page: i + 1 })}
                       aria-current={i === page}
                       onClick={() => setPage(i)}
                       className={`h-2! rounded-full! transition-all! duration-300! ease-out! cursor-pointer! ${
@@ -137,7 +138,7 @@ const StudentReview = () => {
 
                 <button
                   type="button"
-                  aria-label="Next feedbacks"
+                  aria-label={t("next_aria")}
                   disabled={page === totalPages - 1}
                   onClick={() =>
                     setPage((p) => Math.min(totalPages - 1, p + 1))

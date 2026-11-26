@@ -8,6 +8,7 @@ import {
   FlashcardTypeIcon,
 } from "@/components/icons/productTypeIcons";
 import { BrainIcon, GearIcon, HouseSimpleIcon } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import React from "react";
 import SideBarNavigation from "./components/SideBarNavigation/SideBarNavigation";
@@ -18,6 +19,7 @@ interface Props {
 
 const ProfileLayout: React.FC<Props> = ({ children }) => {
   const { userId } = useParams();
+  const t = useTranslations("Profile.Nav");
 
   return (
     <ClientLayout hideFooterOnMobile>
@@ -38,30 +40,30 @@ const ProfileLayout: React.FC<Props> = ({ children }) => {
       <MobileBottomNav
         items={[
           {
-            label: "ပင်မ",
+            label: t("home"),
             href: `/profile/${userId}`,
             icon: <HouseSimpleIcon size={20} weight="fill" />,
           },
           {
-            label: "My courses",
+            label: t("my_courses_short"),
             href: `/profile/${userId}/my-courses`,
             match: "my-courses",
             icon: <CourseTypeIcon size={20} weight="fill" />,
           },
           {
-            label: "Flashcards",
+            label: t("flashcards"),
             href: `/profile/${userId}/flashcards`,
             match: "flashcards",
             icon: <FlashcardTypeIcon size={20} weight="fill" />,
           },
           {
-            label: "Memo Space",
+            label: t("memo_space"),
             href: `/profile/${userId}/memo-space`,
             match: "memo-space",
             icon: <BrainIcon size={20} weight="fill" />,
           },
           {
-            label: "Settings",
+            label: t("settings"),
             href: `/profile/${userId}/settings`,
             match: "settings",
             icon: <GearIcon size={20} weight="fill" />,

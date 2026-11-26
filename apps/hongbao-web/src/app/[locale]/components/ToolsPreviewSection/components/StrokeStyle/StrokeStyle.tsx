@@ -10,11 +10,13 @@ import {
 } from "@mantine/core";
 import { IconRepeat } from "@tabler/icons-react";
 import HanziWriter from "hanzi-writer";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 const sampleChars = ["随", "游", "勤", "稳", "警"];
 
 const StrokeStyle = () => {
+  const t = useTranslations("Home.StrokeStyle");
   const [input, setInput] = useState("随");
   const [char, setChar] = useState("随");
   const writerRef = useRef<HanziWriter | null>(null);
@@ -106,7 +108,7 @@ const StrokeStyle = () => {
             size="lg"
             radius={15}
             variant="filled"
-            placeholder="Type a Chinese character"
+            placeholder={t("input_placeholder")}
             styles={{
               input: {
                 "--input-bd": "var(--mantine-color-hongbao-red-1)",
@@ -130,7 +132,7 @@ const StrokeStyle = () => {
               variant="light"
               color="hongbao-red"
               onClick={handleAnimate}
-              aria-label="Replay stroke animation"
+              aria-label={t("replay_aria")}
             >
               <IconRepeat />
             </Button>
@@ -139,7 +141,7 @@ const StrokeStyle = () => {
               onClick={handleUpdate}
               className="flex-1! sm:flex-none!"
             >
-              Update
+              {t("update")}
             </RubyButtonComponent>
           </Flex>
         </Flex>

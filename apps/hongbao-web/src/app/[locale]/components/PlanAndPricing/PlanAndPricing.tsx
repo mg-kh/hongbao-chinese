@@ -4,6 +4,7 @@ import RubyButtonComponent from "@/components/Buttons/RubyButtonComponent/RubyBu
 import { Link } from "@/i18n/navigation";
 import { Box, Container, Group, Space } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 import PricingCard, { PricingAccent } from "./component/PricingCard";
 import useContainer from "./useContainer";
 import React from "react";
@@ -18,14 +19,14 @@ const accentOrder: PricingAccent[] = [
 ];
 
 const PlanAndPricing = () => {
+  const t = useTranslations("Home.PlanAndPricing");
   const { courses } = useContainer();
   return (
     <Container size={"xl"} px={{ base: 16, sm: 24 }}>
       <Box py={20} id="pricing" className="scroll-mt-24!">
         <SectionTitle
-          title="Plan & Pricing"
-          subtitle="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Mollitia,
-          aperiam?"
+          title={t("title")}
+          subtitle={t("subtitle")}
         />
 
         <Space h={30} />
@@ -50,7 +51,7 @@ const PlanAndPricing = () => {
             radius="xl"
             rightSection={<IconArrowRight size={18} />}
           >
-            See all courses
+            {t("see_all_courses")}
           </RubyButtonComponent>
         </Group>
       </Box>

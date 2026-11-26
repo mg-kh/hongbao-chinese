@@ -3,8 +3,10 @@
 import { Paper, Stack, Tabs } from "@mantine/core";
 import StrokeStyle from "./components/StrokeStyle/StrokeStyle";
 import DailyLesson from "./components/DailyLesson/DailyLesson";
+import { useTranslations } from "next-intl";
 
 const ToolsPreviewSection = () => {
+  const t = useTranslations("Home.ToolsPreviewSection");
   return (
     <Paper
       shadow="xl"
@@ -20,10 +22,10 @@ const ToolsPreviewSection = () => {
             p={5}
           >
             <Tabs.Tab bdrs={15} value="stroke-style" color="hongbao-red">
-              Strokes styles
+              {t("stroke_styles_tab")}
             </Tabs.Tab>
             <Tabs.Tab bdrs={15} value="lesson" color="hongbao-red">
-              Today's lesson
+              {t("todays_lesson_tab")}
             </Tabs.Tab>
           </Tabs.List>
 

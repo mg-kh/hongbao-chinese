@@ -17,6 +17,7 @@ import {
 import { useMounted } from "@mantine/hooks";
 import { ImageIcon } from "@phosphor-icons/react";
 import { IconCheck, IconShoppingBagPlus } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 export type PricingAccent = "red" | "gold" | "orange" | "maroon" | "brown";
@@ -68,6 +69,7 @@ interface Props {
 }
 
 const PricingCard: React.FC<Props> = ({ data, accent = "red" }) => {
+  const t = useTranslations("Home.PricingCard");
   const styles = accentStyles[accent];
   const { isInCart, toggleItem } = useCart();
   // Cart state lives in localStorage, so it's only trustworthy after mount.
@@ -129,7 +131,7 @@ const PricingCard: React.FC<Props> = ({ data, accent = "red" }) => {
               color="dark.9"
               className="absolute! top-3! right-3! text-white!"
             >
-              Free
+              {t("free")}
             </Badge>
           ) : (
             data?.discount > 0 && (
@@ -139,7 +141,7 @@ const PricingCard: React.FC<Props> = ({ data, accent = "red" }) => {
                 color="hongbao-gold.6"
                 className="absolute! top-3! right-3! text-white!"
               >
-                {data.discount}% off
+                {t("discount_off", { discount: data.discount })}
               </Badge>
             )
           )}
@@ -162,7 +164,7 @@ const PricingCard: React.FC<Props> = ({ data, accent = "red" }) => {
 
             <Stack gap={10}>
               <Text fw="bold" size="sm">
-                We provided:
+                {t("we_provided")}
               </Text>
               <Stack gap={8}>
                 {data?.includedAssets?.map((asset) => (
@@ -190,13 +192,15 @@ const PricingCard: React.FC<Props> = ({ data, accent = "red" }) => {
               size="xl"
               className="flex-1!"
             >
-              View Detail
+              {t("view_detail")}
             </Button>
             <RubyButtonComponent
               size="xl"
               radius="md"
               onClick={() => toggleItem(shopProduct)}
-              aria-label={inCart ? "Remove from cart" : "Add to cart"}
+              aria-label={
+                inCart ? t("remove_from_cart_aria") : t("add_to_cart_aria")
+              }
             >
               {inCart ? (
                 <IconCheck size={18} stroke={3} />

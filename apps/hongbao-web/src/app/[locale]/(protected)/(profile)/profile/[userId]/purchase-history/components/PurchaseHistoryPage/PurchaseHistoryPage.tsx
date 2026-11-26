@@ -20,19 +20,20 @@ import {
   StorefrontIcon,
 } from "@phosphor-icons/react";
 import { isEmpty } from "lodash";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { PAGE_SIZE_OPTIONS } from "@/constants/pagination";
 import OrderCard from "../OrderCard/OrderCard";
 import useContainer from "./useContainer";
 
-/** Copy shown when a status filter turns up nothing. */
-const emptyByFilter: Record<string, string> = {
-  ALL: "You haven't placed any orders yet.",
-  PENDING: "Nothing is waiting for review.",
-  APPROVED: "No active purchases right now.",
-  EXPIRED: "Nothing has expired.",
-  CANCELLED: "No declined orders.",
-};
+/** Message keys for the copy shown when a status filter turns up nothing. */
+const emptyByFilter = {
+  ALL: "empty.all",
+  PENDING: "empty.pending",
+  APPROVED: "empty.approved",
+  EXPIRED: "empty.expired",
+  CANCELLED: "empty.cancelled",
+} as const;
 
 const PurchaseHistoryPage = () => {
   const {
@@ -55,16 +56,21 @@ const PurchaseHistoryPage = () => {
     activeCount,
   } = useContainer();
   const { userId } = useParams();
+  const t = useTranslations("Profile.PurchaseHistory");
 
   return (
     <Stack gap={20} className="flex-1!">
       {/* header */}
       <Group justify="space-between" align="center" wrap="wrap" gap={12}>
         <CustomBreadCrumb
-          title="Purchase history"
+          title={t("title")}
           links={[
-            { label: "Profile", href: `/profile/${userId}`, isActive: true },
-            { label: "Purchase history", href: "", isActive: false },
+            {
+              label: t("breadcrumb_profile"),
+              href: `/profile/${userId}`,
+              isActive: true,
+            },
+            { label: t("title"), href: "", isActive: false },
           ]}
         />
         <Button
@@ -76,7 +82,7 @@ const PurchaseHistoryPage = () => {
           rightSection={<ArrowRightIcon size={14} />}
           className="w-full! sm:w-auto! shrink-0!"
         >
-          Go to shop
+          {t("go_to_shop")}
         </Button>
       </Group>
 
@@ -118,15 +124,18 @@ const PurchaseHistoryPage = () => {
       {hasAnyOrders && !isLoading && (
         <Group gap={8} align="center" wrap="wrap">
           <Text size="sm" c="gray.6">
-            Showing{" "}
-            <Text span fw={700} c="gray.9">
-              {activeCount}
-            </Text>{" "}
-            {activeCount === 1 ? "order" : "orders"}
+            {t.rich("showing_count", {
+              count: activeCount,
+              b: (chunks) => (
+                <Text span fw={700} c="gray.9">
+                  {chunks}
+                </Text>
+              ),
+            })}
           </Text>
           {isDateFiltered && (
             <span className="rounded-full! bg-gray-100! px-2! py-0.5! text-[11px]! font-semibold! text-gray-600!">
-              Date range applied
+              {t("date_range_applied")}
             </span>
           )}
         </Group>
@@ -152,8 +161,8 @@ const PurchaseHistoryPage = () => {
             </Box>
             <Text ta="center" c="gray.7">
               {isDateFiltered
-                ? "No orders in this date range."
-                : emptyByFilter[filter]}
+                ? t("empty.date_range")
+                : t(emptyByFilter[filter])}
             </Text>
             {isDateFiltered ? (
               <Button
@@ -162,7 +171,7 @@ const PurchaseHistoryPage = () => {
                 size="sm"
                 onClick={clearDateRange}
               >
-                Clear date range
+                {t("clear_date_range")}
               </Button>
             ) : filter === "ALL" ? (
               <Button
@@ -172,7 +181,7 @@ const PurchaseHistoryPage = () => {
                 rightSection={<ArrowRightIcon size={15} />}
                 className="w-full! sm:w-auto!"
               >
-                Browse the shop
+                {t("browse_shop")}
               </Button>
             ) : (
               <Button
@@ -181,7 +190,7 @@ const PurchaseHistoryPage = () => {
                 size="sm"
                 onClick={() => setFilter("ALL")}
               >
-                Show all orders
+                {t("show_all")}
               </Button>
             )}
           </Stack>
@@ -210,8 +219,8 @@ const PurchaseHistoryPage = () => {
           >
             {/* same per-page choices as the dashboard tables */}
             <Select
-              placeholder="Per page"
-              aria-label="Orders per page"
+              placeholder={t("per_page")}
+              aria-label={t("orders_per_page")}
               data={PAGE_SIZE_OPTIONS}
               value={String(pageSize)}
               onChange={(value) => value && setPageSize(Number(value))}

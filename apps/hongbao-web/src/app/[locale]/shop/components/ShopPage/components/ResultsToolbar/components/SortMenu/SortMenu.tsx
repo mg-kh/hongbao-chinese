@@ -10,6 +10,7 @@ import {
   CaretDownIcon,
   CheckIcon,
 } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 
 interface Props {
   sort: ShopSort;
@@ -18,7 +19,9 @@ interface Props {
 
 /** "Sort by: <current> ▾" trigger with a checkmarked option list. */
 const SortMenu: React.FC<Props> = ({ sort, setSort }) => {
+  const t = useTranslations("Shop.SortMenu");
   const current = SHOP_SORT_OPTIONS.find((o) => o.value === sort);
+  const currentLabel = current ? t(`options.${current.labelKey}`) : "";
 
   return (
     <Menu
@@ -31,20 +34,20 @@ const SortMenu: React.FC<Props> = ({ sort, setSort }) => {
     >
       <Menu.Target>
         <UnstyledButton
-          aria-label={`Sort products, currently ${current?.label}`}
+          aria-label={t("aria", { current: currentLabel })}
           className="flex! items-center! gap-1.5! rounded-full! bg-surface! px-3! py-1.5! text-xs! ring-1! ring-gray-200! transition-colors! duration-150! hover:ring-hongbao-red-200! data-expanded:ring-hongbao-red-300!"
         >
           <ArrowsDownUpIcon size={14} className="text-gray-400!" />
-          <span className="hidden! text-gray-500! sm:inline!">Sort by:</span>
+          <span className="hidden! text-gray-500! sm:inline!">{t("sort_by_colon")}</span>
           <span className="font-semibold! text-gray-900!">
-            {current?.label}
+            {currentLabel}
           </span>
           <CaretDownIcon size={12} weight="bold" className="text-gray-400!" />
         </UnstyledButton>
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Label>Sort by</Menu.Label>
+        <Menu.Label>{t("sort_by")}</Menu.Label>
         {SHOP_SORT_OPTIONS.map((opt) => {
           const active = opt.value === sort;
           return (
@@ -67,7 +70,7 @@ const SortMenu: React.FC<Props> = ({ sort, setSort }) => {
                   : "text-gray-700!"
               }
             >
-              {opt.label}
+              {t(`options.${opt.labelKey}`)}
             </Menu.Item>
           );
         })}

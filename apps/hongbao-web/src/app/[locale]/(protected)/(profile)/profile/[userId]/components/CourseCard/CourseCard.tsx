@@ -11,6 +11,7 @@ import {
   XCircleIcon,
 } from "@phosphor-icons/react";
 import { PRODUCT_TYPE_ICONS } from "@/components/icons/productTypeIcons";
+import { useTranslations } from "next-intl";
 import useContainer, { TMetaKind } from "./useContainer";
 
 interface Props {
@@ -27,6 +28,7 @@ const CourseCard: React.FC<Props> = ({ data }) => {
   const { type, status, meta, isActive, isExpired, isMuted, href, renewHref } =
     useContainer(data);
   const TypeIcon = PRODUCT_TYPE_ICONS[data.type];
+  const t = useTranslations("Profile.CourseCard");
 
   const body = (
     <div className="flex flex-col h-full gap-3">
@@ -103,7 +105,7 @@ const CourseCard: React.FC<Props> = ({ data }) => {
           size="xs"
           fullWidth
         >
-          သက်တမ်းတိုးရန်
+          {t("renew")}
         </Button>
       )}
     </div>
@@ -117,7 +119,7 @@ const CourseCard: React.FC<Props> = ({ data }) => {
     isExpired && "border-dashed! border-gray-300!",
   );
 
-  return isActive ? (
+  return isActive && href ? (
     <Paper component={Link} href={href} p={10} bdrs={12} className={cardClass}>
       {body}
     </Paper>

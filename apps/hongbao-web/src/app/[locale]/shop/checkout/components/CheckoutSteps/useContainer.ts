@@ -5,11 +5,13 @@ import useMutationQuery from "@/hooks/fetching/useMutationQuery";
 import { TErrorOptions } from "@/types/general.type";
 import { showErrorNoti, showSuccessNoti } from "@/utils/notifications-helper";
 import { useDisclosure } from "@mantine/hooks";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { checkoutSteps } from "./schema/checkout.schema";
 
 const useContainer = (onSubmitted: () => void) => {
+  const t = useTranslations("Checkout.CheckoutSteps");
   const form = useFormContext();
   const { control, setValue, getValues, trigger } = form;
   const [opened, { open, close }] = useDisclosure(false);
@@ -51,7 +53,7 @@ const useContainer = (onSubmitted: () => void) => {
     };
     mutate(payload, {
       onSuccess: () => {
-        showSuccessNoti("Order received");
+        showSuccessNoti(t("order_received"));
         clearCart();
         close();
         onSubmitted();

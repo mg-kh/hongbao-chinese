@@ -9,8 +9,10 @@ import {
   Text,
 } from "@mantine/core";
 import { IconArrowRight, IconFlame, IconStarFilled } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 
 const BeginYourJourneyBanner = () => {
+  const t = useTranslations("Home.BeginYourJourneyBanner");
   return (
     <Box
       bg={"#23192c"}
@@ -42,7 +44,7 @@ const BeginYourJourneyBanner = () => {
               },
             }}
           >
-            Start today — basic lessons are free
+            {t("badge")}
           </Badge>
 
           <Text
@@ -50,7 +52,7 @@ const BeginYourJourneyBanner = () => {
             c={"white"}
             className="text-[2.25rem]! sm:text-[3.25rem]! lg:text-[3.75rem]! leading-[1.12]! tracking-tight! text-balance!"
           >
-            Your Chinese journey begins right now
+            {t("title")}
           </Text>
 
           <Text
@@ -58,9 +60,7 @@ const BeginYourJourneyBanner = () => {
             c={"gray.4"}
             className="max-w-[500px]! leading-relaxed!"
           >
-            Join thousands of learners mastering Mandarin with structured HSK
-            courses, AI-powered tone coaching, and lessons that fit your
-            schedule.
+            {t("description")}
           </Text>
 
           <Group
@@ -69,7 +69,7 @@ const BeginYourJourneyBanner = () => {
             className="w-full! flex-col! sm:flex-row! sm:w-auto! pt-2!"
           >
             <RubyButtonComponent size="xl" className="w-full! sm:w-auto!">
-              Start with basics
+              {t("start_with_basics")}
             </RubyButtonComponent>
             <Button
               size="xl"
@@ -78,12 +78,12 @@ const BeginYourJourneyBanner = () => {
               className="w-full! sm:w-auto! transition-colors! duration-200! hover:bg-white/10!"
               rightSection={<IconArrowRight size={18} />}
             >
-              View all courses
+              {t("view_all_courses")}
             </Button>
           </Group>
 
           <Text size="xs" c="gray.5" className="opacity-80!">
-            No card required to start — upgrade anytime as you progress.
+            {t("no_card_required")}
           </Text>
 
           <Group gap={10} wrap="nowrap" mt={4}>
@@ -97,7 +97,7 @@ const BeginYourJourneyBanner = () => {
               ))}
             </Group>
             <Text size="xs" fw={600} c="gray.4">
-              Loved by 248,000+ learners worldwide
+              {t("loved_by")}
             </Text>
           </Group>
         </Stack>

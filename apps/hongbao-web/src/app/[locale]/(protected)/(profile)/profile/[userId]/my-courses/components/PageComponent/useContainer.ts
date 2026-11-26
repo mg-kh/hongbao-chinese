@@ -1,4 +1,5 @@
 import useMyCourses from "@/hooks/global-data-fetching/useMyCourses";
+import { useTranslations } from "next-intl";
 import { CourseFilter } from "../../../types/my-courses.type";
 
 const useContainer = () => {
@@ -13,13 +14,14 @@ const useContainer = () => {
     filter,
     setFilter,
   } = useMyCourses();
+  const t = useTranslations("Profile.MyCourses.filters");
 
   /** Tab config lives here so the counts stay in sync with `stats`. */
   const filters: { value: CourseFilter; label: string; count: number }[] = [
-    { value: "ALL", label: "All", count: stats.total },
-    { value: "APPROVED", label: "In progress", count: stats.active },
-    { value: "PENDING", label: "Pending", count: stats.pending },
-    { value: "EXPIRED", label: "Expired", count: stats.expired },
+    { value: "ALL", label: t("all"), count: stats.total },
+    { value: "APPROVED", label: t("approved"), count: stats.active },
+    { value: "PENDING", label: t("pending"), count: stats.pending },
+    { value: "EXPIRED", label: t("expired"), count: stats.expired },
   ];
 
   return {

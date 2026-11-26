@@ -8,6 +8,7 @@ import { TPurchaseOrder } from "@/app/[locale]/(protected)/(profile)/profile/[us
 import PurchaseOrderCard from "@/components/PurchaseOrderCard/PurchaseOrderCard";
 import { Link } from "@/i18n/navigation";
 import { Button, Divider } from "@mantine/core";
+import { useTranslations } from "next-intl";
 import useContainer from "@/app/[locale]/(protected)/(profile)/profile/[userId]/purchase-history/components/OrderCard/useContainer";
 
 interface Props {
@@ -17,12 +18,15 @@ interface Props {
 /** Customer view of the shared purchase card: lifecycle + next step. */
 const OrderCard: React.FC<Props> = ({ order }) => {
   const { primaryAction } = useContainer(order);
+  const t = useTranslations("Profile.PurchaseHistory.OrderCard");
 
   return (
     <PurchaseOrderCard
       order={order}
       badge={<OrderStatusBadge status={order.status} size="sm" />}
-      surfaceClassName={(statusMeta[order.status] ?? statusMeta.PENDING).surface}
+      surfaceClassName={
+        (statusMeta[order.status] ?? statusMeta.PENDING).surface
+      }
     >
       <Divider color="gray.2" />
 
@@ -52,7 +56,7 @@ const OrderCard: React.FC<Props> = ({ order }) => {
             size="sm"
             className="flex-1! sm:flex-none!"
           >
-            Buy again
+            {t("buy_again")}
           </Button>
         )}
       </div>
